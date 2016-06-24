@@ -1,0 +1,35 @@
+{
+  "name": "clover",
+  "private": true,
+  "version": "0.1.0",
+  "main": "bin/run",
+  "dependencies": {
+    "bluebird": "^3.3.5",
+    "bower": "^1.7.9",
+    "crypto-promise": "^1.0.2",
+    "handlebars": "^4.0.5",
+    "inquirer": "^1.0.2",
+    "jsonwebtoken": "^5.7.0",
+    "koa": "^2.0.0",
+    "koa-bodyparser": "^3.0.0",
+    "koa-convert": "^1.2.0",
+    "koa-logger": "^2.0.0",
+    "koa-mount": "^2.0.0",
+    "koa-router": "^7.0.1",
+    "koa-session": "^3.3.1",
+    "koa-static": "^3.0.0",
+    "koa-views": "^5.0.1",
+    "mysql": "^2.10.2",
+    "sequelize": "^3.21.0",
+    "typescript": "^1.9.0-dev.20160423",
+    "typings": "^0.8.1"
+  },
+  "devDependencies": {
+    "tslint": "^3.8.0",
+    "tslint-eslint-rules": "^1.2.0"
+  },
+  "scripts": {
+    "start": "node ./bin/run",
+    "postinstall": "bower install&& typings install -so&& tsc"
+  }
+}
