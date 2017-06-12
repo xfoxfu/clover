@@ -1,13 +1,13 @@
 "use strict";
 
+import "./lib/db";
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
 import * as session from "koa-session-minimal";
 import * as views from "koa-views";
 import "reflect-metadata";
-/* tslint:disable:no-var-requires */
+// tslint:disable-next-line:no-var-requires
 const sessionStore: any = require("koa-sqlite3-session");
-/* tslint:enable:no-var-requires */
 import * as logger from "koa-logger";
 import * as mount from "koa-mount";
 import * as serve from "koa-static";
