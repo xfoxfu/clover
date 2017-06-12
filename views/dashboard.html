@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+  <title>LLMCG</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+
+<body>
+  <nav class="pink lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">LLMCG</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="section">
+      <div class="col row">
+        <div class="col l5 s12 card">
+          <h1>{{username}}</h1>
+          <p class="blue-text">{{email}}</p>
+          {{#if is_admin}}
+          <form method="POST" action="/redeem">
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="material-icons prefix">lock</i>
+                <input id="uid" type="text" class="validate" name="uid">
+                <label for="uid">UID</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="material-icons prefix">lock</i>
+                <input id="count" type="text" class="validate" name="count">
+                <label for="count">Count</label>
+              </div>
+            </div>
+            <button class="btn waves-effect waves-light pink" type="submit" name="action">
+              Submit
+              <i class="material-icons right">send</i>
+            </button>
+          </form>
+          {{/if}}
+        </div>
+        <div class="col l6 s12 card offset-l1">
+          <h2>使用记录</h2>
+          <div class="progress pink lighten-3" style="height: 15px">
+            <div class="determinate pink" style="width: {{calls.percent}}%"></div>
+          </div>
+          <p>
+            Remaining calls: <a class="blue-text">{{calls.rest}}</a>, Done calls: <a class="blue-text">{{calls.performed}}</a>,
+            Total calls: <a class="blue-text">{{calls.total}}</a>
+          </p>
+          <p>
+            <a class="waves-effect waves-light btn pink" href="/buy">Buy</a>
+            <a class="waves-effect waves-light btn pink" href="mailto:llmcg@xfox.pw">Help</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <h1 class="center">API Document</h1>
+      <p><code>POST</code> http://llmcg.xfox.pw/api</p>
+      <h2>Parameters</h2>
+      <table style="table-layout:fixed">
+        <thead>
+          <tr>
+            <th> Name </th>
+            <th> Description </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td> data </td>
+            <td> data to generate code </td>
+          </tr>
+          <tr>
+            <td> token </td>
+            <td>
+              <p style="word-wrap: break-word; overflow-wrap: break-word;"> {{token}} </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>Response</h2>
+      <table>
+        <thead>
+          <tr>
+            <th> Name </th>
+            <th> Description </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td> X-Message-Code </td>
+            <td> code generated </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>Example</h2>
+      <h3>200 OK</h3>
+      <h4>Request</h4>
+      <pre><code>
+        POST /api HTTP/1.1
+        Content-Type: application/x-www-form-urlencoded
+        Host: 127.0.0.1:3000
+        Connection: close
+        User-Agent: Paw/2.2.5 (Macintosh; OS X/10.11.4) GCDHTTPRequest
+        Content-Length: 11
+
+        data=%7B%7D
+      </code></pre>
+      <h4>Response</h4>
+      <pre><code>
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        Content-Length: 61
+        Date: Sun, 24 Apr 2016 06:19:57 GMT
+        Connection: close
+
+        {"X-Message-Code":"f8420b09e5ae0bc09f36f8c928dfaccf3b91d6ab"}
+      </code></pre>
+      <h3>400 Bad Request</h3>
+      <h4>Request</h4>
+      <pre><code>
+        POST /api HTTP/1.1
+        Content-Type: application/x-www-form-urlencoded
+        Host: 127.0.0.1:3000
+        Connection: close
+        User-Agent: Paw/2.2.5 (Macintosh; OS X/10.11.4) GCDHTTPRequest
+        Content-Length: 0
+      </code></pre>
+      <h4>Response</h4>
+      <pre><code>
+        HTTP/1.1 400 Bad Request
+        Content-Type: application/json
+        Content-Length: 23
+        Date: Sun, 24 Apr 2016 06:21:36 GMT
+        Connection: close
+
+        {"error":"Bad Request"}
+      </code></pre>
+      <h3>405 Method Not Allowed</h3>
+      <h4>Request</h4>
+      <pre><code>
+        GET /api HTTP/1.1
+        Content-Type: application/x-www-form-urlencoded
+        Host: 127.0.0.1:3000
+        Connection: close
+        User-Agent: Paw/2.2.5 (Macintosh; OS X/10.11.4) GCDHTTPRequest
+      </code></pre>
+      <h4>Response</h4>
+      <pre><code>
+        HTTP/1.1 405 Method Not Allowed
+        Allow: POST
+        Content-Type: application/json
+        Content-Length: 30
+        Date: Sun, 24 Apr 2016 06:22:26 GMT
+        Connection: close
+
+        {"error":"Method Not Allowed"}
+      </code></pre>
+    </div>
+  </div>
+  <footer class="page-footer light-blue">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Author</h5>
+          <p class="grey-text text-lighten-4">@coderfox: student developer, Node.js/C#/PHP.</p>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">+More</h5>
+          <ul>
+            <li><a class="white-text" href="http://xfox.pw">Website</a></li>
+            <li><a class="white-text" href="https://github.com/coderfox">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Contact</h5>
+          <ul>
+            <li><a class="white-text" href="mailto:llmcg@xfox.pw">llmcg#xfox.pw</a></li>
+            <li><a class="white-text" href="https://keybase.io/coderfox">Keybase.io</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        Made by <a class="light-blue-text text-lighten-3" href="http://materializecss.com">Materialize</a>, Powered by
+        <a class="light-blue-text text-lighten-3" href="http://koajs.com/">Koa<sup>2</sup></a>
+      </div>
+    </div>
+  </footer>
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+</body>
+
+</html>
