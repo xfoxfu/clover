@@ -13,10 +13,10 @@
     "object-literal-sort-keys": false,
     "ordered-imports": [
       false
+    ],
+    "member-ordering": [
+      false
     ]
   },
-  "rulesDirectory": [],
-  "exclude": [
-    "node_modules/**.*"
-  ]
+  "rulesDirectory": []
 }

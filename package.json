@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "main": "bin/run",
   "dependencies": {
+    "@types/bcrypt": "^1.0.0",
+    "@types/chalk": "^0.4.31",
     "@types/handlebars": "^4.0.33",
     "@types/koa-bodyparser": "^3.0.23",
     "@types/koa-logger": "^2.0.2",
@@ -13,7 +15,10 @@
     "@types/koa-static": "^3.0.0",
     "@types/koa-views": "^2.0.1",
     "@types/node": "^7.0.29",
+    "@types/pino": "^3.0.1",
     "@types/reflect-metadata": "^0.0.5",
+    "bcrypt": "^1.0.2",
+    "chalk": "^1.1.3",
     "config-file-bi": "^0.2.0",
     "handlebars": "^4.0.10",
     "koa": "^2.2.0",
@@ -26,6 +31,7 @@
     "koa-static": "^3.0.0",
     "koa-views": "^6.0.2",
     "material-design-lite": "^1.3.0",
+    "pino": "^4.6.0",
     "reflect-metadata": "^0.1.10",
     "sqlite3": "^3.1.8",
     "typeorm": "^0.1.0-alpha.8",
@@ -49,7 +55,8 @@
     "test-cov": "nyc -r lcovonly mocha",
     "postinstall": "tsc",
     "pretest": "tsc",
-    "dev": "supervisor -w . bin/run"
+    "dev": "supervisor -w . bin/run",
+    "start": "node ./bin/run"
   },
   "greenkeeper": {
     "ignore": []

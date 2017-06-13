@@ -8,7 +8,6 @@ import * as views from "koa-views";
 import "reflect-metadata";
 // tslint:disable-next-line:no-var-requires
 const sessionStore: any = require("koa-sqlite3-session");
-import * as logger from "koa-logger";
 import * as mount from "koa-mount";
 import * as serve from "koa-static";
 import * as config from "./lib/config";
@@ -37,7 +36,7 @@ app.use(views(`${__dirname}/views`, {
     html: "handlebars",
   },
 }));
-app.use(logger());
+// TODO: logger
 app.use(bodyParser());
 app.use(session({
   store: new sessionStore(config.get("db_path")),
