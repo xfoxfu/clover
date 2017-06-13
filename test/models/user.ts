@@ -3,6 +3,7 @@
 import User from "../../models/user";
 import * as chai from "chai";
 const expect = chai.expect;
+import * as config from "../../lib/config";
 
 export default () => {
   describe("#setPassword", () => {
@@ -19,6 +20,22 @@ export default () => {
     it("returns false on failure", async () => {
       // tslint:disable-next-line:no-unused-expression
       expect(await user.checkPassword("B")).to.be.false;
+    });
+  });
+  describe("#setConnPassword", () => {
+    const user = new User();
+    it("should return the new password", () => {
+      expect(user.setConnPassword()).to.eql(user.connPassword);
+    });
+  });
+  describe("#allocConnPort", () => {
+    const user = new User();
+    it("should return new port according to config", async () => {
+      const oldPort = config.get("port_last_allocated");
+      expect(await user.allocConnPort()).to.eql(oldPort + 1);
+    });
+    it("should write new port to config", async () => {
+      expect(await user.allocConnPort()).to.eql(config.get("port_last_allocated"));
     });
   });
 };

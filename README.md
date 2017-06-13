@@ -4,7 +4,7 @@ Clover
 [![Greenkeeper badge](https://badges.greenkeeper.io/coderfox/ss-ui.svg)](https://greenkeeper.io/)
 [![Build Status](https://img.shields.io/travis/coderfox/ss-ui.svg?style=flat-square)](https://travis-ci.org/coderfox/ss-ui)
 [![Coveralls](https://img.shields.io/coveralls/coderfox/ss-ui.svg?style=flat-square)](https://coveralls.io/github/coderfox/ss-ui)
-[![license](https://img.shields.io/github/license/coderfox/ss-ui.svg?style=flat-square)](https://github.com/coderfox/ss-ui/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/coderfox/ss-ui.svg?style=flat-square)](https://github.com/coderfox/ss-ui/blob/master/LICENSE.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-v2.3.4-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 
 Yet another [shadowsocks](https://shadowsocks.org) multiuser frontend.
@@ -14,7 +14,7 @@ Config
 
 Please use the built-in control panel at `/admin`.
 
-It uses `/config.yaml` as configuration file, and `/clover.db` as default storage.
+It uses `/config.sample.yaml` as configuration file unless set in env var `SS_UI_CONFIG`, and `/clover.db` as default storage.
 
 Start
 -----
