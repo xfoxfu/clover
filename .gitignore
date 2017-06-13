@@ -6,6 +6,9 @@
 config.yaml
 html-report
 
+# Database ignores
+clover.db
+
 # Created by https://www.gitignore.io/api/node,macos,linux,windows,visualstudiocode,istanbul
 
 ### Linux ###
