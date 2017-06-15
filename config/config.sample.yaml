@@ -2,6 +2,6 @@ db_path: ./clover.db
 log_level: debug
 port: 3000
 password_hash_rounds: 12
-port_last_allocated: 10008
+port_last_allocated: 10014
 default_encryption: chacha20-ietf-poly1305
 site_title: Clover

@@ -12,6 +12,7 @@ import * as mount from "koa-mount";
 import * as serve from "koa-static";
 import * as config from "./lib/config";
 import * as router from "./routes";
+import log from "./lib/log";
 
 const app = new Koa();
 
@@ -24,6 +25,9 @@ app.use(async (ctx: Koa.Context, next: () => any) => {
       ctx.throw(status);
     }
   } catch (error) {
+    if (!error.status) {
+      log.error(error);
+    }
     ctx.status = error.status || 500;
     ctx.throw(ctx.status);
     ctx.app.emit("error", error, ctx);

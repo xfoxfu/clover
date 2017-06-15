@@ -47,65 +47,10 @@
           Updates
         </button>
       </a>
-      <!--
-        <a href="/support">
-          <button class="mdl-button mdl-js-button mdl-button--primary">
-            Support
-          </button>
-        </a>
-        <a href="/invoices">
-          <button class="mdl-button mdl-js-button mdl-button--primary">
-            Invoices
-          </button>
-        </a>
-      -->
       <div class="mdl-grid">
         <div class="mdl-cell mdl-cell--8-col">
+          {{#each updates}}
           <div class="mdl-card">
-            <div class="mdl-card__title">
-              <h2 class="mdl-card__title-text">
-                <i class="material-icons">settings</i> Config Guide
-              </h2>
-            </div>
-            <div class="mdl-card__supporting-text">
-              <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-                <div class="mdl-tabs__tab-bar">
-                  <a href="#starks-panel" class="mdl-tabs__tab is-active">Android</a>
-                  <a href="#lannisters-panel" class="mdl-tabs__tab">iOS</a>
-                  <a href="#targaryens-panel" class="mdl-tabs__tab">Others</a>
-                </div>
-
-                <div class="mdl-tabs__panel is-active" id="starks-panel">
-                  <ul>
-                    <li>Eddard</li>
-                    <li>Catelyn</li>
-                    <li>Robb</li>
-                    <li>Sansa</li>
-                    <li>Brandon</li>
-                    <li>Arya</li>
-                    <li>Rickon</li>
-                  </ul>
-                </div>
-                <div class="mdl-tabs__panel" id="lannisters-panel">
-                  <ul>
-                    <li>Tywin</li>
-                    <li>Cersei</li>
-                    <li>Jamie</li>
-                    <li>Tyrion</li>
-                  </ul>
-                </div>
-                <div class="mdl-tabs__panel" id="targaryens-panel">
-                  <ul>
-                    <li>Viserys</li>
-                    <li>Daenerys</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          {{#each cards}}
-          <div class="mdl-card">
-            {{#if isAnnouncement}}
             <div class="mdl-card__title">
               <h2 class="mdl-card__title-text">
                 <i class="material-icons">add_alert</i> {{title}}
@@ -114,21 +59,8 @@
             <div class="mdl-card__supporting-text">
               {{{content}}}
             </div>
-            {{/if}}
           </div>
           {{/each}}
-          <!--
-            <div class="mdl-card">
-              <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">
-                  <i class="material-icons">add_alert</i> Scheduled Maintenance
-                </h2>
-              </div>
-              <div class="mdl-card__supporting-text">
-                card content
-              </div>
-            </div>
-          -->
         </div>
         <div class="mdl-cell mdl-cell--4-col">
           <div class="mdl-card">

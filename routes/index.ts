@@ -4,7 +4,9 @@ import Router = require("koa-router");
 const router = new Router();
 import * as config from "../lib/config";
 import User from "../models/user";
+import Announcement from "../models/announcement";
 import { connection } from "../lib/db";
+import log from "../lib/log";
 
 declare module "koa" {
   // tslint:disable-next-line
@@ -80,14 +82,36 @@ router.post("/reg", async (ctx, next) => {
 });
 router.get("/dashboard", async (ctx) => {
   await checkAuth(ctx, false);
+  const cards = [];
+  {
+    const announces = await connection.getRepository(Announcement)
+      .find({ take: 2, order: { updatedAt: "DESC" } });
+    for (const announce of announces) {
+      cards.push({ isAnnouncement: true, ...announce });
+    }
+  }
+  cards.sort((a, b) => (a.updatedAt > b.createdAt ? -1 : 1));
   await ctx.render("dashboard", {
     site: { ...site },
     // TODO: change these to real
     user: { email: ctx.user.email },
     bandwidth: { used: "N/A", start: "Jan. 1, 2017" },
+    // tslint:disable-next-line:object-literal-shorthand
+    cards: cards,
   });
 });
-router.get("/logout", (ctx, next) => {
+router.get("/updates", async (ctx) => {
+  await checkAuth(ctx, false);
+  await ctx.render("updates", {
+    site: { ...site },
+    user: { email: ctx.user.email },
+    // TODO: change these to real
+    bandwidth: { used: "N/A", start: "Jan. 1, 2017" },
+    updates: await connection.getRepository(Announcement)
+      .find({ take: 10, order: { updatedAt: "DESC" } }),
+  });
+});
+router.get("/logout", (ctx) => {
   ctx.session = null;
   ctx.response.redirect("/");
 });
