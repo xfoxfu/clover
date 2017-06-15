@@ -1,0 +1,25 @@
+<div class="mdl-cell mdl-cell--4-col">
+  <div class="mdl-card">
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">
+        <i class="material-icons">account_circle</i> {{user.email}}
+      </h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+      <a href="/logout" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+          Logout
+        </a>
+    </div>
+  </div>
+  <div class="mdl-card">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--4-col">
+        <h5><b>Used</b></h5>
+      </div>
+      <div class="mdl-cell mdl-cell--8-col">
+        <h5>{{bandwidth.used}}</h5>
+      </div>
+      <p>Since {{bandwidth.start}}</p>
+    </div>
+  </div>
+</div>

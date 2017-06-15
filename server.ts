@@ -37,6 +37,14 @@ app.use(views(`${__dirname}/views`, {
   map: {
     html: "handlebars",
   },
+  options: {
+    partials: {
+      card: "./partials/card",
+      footer: "./partials/footer",
+      header: "./partials/header",
+      sidebar: "./partials/sidebar",
+    },
+  },
 }));
 // TODO: logger
 app.use(bodyParser());

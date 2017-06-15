@@ -102,13 +102,18 @@ router.get("/dashboard", async (ctx) => {
 });
 router.get("/updates", async (ctx) => {
   await checkAuth(ctx, false);
+  const cards: any = await connection.getRepository(Announcement)
+    .find({ take: 10, order: { updatedAt: "DESC" } });
+  for (const card of cards) {
+    card.isAnnouncement = true;
+  }
   await ctx.render("updates", {
     site: { ...site },
     user: { email: ctx.user.email },
     // TODO: change these to real
     bandwidth: { used: "N/A", start: "Jan. 1, 2017" },
-    updates: await connection.getRepository(Announcement)
-      .find({ take: 10, order: { updatedAt: "DESC" } }),
+    // tslint:disable-next-line:object-literal-shorthand
+    cards: cards,
   });
 });
 router.get("/logout", (ctx) => {
