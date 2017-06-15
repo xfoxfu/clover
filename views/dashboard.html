@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>{{site.title}}</title>
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+  <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <link rel="shortcut icon" href="images/favicon.png">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/css/material.min.css">
+  <style>
+    .mdl-card {
+      width: 100%;
+      margin-bottom: 20px;
+      min-height: 0px;
+    }
+  </style>
+</head>
+
+<body class="mdl-layout mdl-grid mdl-color--grey-100 mdl-color-text--grey-700">
+  <main class="mdl-layout__content">
+    <div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop">
+      <h1>{{site.title}}</h1>
+      <a href="/dashboard">
+        <button class="mdl-button mdl-js-button mdl-button--primary">
+          Dashboard
+        </button>
+        </a>
+      <a href="/updates">
+        <button class="mdl-button mdl-js-button mdl-button--primary">
+          Updates
+        </button>
+      </a>
+      <!--
+        <a href="/support">
+          <button class="mdl-button mdl-js-button mdl-button--primary">
+            Support
+          </button>
+        </a>
+        <a href="/invoices">
+          <button class="mdl-button mdl-js-button mdl-button--primary">
+            Invoices
+          </button>
+        </a>
+      -->
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--8-col">
+          <div class="mdl-card">
+            <div class="mdl-card__title">
+              <h2 class="mdl-card__title-text">
+                <i class="material-icons">settings</i> Config Guide
+              </h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                <div class="mdl-tabs__tab-bar">
+                  <a href="#starks-panel" class="mdl-tabs__tab is-active">Android</a>
+                  <a href="#lannisters-panel" class="mdl-tabs__tab">iOS</a>
+                  <a href="#targaryens-panel" class="mdl-tabs__tab">Others</a>
+                </div>
+
+                <div class="mdl-tabs__panel is-active" id="starks-panel">
+                  <ul>
+                    <li>Eddard</li>
+                    <li>Catelyn</li>
+                    <li>Robb</li>
+                    <li>Sansa</li>
+                    <li>Brandon</li>
+                    <li>Arya</li>
+                    <li>Rickon</li>
+                  </ul>
+                </div>
+                <div class="mdl-tabs__panel" id="lannisters-panel">
+                  <ul>
+                    <li>Tywin</li>
+                    <li>Cersei</li>
+                    <li>Jamie</li>
+                    <li>Tyrion</li>
+                  </ul>
+                </div>
+                <div class="mdl-tabs__panel" id="targaryens-panel">
+                  <ul>
+                    <li>Viserys</li>
+                    <li>Daenerys</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--
+            <div class="mdl-card">
+              <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">
+                  <i class="material-icons">add_alert</i> Scheduled Maintenance
+                </h2>
+              </div>
+              <div class="mdl-card__supporting-text">
+                card content
+              </div>
+            </div>
+          -->
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <div class="mdl-card">
+            <div class="mdl-card__title">
+              <h2 class="mdl-card__title-text">
+                <i class="material-icons">account_circle</i> {{user.email}}
+              </h2>
+            </div>
+          </div>
+          <div class="mdl-card">
+            <div class="mdl-grid">
+              <div class="mdl-cell mdl-cell--4-col">
+                <h5><b>Used</b></h5>
+              </div>
+              <div class="mdl-cell mdl-cell--8-col">
+                <h5>{{bandwidth.used}}</h5>
+              </div>
+              <p>Since {{bandwidth.start}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="/js/material.min.js"></script>
+</body>
+
+</html>

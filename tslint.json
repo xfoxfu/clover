@@ -1,0 +1,22 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:recommended",
+    "tslint-consistent-codestyle",
+    "tslint-eslint-rules"
+  ],
+  "jsRules": {},
+  "rules": {
+    "no-console": [
+      false
+    ],
+    "object-literal-sort-keys": false,
+    "ordered-imports": [
+      false
+    ],
+    "member-ordering": [
+      false
+    ]
+  },
+  "rulesDirectory": []
+}

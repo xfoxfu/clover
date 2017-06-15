@@ -1,15 +1,17 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "noImplicitAny": false,
-        "sourceMap": true,
-        "allowSyntheticDefaultImports": true
-    },
-    "exclude": [
-        "node_modules",
-        "typings/browser",
-        "typings/main",
-        "typings/browser.d.ts"
-    ]
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "removeComments": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true
+  },
+  "exclude": [
+    ".vscode",
+    "logs",
+    "node_modules"
+  ]
 }
