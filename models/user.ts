@@ -22,12 +22,15 @@ export declare type EncryptionMethods =
   "aes-256-gcm";
 @Entity()
 export default class User {
+  constructor(email: string) {
+    this.email = email;
+  }
   @PrimaryGeneratedColumn()
   public id: number;
-  @Column({ length: 50, nullable: false })
+  @Column({ length: 50, nullable: false, unique: true })
   public email: string;
   @Column({ name: "password", type: "string", length: 60 })
-  private hashedPassword: string;
+  public hashedPassword: string;
   public setPassword = async (password: string) => {
     this.hashedPassword = await bcrypt.hash(password, config.get("password_hash_rounds"));
   }

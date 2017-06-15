@@ -799,6 +799,10 @@ flatstr@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/flatstr/-/flatstr-1.0.5.tgz#5b451b08cbd48e2eac54a2bbe0bf46165aa14be3"
 
+flexblocks@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/flexblocks/-/flexblocks-1.0.1.tgz#2f4d12a8bab9d5301edd17366ab6a301df436112"
+
 for-in@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"

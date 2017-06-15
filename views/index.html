@@ -1,153 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
-  <title>LLMCG</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>{{site.title}}</title>
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Material Design Lite">
+  <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <link rel="shortcut icon" href="images/favicon.png">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/css/material.min.css">
+  <style>
+    .mdl-card {
+      width: 100%;
+      margin-bottom: 20px;
+      min-height: 0px;
+    }
+  </style>
 </head>
 
-<body>
-  <nav class="pink lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">LLMCG</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
-      </ul>
-      <ul id="nav-mobile" class="side-nav">
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
-      </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-    </div>
-  </nav>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-      <br><br>
-      <h1 class="header center light-blue-text">LLMCG</h1>
-      <div class="row center">
-        <h5 class="header col s12 light">Generates <i>Love Live! School Idol Festival</i> X-Message-Code</h5>
-      </div>
-      <div class="row center">
-        <a href="/register" id="download-button" class="btn-large waves-effect waves-light light-blue">Register</a>
-      </div>
-      <br><br>
-    </div>
-  </div>
-  <div class="container">
-    <div class="section">
-      <div class="row">
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center pink-text"><i class="material-icons large">flash_on</i></h2>
-            <h5 class="center">Simplify Development</h5>
-            <p class="light">Don't know how to disassemble? No problem! Let us do it for you!</p>
-          </div>
+<body class="mdl-layout mdl-grid mdl-color--grey-100 mdl-color-text--grey-700">
+  <main class="mdl-layout__content">
+    <div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--8-col">
+          <h1>{{site.title}}</h1>
         </div>
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center pink-text"><i class="material-icons large">airplanemode_active</i></h2>
-            <h5 class="center">Start Now, Start Everything</h5>
-            <p class="light">By using this simple service, you can create incredible scripts for LLSIF!</p>
-          </div>
-        </div>
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center pink-text"><i class="material-icons large">settings</i></h2>
-            <h5 class="center">Easy to work with</h5>
-            <p class="light">Just one API and well-documented, along with full set of SDK!</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="row">
-        <h1 class="center">Pricing</h1>
-        <table>
-          <thead>
-            <tr>
-              <th data-field="id">API calls</th>
-              <th data-field="name">Price per Package</th>
-              <th data-field="name">Price per Call</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>500</td>
-              <td>$0.5/￥3</td>
-              <td>$0.001/￥0.006</td>
-            </tr>
-            <tr>
-              <td>1000</td>
-              <td>$0.9/￥5</td>
-              <td>$0.0009/￥0.005</td>
-            </tr>
-            <tr>
-              <td>10000</td>
-              <td>$8/￥48</td>
-              <td>$0.0008/￥0.0048</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="row">
-        <h1 class="center">Payments</h1>
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center pink-text">WeChat Pay
-            </h2>
-          </div>
-        </div>
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center pink-text">Alipay</h2>
-          </div>
-        </div>
-        <div class="col s12 m4">
-          <div class="icon-block">
-            <h2 class="center pink-text">Taobao</h2>
+        <div class="mdl-cell mdl-cell--4-col">
+          <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div class="mdl-tabs__tab-bar">
+              <a href="#login-panel" class="mdl-tabs__tab is-active">Login</a>
+              <a href="#reg-panel" class="mdl-tabs__tab">Reg</a>
+            </div>
+            <div class="mdl-tabs__panel is-active" id="login-panel">
+              <form action="/login" method="POST">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="username" name="email">
+                  <label class="mdl-textfield__label" for="username">Email</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="password" id="password" name="password">
+                  <label class="mdl-textfield__label" for="password">Password</label>
+                </div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit">
+                  Login
+                </button>
+              </form>
+            </div>
+            <div class="mdl-tabs__panel" id="reg-panel">
+              <form action="/reg" method="POST">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="username" name="email">
+                  <label class="mdl-textfield__label" for="username">Email</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="password" id="password" name="password">
+                  <label class="mdl-textfield__label" for="password">Password</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="password" id="password2" name="password2">
+                  <label class="mdl-textfield__label" for="password2">Password Again</label>
+                </div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit">
+                  Reg
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <footer class="page-footer light-blue">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">Author</h5>
-          <p class="grey-text text-lighten-4">@coderfox: student developer, Node.js/C#/PHP.</p>
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">+More</h5>
-          <ul>
-            <li><a class="white-text" href="http://xfox.pw">Website</a></li>
-            <li><a class="white-text" href="https://github.com/coderfox">GitHub</a></li>
-          </ul>
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Contact</h5>
-          <ul>
-            <li><a class="white-text" href="mailto:llmcg@xfox.pw">llmcg#xfox.pw</a></li>
-            <li><a class="white-text" href="https://keybase.io/coderfox">Keybase.io</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container">
-        Made by <a class="light-blue-text text-lighten-3" href="http://materializecss.com">Materialize</a>, Powered by
-        <a
-          class="light-blue-text text-lighten-3" href="http://koajs.com/">Koa<sup>2</sup></a>
-      </div>
-    </div>
-  </footer>
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
+  </main>
+  <script src="/js/material.min.js"></script>
 </body>
 
 </html>

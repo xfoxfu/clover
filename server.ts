@@ -20,14 +20,12 @@ app.use(async (ctx: Koa.Context, next: () => any) => {
     await next();
     // Handle 404 upstream.
     const status = ctx.status || 404;
-    if (status !== 200) {
+    if (status >= 400) {
       ctx.throw(status);
     }
   } catch (error) {
     ctx.status = error.status || 500;
-    if (ctx.status === 404) {
-      await ctx.render("error/error", { error });
-    }
+    ctx.throw(ctx.status);
     ctx.app.emit("error", error, ctx);
   }
 });
@@ -41,9 +39,9 @@ app.use(bodyParser());
 app.use(session({
   store: new sessionStore(config.get("db_path")),
 }));
-app.use(mount("/js/material.min.js", serve(`./node_modules/material-design-lite/material.min.js`)));
-app.use(mount("/css/material.min.css",
-  serve(`./node_modules/material-design-lite/dist/material.lime-indigo.min.css`)));
+app.use(mount("/js", serve(`./node_modules/material-design-lite/dist`)));
+app.use(mount("/css",
+  serve(`./node_modules/material-design-lite/dist`)));
 app
   .use(router.routes())
   .use(router.allowedMethods());

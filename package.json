@@ -19,6 +19,7 @@
     "@types/reflect-metadata": "^0.0.5",
     "bcrypt": "^1.0.2",
     "config-file-bi": "^0.2.0",
+    "flexblocks": "^1.0.1",
     "handlebars": "^4.0.10",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",
