@@ -161,8 +161,8 @@ router.get("/mu/v2/users", async (ctx) => {
       data.push({
         id: user.id,
         passwd: user.connPassword,
-        t: user.bandwidthUsed,
-        u: user.bandwidthUsed,
+        t: user.updatedAt.getTime(),
+        u: 0,
         d: user.bandwidthUsed,
         transfer_enable: user.bandwidthUsed + 200000000,
         port: user.connPort,
@@ -191,8 +191,11 @@ router.post("/mu/v2/users/:id/traffic", async (ctx) => {
       user.bandwidthUsed += parseInt(ctx.request.body.u, 10);
       user.bandwidthUsed += parseInt(ctx.request.body.d, 10);
       await connection.getRepository(User).persist(user);
-      ctx.response.status = 200;
-      ctx.response.body = JSON.stringify({ msg: "ok" });
+      ctx.response.set("Content-Type", "application/json");
+      ctx.response.body = JSON.stringify({
+        ret: 1,
+        msg: "ok",
+      });
     }
   }
 });
