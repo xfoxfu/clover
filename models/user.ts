@@ -63,6 +63,8 @@ export default class User {
   public isEmailVerified: boolean = false;
   @Column()
   public enabled: boolean = true;
+  @Column({ name: "bandwidth_used" })
+  public bandwidthUsed = 0;
   @CreateDateColumn()
   public createdAt: Date;
   @UpdateDateColumn()
