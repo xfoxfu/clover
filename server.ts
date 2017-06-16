@@ -10,7 +10,7 @@ import "reflect-metadata";
 const sessionStore: any = require("koa-sqlite3-session");
 import * as mount from "koa-mount";
 import * as serve from "koa-static";
-import * as config from "./lib/config";
+import config from "./lib/config";
 import * as router from "./routes";
 import log from "./lib/log";
 
@@ -34,15 +34,19 @@ app.use(async (ctx: Koa.Context, next: () => any) => {
   }
 });
 app.use(views(`${__dirname}/views`, {
+  extension: "hbs",
   map: {
-    html: "handlebars",
+    hbs: "handlebars",
   },
   options: {
     partials: {
-      card: "./partials/card",
-      footer: "./partials/footer",
-      header: "./partials/header",
-      sidebar: "./partials/sidebar",
+      "card": "./partials/card",
+      "footer": "./partials/footer",
+      "header": "./partials/header",
+      "sidebar": "./partials/sidebar",
+      "html-head": "./partials/html-head",
+      "html-foot": "./partials/html-foot",
+      "admin-menu": "./partials/admin-menu",
     },
   },
 }));

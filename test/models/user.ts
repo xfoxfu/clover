@@ -3,7 +3,7 @@
 import User from "../../models/user";
 import * as chai from "chai";
 const expect = chai.expect;
-import * as config from "../../lib/config";
+import config from "../../lib/config";
 
 export default () => {
   describe("#setPassword", () => {

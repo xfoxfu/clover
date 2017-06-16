@@ -12,7 +12,7 @@ export default class Announcement {
   public id: number;
   @Column({ length: 200, nullable: false })
   public title: string;
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
   public content: string;
   @CreateDateColumn()
   public createdAt: Date;

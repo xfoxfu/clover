@@ -5,3 +5,5 @@ password_hash_rounds: 12
 port_last_allocated: 10014
 default_encryption: chacha20-ietf-poly1305
 site_title: Clover
+sendgrid_key: KEY
+email_from: clover@example.com

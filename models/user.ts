@@ -2,7 +2,7 @@
 
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import * as bcrypt from "bcrypt";
-import * as config from "../lib/config";
+import config from "../lib/config";
 import { connection } from "../lib/db";
 
 const generatePassword = () => {

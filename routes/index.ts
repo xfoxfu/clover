@@ -2,11 +2,12 @@
 
 import Router = require("koa-router");
 const router = new Router();
-import * as config from "../lib/config";
+import config from "../lib/config";
 import User from "../models/user";
-import Announcement from "../models/announcement";
+import Announce from "../models/announce";
 import { connection } from "../lib/db";
 import log from "../lib/log";
+import { announce as announceMail } from "../lib/email";
 
 declare module "koa" {
   // tslint:disable-next-line
@@ -84,7 +85,7 @@ router.get("/dashboard", async (ctx) => {
   await checkAuth(ctx, false);
   const cards = [];
   {
-    const announces = await connection.getRepository(Announcement)
+    const announces = await connection.getRepository(Announce)
       .find({ take: 2, order: { updatedAt: "DESC" } });
     for (const announce of announces) {
       cards.push({ isAnnouncement: true, ...announce });
@@ -102,7 +103,7 @@ router.get("/dashboard", async (ctx) => {
 });
 router.get("/updates", async (ctx) => {
   await checkAuth(ctx, false);
-  const cards: any = await connection.getRepository(Announcement)
+  const cards: any = await connection.getRepository(Announce)
     .find({ take: 10, order: { updatedAt: "DESC" } });
   for (const card of cards) {
     card.isAnnouncement = true;
@@ -119,6 +120,32 @@ router.get("/updates", async (ctx) => {
 router.get("/logout", (ctx) => {
   ctx.session = null;
   ctx.response.redirect("/");
+});
+router.use("/admin", async (ctx, next) => {
+  await checkAuth(ctx, false);
+  if (ctx.user.isAdmin) {
+    await next();
+  } else {
+    ctx.redirect("/dashboard");
+  }
+});
+router.get("/admin", async (ctx) => {
+  await ctx.render("admin-index", {
+    site: { ...site },
+  });
+});
+// TODO: support announce update
+router.get("/admin/announces", async (ctx) => {
+  await ctx.render("admin-announces", {
+    site: { ...site },
+  });
+});
+router.post("/admin/announces", async (ctx) => {
+  const announce = new Announce(ctx.request.body.title, ctx.request.body.content);
+  await connection.getRepository(Announce).persist(announce);
+  const users = await connection.getRepository(User).find();
+  // TODO: use job queues
+  await announceMail(announce, users);
 });
 
 export = router;

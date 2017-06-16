@@ -14,7 +14,13 @@ Config
 
 Please use the built-in control panel at `/admin`.
 
-It uses `/config.sample.yaml` as configuration file unless set in env var `SS_UI_CONFIG`, and `/clover.db` as default storage.
+It discovers config file at the follwing sequence:
+
+1. environment variable `CLOVER_CONFIG`
+2. /config/config.yaml
+3. /config/config.sample.yaml
+
+And the default storage SQLite db is at `/clover.db`, unless defined in config file.
 
 Start
 -----

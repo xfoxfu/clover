@@ -1,0 +1,18 @@
+{{> html-head}}
+<div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop">
+  {{> admin-menu}}
+  <form method="POST">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" id="title" name="title">
+      <label class="mdl-textfield__label" for="title">Title</label>
+    </div><br>
+    <div class="mdl-textfield mdl-js-textfield">
+      <textarea class="mdl-textfield__input" type="text" rows="3" id="content" name="content"></textarea>
+      <label class="mdl-textfield__label" for="content">Content with HTML enabled</label>
+    </div><br>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" type="submit">
+      Send
+    </button>
+  </form>
+</div>
+{{> html-foot}}
