@@ -146,6 +146,10 @@ router.post("/admin/announces", async (ctx) => {
   const users = await connection.getRepository(User).find();
   // TODO: use job queues
   await announceMail(announce, users);
+  // TODO: better appearance
+  ctx.response.status = 200;
+  ctx.response.type = "text/html";
+  ctx.response.body = `Succeeded.<a href="/admin">Go back</a>`;
 });
 
 export = router;
