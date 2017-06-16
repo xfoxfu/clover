@@ -151,5 +151,50 @@ router.post("/admin/announces", async (ctx) => {
   ctx.response.type = "text/html";
   ctx.response.body = `Succeeded.<a href="/admin">Go back</a>`;
 });
+router.get("/mu/v2/users", async (ctx) => {
+  if (ctx.request.header.token !== config.get("mu_token")) {
+    ctx.throw(401);
+  } else {
+    const users = await connection.getRepository(User).find();
+    const data = [];
+    for (const user of users) {
+      data.push({
+        id: user.id,
+        passwd: user.connPassword,
+        t: user.bandwidthUsed,
+        u: user.bandwidthUsed,
+        d: user.bandwidthUsed,
+        transfer_enable: user.bandwidthUsed + 200000000,
+        port: user.connPort,
+        switch: user.enabled ? 1 : 0,
+        enable: user.enabled ? 1 : 0,
+        method: user.connEnc,
+      });
+    }
+    ctx.response.set("Content-Type", "application/json");
+    ctx.response.body = JSON.stringify({
+      msg: "ok",
+      data,
+    });
+  }
+});
+router.post("/mu/v2/users/:id/traffic", async (ctx) => {
+  if (ctx.request.header.token !== config.get("mu_token")) {
+    ctx.throw(401);
+  } else {
+    const user = await connection.getRepository(User).findOneById(ctx.params.id);
+    if (!user) {
+      ctx.throw(404);
+    } else if ((!ctx.request.body.u) && (!ctx.request.body.d)) {
+      ctx.throw(400);
+    } else {
+      user.bandwidthUsed += parseInt(ctx.request.body.u, 10);
+      user.bandwidthUsed += parseInt(ctx.request.body.d, 10);
+      await connection.getRepository(User).persist(user);
+      ctx.response.status = 200;
+      ctx.response.body = JSON.stringify({ msg: "ok" });
+    }
+  }
+});
 
 export = router;

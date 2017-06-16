@@ -7,3 +7,4 @@ default_encryption: chacha20-ietf-poly1305
 site_title: Clover
 sendgrid_key: KEY
 email_from: clover@example.com
+mu_token: d6d0fbdc9483c27e6b653457879d3fbd
