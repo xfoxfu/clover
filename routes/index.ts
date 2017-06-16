@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path="../typings/filesize.d.ts" />
 
 import Router = require("koa-router");
 const router = new Router();
@@ -8,6 +9,8 @@ import Announce from "../models/announce";
 import { connection } from "../lib/db";
 import log from "../lib/log";
 import { announce as announceMail } from "../lib/email";
+// tslint:disable-next-line:no-var-requires
+const filesize: any = require("filesize");
 
 declare module "koa" {
   // tslint:disable-next-line
@@ -96,7 +99,10 @@ router.get("/dashboard", async (ctx) => {
     site: { ...site },
     // TODO: change these to real
     user: { email: ctx.user.email },
-    bandwidth: { used: "N/A", start: "Jan. 1, 2017" },
+    bandwidth: {
+      used: filesize(ctx.user.bandwidthUsed),
+      start: config.get("bandwidth_start"),
+    },
     // tslint:disable-next-line:object-literal-shorthand
     cards: cards,
   });
@@ -112,7 +118,10 @@ router.get("/updates", async (ctx) => {
     site: { ...site },
     user: { email: ctx.user.email },
     // TODO: change these to real
-    bandwidth: { used: "N/A", start: "Jan. 1, 2017" },
+    bandwidth: {
+      used: filesize(ctx.user.bandwidthUsed),
+      start: config.get("bandwidth_start"),
+    },
     // tslint:disable-next-line:object-literal-shorthand
     cards: cards,
   });
