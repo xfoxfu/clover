@@ -1,0 +1,30 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
+    "**/*.js.map": true,
+    "logs": true,
+    ".nyc_output": true,
+    "coverage": true,
+    "html-report": true,
+    "config.yaml": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.js": {
+      "when": "$(basename).ts"
+    }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "tslint.exclude": "${workspaceRoot}/node_modules/**/*",
+  "tslint.autoFixOnSave": true,
+  "tslint.configFile": "tslint.json",
+  "tslint.alwaysShowRuleFailuresAsWarnings": true
+}
