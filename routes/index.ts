@@ -141,7 +141,7 @@ router.post("/reset_password", async (ctx) => {
       // TODO: better appearance
       ctx.throw(400);
     } else {
-      ctx.user.setPassword(ctx.request.body.new);
+      await ctx.user.setPassword(ctx.request.body.new);
       await connection.getRepository(User).persist(ctx.user);
       ctx.redirect("/dashboard");
     }
@@ -194,7 +194,7 @@ router.post("/reset_password_email_callback", async (ctx) => {
     if (ctx.request.body.password !== ctx.request.body.password2) {
       ctx.throw(400);
     }
-    user.setPassword(ctx.request.body.password);
+    await user.setPassword(ctx.request.body.password);
     await connection.getRepository(User).persist(user);
     // TODO: better appearance
     ctx.response.status = 200;

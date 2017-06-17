@@ -29,7 +29,7 @@ export default class User {
   public id: number;
   @Column({ length: 50, nullable: false, unique: true })
   public email: string;
-  @Column({ name: "password", type: "string", length: 60 })
+  @Column({ name: "password", type: "string" })
   public hashedPassword: string;
   public setPassword = async (password: string) => {
     this.hashedPassword = await bcrypt.hash(password, config.get("password_hash_rounds"));
