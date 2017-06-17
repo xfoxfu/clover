@@ -15,7 +15,7 @@ export const encode = <T>(data: T, expires = "6h") => new Promise(
       });
   },
 );
-export const decode = <T>(encoded: string) => new Promise(
+export const decode = <T>(encoded: string) => new Promise<T>(
   (resolve, reject) => {
     jwt.verify(encoded, config.get("jwt_key"),
       (err: Error, result: T) => {

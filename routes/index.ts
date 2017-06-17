@@ -8,10 +8,11 @@ import User from "../models/user";
 import Announce from "../models/announce";
 import { connection } from "../lib/db";
 import log from "../lib/log";
-import { announce as announceMail } from "../lib/email";
+import { announce as announceMail, resetPassword as resetPasswordMail } from "../lib/email";
 // tslint:disable-next-line:no-var-requires
 const filesize: any = require("filesize");
 import checkAuth from "./checkAuth";
+import { encode, decode } from "../lib/jwt";
 
 import muRouter from "./mu";
 import adminRouter from "./admin";
@@ -144,17 +145,60 @@ router.post("/reset_password", async (ctx) => {
     }
   }
 });
-router.get("/reset_password_email", async (ctx) => {
-  await ctx.render("reset-password-email");
-});
 router.post("/reset_password_email", async (ctx) => {
-  ctx.throw(501);
+  const user = await connection.getRepository(User).findOne({ email: ctx.request.body.email });
+  if (!user) {
+    ctx.throw(404);
+  } else {
+    await resetPasswordMail(user);
+    // TODO: better appearance
+    ctx.response.status = 200;
+    ctx.response.type = "text/html";
+    ctx.response.body = `Succeeded.<a href="/">Go back</a>`;
+  }
 });
 router.get("/reset_password_email_callback", async (ctx) => {
-  await ctx.render("reset-password-email-callback");
+  if (!ctx.request.query.token) {
+    ctx.throw(400);
+  }
+  let token: any;
+  try {
+    token = await decode(ctx.request.query.token);
+  } catch (err) {
+    log.error(err, { action: "decode token", token: ctx.request.query.token });
+    if (err.name === "") {
+      ctx.throw(403);
+    }
+  }
+  if (!token.email) {
+    ctx.throw(400);
+  }
+  await ctx.render("reset-password-email-callback", {
+    site: { ...site },
+    email: token.email,
+    token: ctx.request.query.token,
+  });
 });
 router.post("/reset_password_email_callback", async (ctx) => {
-  ctx.throw(501);
+  const user = await connection.getRepository(User).findOneById(
+    (await decode<any>(ctx.request.body.token)).uid,
+  );
+  if (!user) {
+    ctx.throw(404);
+  } else {
+    if (!ctx.request.body.password) {
+      ctx.throw(400);
+    }
+    if (ctx.request.body.password !== ctx.request.body.password2) {
+      ctx.throw(400);
+    }
+    user.setPassword(ctx.request.body.password);
+    await connection.getRepository(User).persist(user);
+    // TODO: better appearance
+    ctx.response.status = 200;
+    ctx.response.type = "text/html";
+    ctx.response.body = `Succeeded.<a href="/">Go login</a>`;
+  }
 });
 
 router.use("/admin", adminRouter.routes(), adminRouter.allowedMethods());
