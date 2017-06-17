@@ -2,10 +2,11 @@ db_path: ./clover.db
 log_level: debug
 port: 3000
 password_hash_rounds: 12
-port_last_allocated: 10015
+port_last_allocated: 10000
 default_encryption: chacha20-ietf-poly1305
 site_title: Clover
 sendgrid_key: KEY
 email_from: clover@example.com
 mu_token: d6d0fbdc9483c27e6b653457879d3fbd
 bandwidth_start: 'Jan. 1, 2017'
+jwt_key: 527877cb

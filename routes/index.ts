@@ -1,4 +1,3 @@
-import { connection } from "./../lib/db";
 "use strict";
 /// <reference path="../typings/filesize.d.ts" />
 
@@ -144,6 +143,18 @@ router.post("/reset_password", async (ctx) => {
       ctx.redirect("/dashboard");
     }
   }
+});
+router.get("/reset_password_email", async (ctx) => {
+  await ctx.render("reset-password-email");
+});
+router.post("/reset_password_email", async (ctx) => {
+  ctx.throw(501);
+});
+router.get("/reset_password_email_callback", async (ctx) => {
+  await ctx.render("reset-password-email-callback");
+});
+router.post("/reset_password_email_callback", async (ctx) => {
+  ctx.throw(501);
 });
 
 router.use("/admin", adminRouter.routes(), adminRouter.allowedMethods());
