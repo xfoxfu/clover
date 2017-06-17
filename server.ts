@@ -11,7 +11,7 @@ const sessionStore: any = require("koa-sqlite3-session");
 import * as mount from "koa-mount";
 import * as serve from "koa-static";
 import config from "./lib/config";
-import * as router from "./routes";
+import router from "./routes";
 import log from "./lib/log";
 
 const app = new Koa();

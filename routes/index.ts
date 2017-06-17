@@ -8,9 +8,14 @@ import User from "../models/user";
 import Announce from "../models/announce";
 import { connection } from "../lib/db";
 import log from "../lib/log";
-import { announce as announceMail } from "../lib/email";
+import { announce as announceMail, resetPassword as resetPasswordMail } from "../lib/email";
 // tslint:disable-next-line:no-var-requires
 const filesize: any = require("filesize");
+import checkAuth from "./checkAuth";
+import { encode, decode } from "../lib/jwt";
+
+import muRouter from "./mu";
+import adminRouter from "./admin";
 
 declare module "koa" {
   // tslint:disable-next-line
@@ -22,25 +27,7 @@ declare module "koa" {
 const site = {
   title: config.get("site_title"),
 };
-const checkAuth = async (ctx: Router.IRouterContext, redirectDashboard = true, redirectIndex = true) => {
-  let authorized = false;
-  if (ctx.session.uid) {
-    const result = await connection.getRepository(User).findOneById(ctx.session.uid);
-    if (result) {
-      ctx.user = result;
-      authorized = true;
-    }
-  }
-  if (authorized) {
-    if (redirectDashboard) {
-      ctx.redirect("/dashboard");
-    }
-  } else {
-    if (redirectIndex) {
-      ctx.redirect("/");
-    }
-  }
-};
+
 router.get("/", async (ctx) => {
   await checkAuth(ctx, true, false);
   await ctx.render("index", {
@@ -130,84 +117,91 @@ router.get("/logout", (ctx) => {
   ctx.session = null;
   ctx.response.redirect("/");
 });
-router.use("/admin", async (ctx, next) => {
+router.get("/reset_password", async (ctx) => {
   await checkAuth(ctx, false);
-  if (ctx.user.isAdmin) {
-    await next();
-  } else {
-    ctx.redirect("/dashboard");
-  }
-});
-router.get("/admin", async (ctx) => {
-  await ctx.render("admin-index", {
+  await ctx.render("reset-password", {
     site: { ...site },
+    user: { email: ctx.user.email },
+    // TODO: change these to real
+    bandwidth: {
+      used: filesize(ctx.user.bandwidthUsed),
+      start: config.get("bandwidth_start"),
+    },
   });
 });
-// TODO: support announce update
-router.get("/admin/announces", async (ctx) => {
-  await ctx.render("admin-announces", {
-    site: { ...site },
-  });
-});
-router.post("/admin/announces", async (ctx) => {
-  const announce = new Announce(ctx.request.body.title, ctx.request.body.content);
-  await connection.getRepository(Announce).persist(announce);
-  const users = await connection.getRepository(User).find();
-  // TODO: use job queues
-  await announceMail(announce, users);
-  // TODO: better appearance
-  ctx.response.status = 200;
-  ctx.response.type = "text/html";
-  ctx.response.body = `Succeeded.<a href="/admin">Go back</a>`;
-});
-router.get("/mu/v2/users", async (ctx) => {
-  if ((ctx.request.header.token || ctx.request.query.key) !== config.get("mu_token")) {
+router.post("/reset_password", async (ctx) => {
+  await checkAuth(ctx, false);
+  if (!await ctx.user.checkPassword(ctx.request.body.current)) {
+    // TODO: better appearance
     ctx.throw(401);
   } else {
-    const users = await connection.getRepository(User).find();
-    const data = [];
-    for (const user of users) {
-      data.push({
-        id: user.id,
-        email: user.email,
-        passwd: user.connPassword,
-        t: user.updatedAt.getTime(),
-        u: 0,
-        d: user.bandwidthUsed,
-        transfer_enable: user.bandwidthUsed + 200000000,
-        port: user.connPort,
-        switch: user.enabled ? 1 : 0,
-        enable: user.enabled ? 1 : 0,
-        method: user.connEnc,
-      });
-    }
-    ctx.response.set("Content-Type", "application/json");
-    ctx.response.body = JSON.stringify({
-      msg: "ok",
-      data,
-    });
-  }
-});
-router.post("/mu/v2/users/:id/traffic", async (ctx) => {
-  if ((ctx.request.header.token || ctx.request.query.key) !== config.get("mu_token")) {
-    ctx.throw(401);
-  } else {
-    const user = await connection.getRepository(User).findOneById(ctx.params.id);
-    if (!user) {
-      ctx.throw(404);
-    } else if ((!ctx.request.body.u) && (!ctx.request.body.d)) {
+    if (ctx.request.body.new !== ctx.request.body.new2) {
+      // TODO: better appearance
       ctx.throw(400);
     } else {
-      user.bandwidthUsed += parseInt(ctx.request.body.u, 10);
-      user.bandwidthUsed += parseInt(ctx.request.body.d, 10);
-      await connection.getRepository(User).persist(user);
-      ctx.response.set("Content-Type", "application/json");
-      ctx.response.body = JSON.stringify({
-        ret: 1,
-        msg: "ok",
-      });
+      ctx.user.setPassword(ctx.request.body.new);
+      await connection.getRepository(User).persist(ctx.user);
+      ctx.redirect("/dashboard");
     }
+  }
+});
+router.post("/reset_password_email", async (ctx) => {
+  const user = await connection.getRepository(User).findOne({ email: ctx.request.body.email });
+  if (!user) {
+    ctx.throw(404);
+  } else {
+    await resetPasswordMail(user);
+    // TODO: better appearance
+    ctx.response.status = 200;
+    ctx.response.type = "text/html";
+    ctx.response.body = `Succeeded.<a href="/">Go back</a>`;
+  }
+});
+router.get("/reset_password_email_callback", async (ctx) => {
+  if (!ctx.request.query.token) {
+    ctx.throw(400);
+  }
+  let token: any;
+  try {
+    token = await decode(ctx.request.query.token);
+  } catch (err) {
+    log.error(err, { action: "decode token", token: ctx.request.query.token });
+    if (err.name === "") {
+      ctx.throw(403);
+    }
+  }
+  if (!token.email) {
+    ctx.throw(400);
+  }
+  await ctx.render("reset-password-email-callback", {
+    site: { ...site },
+    email: token.email,
+    token: ctx.request.query.token,
+  });
+});
+router.post("/reset_password_email_callback", async (ctx) => {
+  const user = await connection.getRepository(User).findOneById(
+    (await decode<any>(ctx.request.body.token)).uid,
+  );
+  if (!user) {
+    ctx.throw(404);
+  } else {
+    if (!ctx.request.body.password) {
+      ctx.throw(400);
+    }
+    if (ctx.request.body.password !== ctx.request.body.password2) {
+      ctx.throw(400);
+    }
+    user.setPassword(ctx.request.body.password);
+    await connection.getRepository(User).persist(user);
+    // TODO: better appearance
+    ctx.response.status = 200;
+    ctx.response.type = "text/html";
+    ctx.response.body = `Succeeded.<a href="/">Go login</a>`;
   }
 });
 
-export = router;
+router.use("/admin", adminRouter.routes(), adminRouter.allowedMethods());
+router.use("/mu/v2", muRouter.routes(), muRouter.allowedMethods());
+
+export default router;
