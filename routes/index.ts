@@ -161,7 +161,7 @@ router.post("/admin/announces", async (ctx) => {
   ctx.response.body = `Succeeded.<a href="/admin">Go back</a>`;
 });
 router.get("/mu/v2/users", async (ctx) => {
-  if (ctx.request.header.token !== config.get("mu_token")) {
+  if ((ctx.request.header.token || ctx.request.query.key) !== config.get("mu_token")) {
     ctx.throw(401);
   } else {
     const users = await connection.getRepository(User).find();
@@ -169,6 +169,7 @@ router.get("/mu/v2/users", async (ctx) => {
     for (const user of users) {
       data.push({
         id: user.id,
+        email: user.email,
         passwd: user.connPassword,
         t: user.updatedAt.getTime(),
         u: 0,
@@ -188,7 +189,7 @@ router.get("/mu/v2/users", async (ctx) => {
   }
 });
 router.post("/mu/v2/users/:id/traffic", async (ctx) => {
-  if (ctx.request.header.token !== config.get("mu_token")) {
+  if ((ctx.request.header.token || ctx.request.query.key) !== config.get("mu_token")) {
     ctx.throw(401);
   } else {
     const user = await connection.getRepository(User).findOneById(ctx.params.id);
