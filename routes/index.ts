@@ -1,3 +1,4 @@
+import { connection } from "./../lib/db";
 "use strict";
 /// <reference path="../typings/filesize.d.ts" />
 
@@ -115,6 +116,34 @@ router.get("/updates", async (ctx) => {
 router.get("/logout", (ctx) => {
   ctx.session = null;
   ctx.response.redirect("/");
+});
+router.get("/reset_password", async (ctx) => {
+  await checkAuth(ctx, false);
+  await ctx.render("reset-password", {
+    site: { ...site },
+    user: { email: ctx.user.email },
+    // TODO: change these to real
+    bandwidth: {
+      used: filesize(ctx.user.bandwidthUsed),
+      start: config.get("bandwidth_start"),
+    },
+  });
+});
+router.post("/reset_password", async (ctx) => {
+  await checkAuth(ctx, false);
+  if (!await ctx.user.checkPassword(ctx.request.body.current)) {
+    // TODO: better appearance
+    ctx.throw(401);
+  } else {
+    if (ctx.request.body.new !== ctx.request.body.new2) {
+      // TODO: better appearance
+      ctx.throw(400);
+    } else {
+      ctx.user.setPassword(ctx.request.body.new);
+      await connection.getRepository(User).persist(ctx.user);
+      ctx.redirect("/dashboard");
+    }
+  }
 });
 
 router.use("/admin", adminRouter.routes(), adminRouter.allowedMethods());
