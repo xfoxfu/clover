@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "main": "bin/run",
   "dependencies": {
+    "@types/base64-js": "^1.2.5",
     "@types/bcrypt": "^1.0.0",
     "@types/chalk": "^0.4.31",
     "@types/handlebars": "^4.0.33",
@@ -18,6 +19,7 @@
     "@types/node": "^7.0.29",
     "@types/pino": "^3.0.1",
     "@types/reflect-metadata": "^0.0.5",
+    "base64-js": "^1.2.0",
     "bcrypt": "^1.0.2",
     "config-file-bi": "^0.2.0",
     "filesize": "^3.5.10",

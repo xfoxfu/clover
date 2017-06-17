@@ -11,3 +11,4 @@ mu_token: d6d0fbdc9483c27e6b653457879d3fbd
 bandwidth_start: 'Jan. 1, 2017'
 jwt_key: 527877cb
 site_url: http://127.0.0.1:3000
+ss_host: 127.0.0.1

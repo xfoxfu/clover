@@ -13,6 +13,7 @@ import { announce as announceMail, resetPassword as resetPasswordMail } from "..
 const filesize: any = require("filesize");
 import checkAuth from "./checkAuth";
 import { encode, decode } from "../lib/jwt";
+import * as base64 from "base64-js";
 
 import muRouter from "./mu";
 import adminRouter from "./admin";
@@ -85,13 +86,14 @@ router.get("/dashboard", async (ctx) => {
   await ctx.render("dashboard", {
     site: { ...site },
     // TODO: change these to real
-    user: { email: ctx.user.email },
+    user: ctx.user,
     bandwidth: {
       used: filesize(ctx.user.bandwidthUsed),
       start: config.get("bandwidth_start"),
     },
     // tslint:disable-next-line:object-literal-shorthand
     cards: cards,
+    server: config.get("ss_host"),
   });
 });
 router.get("/updates", async (ctx) => {
@@ -154,7 +156,7 @@ router.post("/reset_password_email", async (ctx) => {
     // TODO: better appearance
     ctx.response.status = 200;
     ctx.response.type = "text/html";
-    ctx.response.body = `Succeeded.<a href="/">Go back</a>`;
+    ctx.response.body = `Succeeded.<a href="/" > Go back</a > `;
   }
 });
 router.get("/reset_password_email_callback", async (ctx) => {
@@ -197,7 +199,7 @@ router.post("/reset_password_email_callback", async (ctx) => {
     // TODO: better appearance
     ctx.response.status = 200;
     ctx.response.type = "text/html";
-    ctx.response.body = `Succeeded.<a href="/">Go login</a>`;
+    ctx.response.body = `Succeeded.<a href= "/" > Go login< /a>`;
   }
 });
 
