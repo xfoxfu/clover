@@ -1,10 +1,10 @@
 Clover
 =====
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/coderfox/ss-ui.svg)](https://greenkeeper.io/)
-[![Build Status](https://img.shields.io/travis/coderfox/ss-ui.svg?style=flat-square)](https://travis-ci.org/coderfox/ss-ui)
-[![Coveralls](https://img.shields.io/coveralls/coderfox/ss-ui.svg?style=flat-square)](https://coveralls.io/github/coderfox/ss-ui)
-[![license](https://img.shields.io/github/license/coderfox/ss-ui.svg?style=flat-square)](https://github.com/coderfox/ss-ui/blob/master/LICENSE.md)
+[![Greenkeeper badge](https://badges.greenkeeper.io/coderfox/clover.svg)](https://greenkeeper.io/)
+[![Build Status](https://img.shields.io/travis/coderfox/clover.svg?style=flat-square)](https://travis-ci.org/coderfox/clover)
+[![Coveralls](https://img.shields.io/coveralls/coderfox/clover.svg?style=flat-square)](https://coveralls.io/github/coderfox/clover)
+[![license](https://img.shields.io/github/license/coderfox/clover.svg?style=flat-square)](https://github.com/coderfox/clover/blob/master/LICENSE.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-v2.3.4-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 
 Yet another [shadowsocks](https://shadowsocks.org) multiuser frontend.
@@ -33,7 +33,7 @@ License
 -----
 
 ```
-ss-ui shadowsocks manyuser frontend
+clover shadowsocks manyuser frontend
 Copyright (C) 2017 coderfox
 
 This program is free software: you can redistribute it and/or modify
