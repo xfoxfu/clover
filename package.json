@@ -16,7 +16,7 @@
     "@types/koa-session-minimal": "^3.0.4",
     "@types/koa-static": "^3.0.0",
     "@types/koa-views": "^2.0.1",
-    "@types/node": "^7.0.29",
+    "@types/node": "^8.0.0",
     "@types/pino": "^3.0.1",
     "@types/reflect-metadata": "^0.0.5",
     "base64-js": "^1.2.0",
