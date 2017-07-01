@@ -56,14 +56,20 @@ router.post("/login", async (ctx) => {
 router.post("/reg", async (ctx, next) => {
   if ((!ctx.request.body.email) ||
     (!ctx.request.body.password) ||
-    (!ctx.request.body.password2)) {
+    (!ctx.request.body.password2) ||
+    (!ctx.request.body.refcode)) {
     // TODO: better output
     ctx.throw(400);
-  } else if (ctx.request.body.password !== ctx.request.body.password2) {
+  }
+  const refData = await decode<any>(ctx.request.body.refcode);
+  if (ctx.request.body.password !== ctx.request.body.password2) {
     // TODO: better output
     ctx.throw(400, "password and password2 mismatch");
+  } else if (refData.email !== ctx.request.body.email) {
+    ctx.throw(400, "invalid refcode");
   } else {
     const user = new User(ctx.request.body.email);
+    user.note = refData.name;
     await user.setPassword(ctx.request.body.password);
     user.setConnPassword();
     await user.allocConnPort();
