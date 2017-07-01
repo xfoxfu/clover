@@ -69,7 +69,7 @@ router.post("/reg", async (ctx, next) => {
     ctx.throw(400, "invalid refcode");
   } else {
     const user = new User(ctx.request.body.email);
-    user.note = refData.name;
+    user.note = refData.note;
     await user.setPassword(ctx.request.body.password);
     user.setConnPassword();
     await user.allocConnPort();
