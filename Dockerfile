@@ -8,5 +8,5 @@ RUN apk add --no-cache make gcc g++ python yarn && \
     apk del make gcc g++ python
 ENV NODE_ENV production
 EXPOSE 3000
-CMD ["yarn","start"]
+CMD ["start"]
 ENTRYPOINT ["yarn"]
