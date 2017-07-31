@@ -31,14 +31,14 @@ export default class User {
   public note: string;
   @Column({ length: 50, nullable: false, unique: true })
   public email: string;
-  @Column({ name: "password", type: "string" })
+  @Column({ name: "password", type: "varchar" })
   public hashedPassword: string;
   public setPassword = async (password: string) => {
     this.hashedPassword = await bcrypt.hash(password, config.get("password_hash_rounds"));
   }
   public checkPassword = async (password: string) =>
     bcrypt.compare(password, this.hashedPassword)
-  @Column({ name: "ss_password", type: "string", length: 10 })
+  @Column({ name: "ss_password", type: "varchar", length: 10 })
   private ssPassword: string;
   public get connPassword(): string {
     return this.ssPassword;
@@ -57,7 +57,7 @@ export default class User {
     await config.push();
     return this.ssPort;
   }
-  @Column({ name: "ss_enc", type: "string", length: 25 })
+  @Column({ name: "ss_enc", type: "varchar", length: 25 })
   public connEnc: EncryptionMethods = config.get("default_encryption");
   @Column({ name: "is_admin" })
   public isAdmin: boolean = false;
@@ -65,7 +65,7 @@ export default class User {
   public isEmailVerified: boolean = false;
   @Column()
   public enabled: boolean = true;
-  @Column({ name: "bandwidth_used" })
+  @Column({ type: "int", name: "bandwidth_used" })
   public bandwidthUsed = 0;
   @CreateDateColumn()
   public createdAt: Date;

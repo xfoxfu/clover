@@ -10,7 +10,7 @@ export default class Announcement {
   }
   @PrimaryGeneratedColumn()
   public id: number;
-  @Column({ length: 200, nullable: false })
+  @Column({ type: "text", length: 200, nullable: false })
   public title: string;
   @Column({ type: "text", nullable: true })
   public content: string;
