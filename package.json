@@ -18,7 +18,7 @@
     "@types/koa-static": "^3.0.0",
     "@types/koa-views": "^2.0.1",
     "@types/node": "^8.0.17",
-    "@types/pino": "^4.7.0",
+    "@types/pino": "^3.0.1",
     "@types/reflect-metadata": "^0.0.5",
     "base64-js": "^1.2.1",
     "bcrypt": "^1.0.2",
