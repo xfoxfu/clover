@@ -25,7 +25,7 @@
     "config-file-bi": "^0.2.0",
     "filesize": "^3.5.10",
     "flexblocks": "^1.0.1",
-    "fs-extra": "^4.0.0",
+    "fs-extra": "^3.0.1",
     "handlebars": "^4.0.10",
     "inquirer": "^3.2.1",
     "jsonwebtoken": "^7.4.1",
