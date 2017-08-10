@@ -1,15 +1,15 @@
 "use strict";
 
 // TODO: support more email services
+import * as fs from "fs-extra";
+import * as hbs from "handlebars";
 import { mail as helper } from "sendgrid";
 import * as sendgrid from "sendgrid";
-import * as hbs from "handlebars";
-import * as fs from "fs-extra";
 import config from "../lib/config";
+import { encode } from "../lib/jwt";
+import log from "../lib/log";
 import Announce from "../models/announce";
 import User from "../models/user";
-import log from "../lib/log";
-import { encode } from "../lib/jwt";
 
 const mailer = sendgrid(config.get("sendgrid_key"));
 

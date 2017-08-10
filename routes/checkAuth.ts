@@ -1,10 +1,8 @@
 "use strict";
 
 import Router = require("koa-router");
-import config from "../lib/config";
-import User from "../models/user";
 import { connection } from "../lib/db";
-import log from "../lib/log";
+import User from "../models/user";
 
 export default async (ctx: Router.IRouterContext, redirectDashboard = true, redirectIndex = true) => {
   let authorized = false;

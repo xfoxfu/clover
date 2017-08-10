@@ -3,11 +3,10 @@
 import Router = require("koa-router");
 const router = new Router();
 import config from "../lib/config";
-import User from "../models/user";
-import Announce from "../models/announce";
 import { connection } from "../lib/db";
-import log from "../lib/log";
 import { announce as announceMail } from "../lib/email";
+import Announce from "../models/announce";
+import User from "../models/user";
 import checkAuth from "./checkAuth";
 
 const site = {

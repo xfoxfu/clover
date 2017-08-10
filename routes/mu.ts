@@ -3,9 +3,8 @@
 import Router = require("koa-router");
 const router = new Router();
 import config from "../lib/config";
-import User from "../models/user";
 import { connection } from "../lib/db";
-import log from "../lib/log";
+import User from "../models/user";
 
 router.get("/users", async (ctx) => {
   if ((ctx.request.header.token || ctx.request.query.key) !== config.get("mu_token")) {

@@ -1,9 +1,8 @@
 "use strict";
 
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import * as bcrypt from "bcrypt";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import config from "../lib/config";
-import { connection } from "../lib/db";
 
 const generatePassword = () => {
   const length = 8;

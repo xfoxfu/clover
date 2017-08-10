@@ -1,13 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2016",
     "module": "commonjs",
-    "removeComments": true,
     "strict": true,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
-    "sourceMap": true
+    "emitDecoratorMetadata": true,
+    "plugins": [{
+      "name": "tslint-language-service",
+      "alwaysShowRuleFailuresAsWarnings": true,
+      // "ignoreDefinitionFiles": true,
+      "configFile": "./tslint.json",
+      //"disableNoUnusedVariableRule": false,
+      "exclude": "${workspaceRoot}/node_modules/*",
+      "autoFixOnSave": true
+    }]
   },
   "exclude": [
     ".vscode",

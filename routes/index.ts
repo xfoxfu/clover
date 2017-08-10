@@ -4,19 +4,18 @@
 import Router = require("koa-router");
 const router = new Router();
 import config from "../lib/config";
-import User from "../models/user";
-import Announce from "../models/announce";
 import { connection } from "../lib/db";
+import { resetPassword as resetPasswordMail } from "../lib/email";
 import log from "../lib/log";
-import { announce as announceMail, resetPassword as resetPasswordMail } from "../lib/email";
+import Announce from "../models/announce";
+import User from "../models/user";
 // tslint:disable-next-line:no-var-requires
 const filesize: any = require("filesize");
+import { decode } from "../lib/jwt";
 import checkAuth from "./checkAuth";
-import { encode, decode } from "../lib/jwt";
-import * as base64 from "base64-js";
 
-import muRouter from "./mu";
 import adminRouter from "./admin";
+import muRouter from "./mu";
 
 declare module "koa" {
   // tslint:disable-next-line
@@ -53,7 +52,7 @@ router.post("/login", async (ctx) => {
     }
   }
 });
-router.post("/reg", async (ctx, next) => {
+router.post("/reg", async (ctx) => {
   if ((!ctx.request.body.email) ||
     (!ctx.request.body.password) ||
     (!ctx.request.body.password2) ||

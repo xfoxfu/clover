@@ -1,18 +1,18 @@
 "use strict";
 
-import "./lib/db";
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
 import * as session from "koa-session-minimal";
 import * as views from "koa-views";
 import "reflect-metadata";
+import "./lib/db";
 // tslint:disable-next-line:no-var-requires
 const sessionStore: any = require("koa-sqlite3-session");
 import * as mount from "koa-mount";
 import * as serve from "koa-static";
 import config from "./lib/config";
-import router from "./routes";
 import log from "./lib/log";
+import router from "./routes";
 
 const app = new Koa();
 
@@ -40,13 +40,13 @@ app.use(views(`${__dirname}/views`, {
   },
   options: {
     partials: {
+      "admin-menu": "./partials/admin-menu",
       "card": "./partials/card",
       "footer": "./partials/footer",
       "header": "./partials/header",
-      "sidebar": "./partials/sidebar",
-      "html-head": "./partials/html-head",
       "html-foot": "./partials/html-foot",
-      "admin-menu": "./partials/admin-menu",
+      "html-head": "./partials/html-head",
+      "sidebar": "./partials/sidebar",
     },
   },
 }));

@@ -1,6 +1,6 @@
 "use strict";
 
-import { createConnection, Connection } from "typeorm";
+import { Connection, createConnection } from "typeorm";
 import config from "../lib/config";
 
 export let connection: Connection;

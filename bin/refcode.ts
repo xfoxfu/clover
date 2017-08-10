@@ -1,7 +1,7 @@
 "use strict";
 
-import { encode } from "../lib/jwt";
 import { prompt } from "inquirer";
+import { encode } from "../lib/jwt";
 
 /*
 console.log(process.argv);

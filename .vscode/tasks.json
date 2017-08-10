@@ -17,5 +17,5 @@
 
 	"args": ["--watch"],
 
-	"problemMatcher": "$tsc"
+	"problemMatcher": "$tsc-watch"
 }

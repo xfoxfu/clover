@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 if (process.env.NODE_ENV !== "test") {
+  // tslint:disable-next-line:no-console
   console.log(`ss-ui  Copyright (C) 2017 coderfox\n
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
@@ -9,11 +10,11 @@ For more information, see "${__dirname}/../LICENSE.md".
 `);
 }
 
-import server from "../server";
-import db from "../lib/db";
 import config from "../lib/config";
-import log from "../lib/log";
+import db from "../lib/db";
 import "../lib/email";
+import log from "../lib/log";
+import server from "../server";
 
 if (process.env.NODE_ENV === "test") {
   log.level = "silent";
@@ -22,9 +23,9 @@ if (process.env.NODE_ENV === "test") {
 const PORT = config.get("port") || 3000;
 
 db
-  .then((connection) => {
+  .then(() => {
     log.info(`database connected to ${config.get("db_path")}`);
     server.listen(PORT);
     log.info(`server listening on port ${PORT}`);
   })
-  .catch((err) => console.error(err));
+  .catch((err) => log.error(err));
