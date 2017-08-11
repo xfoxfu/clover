@@ -18,6 +18,10 @@ import server from "../server";
 
 if (process.env.NODE_ENV === "test") {
   log.level = "silent";
+} else if (process.env.NODE_ENV === "dev") {
+  log.level = "debug";
+} else {
+  log.level = "info";
 }
 
 const PORT = config.get("port") || 3000;

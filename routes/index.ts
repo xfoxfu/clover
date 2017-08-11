@@ -90,14 +90,19 @@ router.get("/dashboard", async (ctx) => {
   cards.sort((a, b) => (a.updatedAt > b.createdAt ? -1 : 1));
   await ctx.render("dashboard", {
     site: { ...site },
-    // TODO: change these to real
-    user: ctx.user,
+    user: {
+      ...ctx.user,
+      connUri: new Buffer(`${
+        ctx.user.connEnc}:${
+        ctx.user.connPassword}@${
+        config.get("ss_host")}:${
+        ctx.user.connPort}`).toString("base64"),
+    },
     bandwidth: {
       used: filesize(ctx.user.bandwidthUsed),
       start: config.get("bandwidth_start"),
     },
-    // tslint:disable-next-line:object-literal-shorthand
-    cards: cards,
+    cards,
     server: config.get("ss_host"),
   });
 });
@@ -116,8 +121,7 @@ router.get("/updates", async (ctx) => {
       used: filesize(ctx.user.bandwidthUsed),
       start: config.get("bandwidth_start"),
     },
-    // tslint:disable-next-line:object-literal-shorthand
-    cards: cards,
+    cards,
   });
 });
 router.get("/logout", (ctx) => {
@@ -161,7 +165,7 @@ router.post("/reset_password_email", async (ctx) => {
     // TODO: better appearance
     ctx.response.status = 200;
     ctx.response.type = "text/html";
-    ctx.response.body = `Succeeded.<a href="/" > Go back</a > `;
+    ctx.response.body = `Succeeded.<a href= "/" > Go back< /a > `;
   }
 });
 router.get("/reset_password_email_callback", async (ctx) => {
