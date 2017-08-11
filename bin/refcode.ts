@@ -14,6 +14,7 @@ prompt([
     name: "email",
     message: "New User's Email",
   }, {
+    type: "editor",
     name: "note",
     message: "New User's Note",
   },
