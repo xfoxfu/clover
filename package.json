@@ -28,7 +28,7 @@
     "fs-extra": "^3.0.1",
     "handlebars": "^4.0.10",
     "inquirer": "^3.2.1",
-    "jsonwebtoken": "^7.4.1",
+    "jsonwebtoken": "^8.0.0",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-logger": "^3.0.1",
