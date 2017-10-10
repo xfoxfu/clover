@@ -92,6 +92,8 @@ router.get("/dashboard", async (ctx) => {
     site: { ...site },
     user: {
       ...ctx.user,
+      connPort: ctx.user.connPort,
+      connPassword: ctx.user.connPassword,
       connUri: new Buffer(`${
         ctx.user.connEnc}:${
         ctx.user.connPassword}@${

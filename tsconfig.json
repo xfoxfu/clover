@@ -9,6 +9,7 @@
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "sourceMap": true,
     "plugins": [{
       "name": "tslint-language-service",
       "alwaysShowRuleFailuresAsWarnings": true,
