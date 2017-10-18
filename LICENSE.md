@@ -1,5 +1,5 @@
 ```
-ss-ui shadowsocks manyuser frontend
+clover: frontend for a variety of proxy tools
 Copyright (C) 2017 coderfox
 
 This program is free software: you can redistribute it and/or modify
