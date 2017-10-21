@@ -21,9 +21,15 @@
 
 [[projects]]
   name = "github.com/jinzhu/gorm"
-  packages = ["dialects/sqlite"]
+  packages = [".","dialects/sqlite"]
   revision = "5174cc5c242a728b435ea2be8a2f7f998e15429b"
   version = "v1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jinzhu/inflection"
+  packages = ["."]
+  revision = "1c35d901db3da928c72a72d8458480cc9ade058f"
 
 [[projects]]
   name = "github.com/joho/godotenv"
@@ -48,6 +54,12 @@
   name = "github.com/ugorji/go"
   packages = ["codec"]
   revision = "f26fc641ec9d52a2161443cf9bb9fd53b9062a22"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["bcrypt","blowfish"]
+  revision = "ed5229da99e3a6df35c756cd64b6982d19505d86"
 
 [[projects]]
   branch = "master"
@@ -76,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "78b51f2d066bf816c3455d61615654e20f40827fae27a024e37f149719dd9608"
+  inputs-digest = "e7851568ede3ee2966c0c9ce65221676a72d3d0478b4bd0380fb01b82d33daa5"
   solver-name = "gps-cdcl"
   solver-version = 1

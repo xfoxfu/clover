@@ -4,7 +4,10 @@
   "editor.formatOnSave": true,
   "files.exclude": {
     "**/.git": true,
-    "**/.DS_Store": true
+    "**/.DS_Store": true,
+    "clover": true,
+    "gin-bin": true,
+    "Gopkg.lock": true
   },
   "search.exclude": {
     "**/vendor": true
