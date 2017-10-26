@@ -6,7 +6,7 @@
   "dependencies": {
     "@types/base64-js": "^1.2.5",
     "@types/bcrypt": "^1.0.0",
-    "@types/chalk": "^0.4.31",
+    "@types/chalk": "^2.2.0",
     "@types/handlebars": "^4.0.35",
     "@types/inquirer": "^0.0.35",
     "@types/jsonwebtoken": "^7.2.2",
