@@ -27,7 +27,7 @@
     "flexblocks": "^1.0.1",
     "fs-extra": "^3.0.1",
     "handlebars": "^4.0.10",
-    "inquirer": "^3.2.1",
+    "inquirer": "^4.0.0",
     "jsonwebtoken": "^7.4.1",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
