@@ -8,6 +8,8 @@ import { announce as announceMail } from "../lib/email";
 import Announce from "../models/announce";
 import User from "../models/user";
 import checkAuth from "./checkAuth";
+// tslint:disable-next-line:no-var-requires
+const filesize: any = require("filesize");
 
 const site = {
   title: config.get("site_title"),
@@ -22,6 +24,15 @@ router.use("/", async (ctx, next) => {
 });
 router.get("/", async (ctx) => {
   await ctx.render("admin-index", {
+    users: (await connection.getRepository(User).find()).map((value) => ({
+      email: value.email,
+      pass: value.connPassword,
+      port: value.connPort,
+      enc: value.connEnc,
+      band: filesize(value.bandwidthUsed),
+      money: Math.ceil(value.bandwidthUsed / 1024 / 1024 / 1024 / 5) * 14.4,
+      note: value.note,
+    })),
     site: { ...site },
   });
 });
