@@ -12,9 +12,12 @@ For more information, see "${__dirname}/../LICENSE.md".
 
 import config from "../lib/config";
 import db from "../lib/db";
+import { connection } from "../lib/db";
 import "../lib/email";
 import log from "../lib/log";
 import server from "../server";
+import User from "../models/user";
+import * as uuid from "uuid/v4";
 
 if (process.env.NODE_ENV === "test") {
   log.level = "silent";
@@ -32,4 +35,13 @@ db
     server.listen(PORT);
     log.info(`server listening on port ${PORT}`);
   })
-  .catch((err: any) => log.error(err));
+  .then(async () => {
+    const users = await connection.getRepository(User).find();
+    for(const user of users) {
+      if(! user.vmessUid ) {
+        user.vmessUid = uuid();
+        await connection.getRepository(User).save(user);
+      }
+    }
+  })
+  .catch((err: any ) => log.error(err));

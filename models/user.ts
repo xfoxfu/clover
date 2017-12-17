@@ -58,7 +58,7 @@ export default class User {
   }
   @Column({ name: "ss_enc", type: "varchar", length: 25 })
   public connEnc: EncryptionMethods = config.get("default_encryption");
-  @Column({ name: "vmess_uid" })
+  @Column({ name: "vmess_uid", nullable: true })
   @Generated("uuid")
   public vmessUid: string;
   @Column({ type: "int", name: "vmess_alter_id" })

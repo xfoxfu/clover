@@ -20,6 +20,7 @@
     "@types/node": "^8.0.17",
     "@types/pino": "^3.0.1",
     "@types/reflect-metadata": "^0.0.5",
+    "@types/uuid": "^3.0.0",
     "base64-js": "^1.2.1",
     "bcrypt": "^1.0.2",
     "config-file-bi": "^0.2.0",
@@ -44,7 +45,8 @@
     "sendgrid": "^5.2.0",
     "sqlite3": "^3.1.13",
     "typeorm": "^0.1.9",
-    "typescript": "^2.4.2"
+    "typescript": "^2.4.2",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "@types/chai": "^4.0.1",

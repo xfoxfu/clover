@@ -104,7 +104,7 @@ router.get("/dashboard", async (ctx) => {
         alterId: ctx.user.vmessAlterId,
         androidLink: new Buffer(JSON.stringify({
           "add":config.get("ss_host"),
-          "aid":ctx.user.vmessUid,
+          "aid":ctx.user.vmessAlterId,
           "host":`/;${config.get("ss_host")}`,
           "id":ctx.user.vmessUid,
           "net":"ws",
