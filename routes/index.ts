@@ -229,8 +229,8 @@ router.post("/reset_password_email_callback", async (ctx) => {
   }
 });
 router.get("/v2ray_config.json", (ctx) => {
-  ctx.header("Content-Type", "application/force-download");
-  ctx.header("Content-disposition", "attachment; filename=v2ray_config.json");
+  ctx.set("Content-Type", "application/force-download");
+  ctx.set("Content-disposition", "attachment; filename=v2ray_config.json");
   ctx.response.body = JSON.stringify({
     "log": {
         "loglevel": "warning"
