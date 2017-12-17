@@ -255,7 +255,7 @@ router.get("/v2ray_config.json", (ctx) => {
                     "users": [
                         {
                             "id": ctx.query.id,
-                            "alterId": ctx.query.aid
+                            "alterId": +ctx.query.aid
                         }
                     ]
                 }
