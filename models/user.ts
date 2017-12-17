@@ -1,7 +1,7 @@
 "use strict";
 
 import * as bcrypt from "bcrypt";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, Generated } from "typeorm";
 import config from "../lib/config";
 
 const generatePassword = () => {
