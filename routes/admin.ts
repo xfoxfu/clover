@@ -53,7 +53,7 @@ router.post("/announces", async (ctx) => {
   ctx.response.type = "text/html";
   ctx.response.body = `Succeeded.<a href="/admin">Go back</a>`;
 });
-router.get("/v2ray.json", (ctx) => {
+router.get("/v2ray.json", async (ctx) => {
   ctx.response.body = JSON.stringify({
     "log": {
         "access": "/var/log/v2ray/access.log",
@@ -66,7 +66,7 @@ router.get("/v2ray.json", (ctx) => {
         "settings": {
             "clients": (await connection.getRepository(User).find()).map((value) => ({
       email: value.email,
-      id: value.vmessId,
+      id: value.vmessUid,
       alterId: value.vmessAlterId
     }))
         },
