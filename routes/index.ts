@@ -72,7 +72,7 @@ router.post("/reg", async (ctx) => {
     await user.setPassword(ctx.request.body.password);
     user.setConnPassword();
     await user.allocConnPort();
-    await connection.getRepository(User).persist(user);
+    await connection.getRepository(User).save(user);
     ctx.session.uid = user.id;
     ctx.response.redirect("/dashboard");
   }
@@ -168,7 +168,7 @@ router.post("/reset_password", async (ctx) => {
       ctx.throw(400);
     } else {
       await ctx.user.setPassword(ctx.request.body.new);
-      await connection.getRepository(User).persist(ctx.user);
+      await connection.getRepository(User).save(ctx.user);
       ctx.redirect("/dashboard");
     }
   }
@@ -221,7 +221,7 @@ router.post("/reset_password_email_callback", async (ctx) => {
       ctx.throw(400);
     }
     await user.setPassword(ctx.request.body.password);
-    await connection.getRepository(User).persist(user);
+    await connection.getRepository(User).save(user);
     // TODO: better appearance
     ctx.response.status = 200;
     ctx.response.type = "text/html";

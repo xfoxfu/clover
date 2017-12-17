@@ -46,7 +46,7 @@ router.post("/users/:id/traffic", async (ctx) => {
     } else {
       user.bandwidthUsed += parseInt(ctx.request.body.u, 10);
       user.bandwidthUsed += parseInt(ctx.request.body.d, 10);
-      await connection.getRepository(User).persist(user);
+      await connection.getRepository(User).save(user);
       ctx.response.set("Content-Type", "application/json");
       ctx.response.body = JSON.stringify({
         ret: 1,

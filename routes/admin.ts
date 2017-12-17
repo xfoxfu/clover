@@ -44,7 +44,7 @@ router.get("/announces", async (ctx) => {
 });
 router.post("/announces", async (ctx) => {
   const announce = new Announce(ctx.request.body.title, ctx.request.body.content);
-  await connection.getRepository(Announce).persist(announce);
+  await connection.getRepository(Announce).save(announce);
   const users = await connection.getRepository(User).find();
   // TODO: use job queues
   await announceMail(announce, users);

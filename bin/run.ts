@@ -32,4 +32,4 @@ db
     server.listen(PORT);
     log.info(`server listening on port ${PORT}`);
   })
-  .catch((err) => log.error(err));
+  .catch((err: any) => log.error(err));
