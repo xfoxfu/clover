@@ -14,12 +14,12 @@
 
       <div class="mdl-tabs__panel" id="android-panel">
         <ol data-anchor-id="0udc">
-          <li>下载客户端并安装</li>
-          <a href="https://github.com/shadowsocks/shadowsocks-android/releases" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <li>下载客户端并安装(app-universal-release.apk)</li>
+          <a href="https://github.com/2dust/v2rayNG/releases" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             GitHub
           </a>
           <li>点击下面的按钮，按照系统提示用应用 v2rayNG 打开，并按照应用提示确认添加。</li>
-          <a href="{{user.vmess.androidLink}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <a href="vmess://{{user.vmess.androidLink}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             Config
           </a>
           <li>点击新增的配置文件右侧编辑图标。</li>
@@ -52,7 +52,7 @@
           </tbody>
         </table>
         <p>如果你的客户端支持配置文件，也可以点击下方的按钮下载配置文件：<br>
-          <a href=`/v2ray_config.json?id=${user.vmess.id}&aid=${user.vmess.alterId}` class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <a href="/v2ray_config.json?id={{user.vmess.id}}&aid={{user.vmess.alterId}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             Config
           </a>
         </p>
