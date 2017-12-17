@@ -42,7 +42,7 @@
     "pino": "^4.7.1",
     "reflect-metadata": "^0.1.10",
     "sendgrid": "^5.2.0",
-    "sqlite3": "^3.1.8",
+    "sqlite3": "^3.1.13",
     "typeorm": "^0.1.0-alpha.33",
     "typescript": "^2.4.2"
   },

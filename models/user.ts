@@ -58,6 +58,11 @@ export default class User {
   }
   @Column({ name: "ss_enc", type: "varchar", length: 25 })
   public connEnc: EncryptionMethods = config.get("default_encryption");
+  @Column({ name: "vmess_uid" })
+  @Generated("uuid")
+  public vmessUid: string;
+  @Column({ type: "int", name: "vmess_alter_id" })
+  public vmessAlterId = 16;
   @Column({ name: "is_admin" })
   public isAdmin: boolean = false;
   @Column({ name: "is_email_verified" })

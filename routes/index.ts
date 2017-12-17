@@ -99,6 +99,21 @@ router.get("/dashboard", async (ctx) => {
         ctx.user.connPassword}@${
         config.get("ss_host")}:${
         ctx.user.connPort}`).toString("base64"),
+      vmess: {
+        id: ctx.user.vmessUid,
+        alterId: ctx.user.vmessAlterId,
+        androidLink: new Buffer(JSON.stringify({
+          "add":config.get("ss_host"),
+          "aid":ctx.user.vmessUid,
+          "host":`/;${config.get("ss_host")}`,
+          "id":ctx.user.vmessUid,
+          "net":"ws",
+          "port":"443",
+          "ps":site.title,
+          "tls":"tls",
+          "type":"none"
+        })).toString("base64"),
+      },
     },
     bandwidth: {
       used: filesize(ctx.user.bandwidthUsed),
