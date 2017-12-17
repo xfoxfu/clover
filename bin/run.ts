@@ -40,6 +40,7 @@ db
     for(const user of users) {
       if(! user.vmessUid ) {
         user.vmessUid = uuid();
+        user.vmessAlterId = 16;
         await connection.getRepository(User).save(user);
       }
     }

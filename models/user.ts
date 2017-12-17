@@ -61,7 +61,7 @@ export default class User {
   @Column({ name: "vmess_uid", nullable: true })
   @Generated("uuid")
   public vmessUid: string;
-  @Column({ type: "int", name: "vmess_alter_id" })
+  @Column({ type: "int", name: "vmess_alter_id", nullable: true })
   public vmessAlterId = 16;
   @Column({ name: "is_admin" })
   public isAdmin: boolean = false;
