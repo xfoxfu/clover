@@ -4,27 +4,12 @@ import * as bcrypt from "bcrypt";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, Generated } from "typeorm";
 import config from "../lib/config";
 
-const generatePassword = () => {
-  const length = 8;
-  const charset = "abcdefghijkmnpqrstuvwxyzACDEFGHJKLMNPQRSTUVWXYZ2345679";
-  let retVal = "";
-  for (let i = 0, n = charset.length; i < length; ++i) {
-    retVal += charset.charAt(Math.floor(Math.random() * n));
-  }
-  return retVal;
-};
-
-// TODO: add more methods
-export declare type EncryptionMethods =
-  "aes-256-cfb" |
-  "chacha20-ietf-poly1305" |
-  "aes-256-gcm";
 @Entity()
 export default class User {
   constructor(email: string) {
     this.email = email;
   }
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   public id: number;
   @Column({ type: "text", nullable: true })
   public note: string;
@@ -37,27 +22,6 @@ export default class User {
   }
   public checkPassword = async (password: string) =>
     bcrypt.compare(password, this.hashedPassword)
-  @Column({ name: "ss_password", type: "varchar", length: 10 })
-  private ssPassword: string;
-  public get connPassword(): string {
-    return this.ssPassword;
-  }
-  public setConnPassword = () => {
-    return this.ssPassword = generatePassword();
-  }
-  @Column({ name: "ss_port", type: "int" })
-  private ssPort: number;
-  public get connPort(): number {
-    return this.ssPort;
-  }
-  public allocConnPort = async () => {
-    this.ssPort = config.get("port_last_allocated") + 1;
-    config.setWhenExists("port_last_allocated", this.ssPort);
-    await config.push();
-    return this.ssPort;
-  }
-  @Column({ name: "ss_enc", type: "varchar", length: 25 })
-  public connEnc: EncryptionMethods = config.get("default_encryption");
   @Column({ name: "vmess_uid", nullable: true })
   @Generated("uuid")
   public vmessUid: string;
@@ -69,8 +33,6 @@ export default class User {
   public isEmailVerified: boolean = false;
   @Column()
   public enabled: boolean = true;
-  @Column({ type: "int", name: "bandwidth_used" })
-  public bandwidthUsed = 0;
   @CreateDateColumn()
   public createdAt: Date;
   @UpdateDateColumn()

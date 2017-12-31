@@ -92,35 +92,23 @@ router.get("/dashboard", async (ctx) => {
     site: { ...site },
     user: {
       ...ctx.user,
-      connPort: ctx.user.connPort,
-      connPassword: ctx.user.connPassword,
-      connUri: new Buffer(`${
-        ctx.user.connEnc}:${
-        ctx.user.connPassword}@${
-        config.get("ss_host")}:${
-        ctx.user.connPort}`).toString("base64"),
       vmess: {
         id: ctx.user.vmessUid,
         alterId: ctx.user.vmessAlterId,
         androidLink: new Buffer(JSON.stringify({
-          "add":config.get("ss_host"),
-          "aid":ctx.user.vmessAlterId,
-          "host":`/;${config.get("ss_host")}`,
-          "id":ctx.user.vmessUid,
-          "net":"ws",
-          "port":"443",
-          "ps":site.title,
-          "tls":"tls",
-          "type":"none"
+          add: config.get("ss_host"),
+          aid: ctx.user.vmessAlterId,
+          host: `/;${config.get("ss_host")}`,
+          id: ctx.user.vmessUid,
+          net: "ws",
+          port: "443",
+          ps: site.title,
+          tls: "tls",
+          type: "none",
         })).toString("base64"),
       },
     },
-    bandwidth: {
-      used: filesize(ctx.user.bandwidthUsed),
-      start: config.get("bandwidth_start"),
-    },
     cards,
-    server: config.get("ss_host"),
   });
 });
 router.get("/updates", async (ctx) => {
@@ -131,7 +119,7 @@ router.get("/updates", async (ctx) => {
     card.isAnnouncement = true;
   }
   await ctx.render("updates", {
-    site: { ...site },
+    site,
     user: { email: ctx.user.email },
     // TODO: change these to real
     bandwidth: {
@@ -148,7 +136,7 @@ router.get("/logout", (ctx) => {
 router.get("/reset_password", async (ctx) => {
   await checkAuth(ctx, false);
   await ctx.render("reset-password", {
-    site: { ...site },
+    site,
     user: { email: ctx.user.email },
     // TODO: change these to real
     bandwidth: {
@@ -202,7 +190,7 @@ router.get("/reset_password_email_callback", async (ctx) => {
     ctx.throw(400);
   }
   await ctx.render("reset-password-email-callback", {
-    site: { ...site },
+    site,
     email: token.email,
     token: ctx.request.query.token,
   });
@@ -231,121 +219,12 @@ router.post("/reset_password_email_callback", async (ctx) => {
 router.get("/v2ray_config.json", (ctx) => {
   ctx.set("Content-Type", "application/force-download");
   ctx.set("Content-disposition", "attachment; filename=v2ray_config.json");
-  ctx.response.body = JSON.stringify({
-    "log": {
-        "loglevel": "warning"
-    },
-    "inbound": {
-        "listen": "127.0.0.1",
-        "port": 1080,
-        "protocol": "socks",
-        "settings": {
-            "auth": "noauth",
-            "udp": true,
-            "ip": "127.0.0.1"
-        }
-    },
-    "outbound": {
-        "protocol": "vmess",
-        "settings": {
-            "vnext": [
-                {
-                    "address": config.get("ss_host"),
-                    "port": 443,
-                    "users": [
-                        {
-                            "id": ctx.query.id,
-                            "alterId": +ctx.query.aid
-                        }
-                    ]
-                }
-            ]
-        },
-        "mux": {
-            "enabled": true,
-            "concurrency": 8
-        },
-        "streamSettings": {
-          "network": "ws",
-          "security": "tls",
-          "tlsSettings": {
-            "serverName": config.get("ss_host"),
-            "allowInsecure": false
-          },
-          "wsSettings": {
-            "path": "/",
-            "headers": {
-              "Host": config.get("ss_host")
-            }
-          }
-        }
-    },
-    "outboundDetour": [
-        {
-            "protocol": "freedom",
-            "settings": {},
-            "tag": "direct"
-        }
-    ],
-    "routing": {
-        "strategy": "rules",
-        "settings": {
-            "rules": [
-                {
-                    "type": "field",
-                    "port": "54-79",
-                    "outboundTag": "direct"
-                },
-                {
-                    "type": "field",
-                    "port": "81-442",
-                    "outboundTag": "direct"
-                },
-                {
-                    "type": "field",
-                    "port": "444-65535",
-                    "outboundTag": "direct"
-                },
-                {
-                    "type": "field",
-                    "domain": [
-                        "gc.kis.scr.kaspersky-labs.com"
-                    ],
-                    "outboundTag": "direct"
-                },
-                {
-                    "type": "chinasites",
-                    "outboundTag": "direct"
-                },
-                {
-                    "type": "field",
-                    "ip": [
-                        "0.0.0.0/8",
-                        "10.0.0.0/8",
-                        "100.64.0.0/10",
-                        "127.0.0.0/8",
-                        "169.254.0.0/16",
-                        "172.16.0.0/12",
-                        "192.0.0.0/24",
-                        "192.0.2.0/24",
-                        "192.168.0.0/16",
-                        "198.18.0.0/15",
-                        "198.51.100.0/24",
-                        "203.0.113.0/24",
-                        "::1/128",
-                        "fc00::/7",
-                        "fe80::/10"
-                    ],
-                    "outboundTag": "direct"
-                },
-                {
-                    "type": "chinaip",
-                    "outboundTag": "direct"
-                }
-            ]
-        }
-    }
-});
+  const configBase = require("config.json");
+  configBase.outbound.settings.vnext[0].users = [{
+    id: ctx.query.id,
+    alterId: +ctx.query.aid,
+  }];
+  ctx.response.body = configBase;
 });
 
 router.use("/admin", adminRouter.routes(), adminRouter.allowedMethods());
