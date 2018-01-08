@@ -15,6 +15,7 @@ import db from "../lib/db";
 import "../lib/email";
 import log from "../lib/log";
 import server from "../server";
+import { writeServerConfig } from "../lib/vmess";
 
 if (process.env.NODE_ENV === "test") {
   log.level = "silent";
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV === "test") {
 const PORT = config.get("port") || 3000;
 
 db()
+  .then(() => writeServerConfig())
   .then(() => {
     log.info(`database connected to ${config.get("db_path")}`);
     server.listen(PORT);
