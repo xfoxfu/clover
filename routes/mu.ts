@@ -19,8 +19,8 @@ router.get("/users", async (ctx) => {
         passwd: user.connPassword,
         t: user.updatedAt.getTime(),
         u: 0,
-        d: user.bandwidthUsed,
-        transfer_enable: user.bandwidthUsed + 200000000,
+        d: 0,
+        transfer_enable: 200000000,
         port: user.connPort,
         switch: user.enabled ? 1 : 0,
         enable: user.enabled ? 1 : 0,
@@ -44,8 +44,6 @@ router.post("/users/:id/traffic", async (ctx) => {
     } else if ((!ctx.request.body.u) && (!ctx.request.body.d)) {
       ctx.throw(400);
     } else {
-      user.bandwidthUsed += parseInt(ctx.request.body.u, 10);
-      user.bandwidthUsed += parseInt(ctx.request.body.d, 10);
       await connection.getRepository(User).save(user);
       ctx.response.set("Content-Type", "application/json");
       ctx.response.body = JSON.stringify({

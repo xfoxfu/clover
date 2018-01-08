@@ -8,8 +8,9 @@ import { announce as announceMail } from "../lib/email";
 import Announce from "../models/announce";
 import User from "../models/user";
 import checkAuth from "./checkAuth";
-// tslint:disable-next-line:no-var-requires
-const filesize: any = require("filesize");
+import { encode } from "../lib/jwt";
+import * as MarkdownIt from "markdown-it";
+const md = new MarkdownIt();
 
 const site = {
   title: config.get("site_title"),
@@ -29,8 +30,6 @@ router.get("/", async (ctx) => {
       pass: value.connPassword,
       port: value.connPort,
       enc: value.connEnc,
-      band: filesize(value.bandwidthUsed),
-      money: Math.ceil(value.bandwidthUsed / 1024 / 1024 / 1024 / 5) * 14.4,
       note: value.note,
     })),
     site,
@@ -43,7 +42,7 @@ router.get("/announces", async (ctx) => {
   });
 });
 router.post("/announces", async (ctx) => {
-  const announce = new Announce(ctx.request.body.title, ctx.request.body.content);
+  const announce = new Announce(ctx.request.body.title, md.render(ctx.request.body.content));
   await connection.getRepository(Announce).save(announce);
   const users = await connection.getRepository(User).find();
   // TODO: use job queues
@@ -52,6 +51,20 @@ router.post("/announces", async (ctx) => {
   ctx.response.status = 200;
   ctx.response.type = "text/html";
   ctx.response.body = `Succeeded.<a href="/admin">Go back</a>`;
+});
+router.get("/refcode", async (ctx) => {
+  await ctx.render("admin-refcode", {
+    site,
+  });
+});
+router.post("/refcode", async (ctx) => {
+  // TODO: better appearance
+  ctx.response.status = 200;
+  ctx.response.type = "text/html";
+  ctx.response.body = await encode({
+    email: ctx.request.body.email,
+    note: ctx.request.body.note,
+  });
 });
 
 export default router;
