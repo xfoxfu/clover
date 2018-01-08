@@ -3,10 +3,11 @@
 import * as bcrypt from "bcrypt";
 import {
   Entity,
-  Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, Generated,
+  Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn,
   getConnection, FindOneOptions,
 } from "typeorm";
 import config from "../lib/config";
+import * as uuid from "uuid/v4";
 
 const generatePassword = () => {
   const length = 8;
@@ -28,6 +29,7 @@ export declare type EncryptionMethods =
 export default class User {
   constructor(email: string) {
     this.email = email;
+    this.vmessUid = uuid();
   }
   @PrimaryGeneratedColumn("uuid")
   public id: number;
@@ -71,7 +73,6 @@ export default class User {
   @Column({ name: "ss_enc", type: "varchar", length: 25 })
   public connEnc: EncryptionMethods = config.get("default_encryption");
   @Column({ name: "vmess_uid", nullable: true })
-  @Generated("uuid")
   public vmessUid: string;
   @Column({ type: "int", name: "vmess_alter_id", nullable: true })
   public vmessAlterId = 16;

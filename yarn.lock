@@ -29,6 +29,17 @@
     "@types/keygrip" "*"
     "@types/node" "*"
 
+"@types/dockerode@^2.5.3":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@types/dockerode/-/dockerode-2.5.3.tgz#6b20888c06d0315d19a6e7bab249c7538d6e564e"
+  dependencies:
+    "@types/events" "*"
+    "@types/node" "*"
+
+"@types/events@*":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/events/-/events-1.1.0.tgz#93b1be91f63c184450385272c47b6496fd028e02"
+
 "@types/fs-extra@^3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-3.0.3.tgz#1d66eb670ebf657e57c0fda014df340c19d8aa0c"

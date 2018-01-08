@@ -4,6 +4,7 @@ import User from "../models/user";
 import { getConnection } from "typeorm";
 import config from "./config";
 import { writeFile } from "fs-extra";
+import { reload } from "./docker";
 
 export const getClientConfig = (user: User) => ({
   log: {
@@ -175,4 +176,5 @@ export const getServerConfig = async () => ({
 });
 export const writeServerConfig = async () => {
   await writeFile(`${__dirname}/../config/v2ray_server.json`, JSON.stringify(await getServerConfig()));
+  await reload();
 };

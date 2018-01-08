@@ -1,0 +1,17 @@
+clover:
+  image: coderfox/clover:latest
+  container_name: clover
+  privileged: false
+  volumes:
+  - ./clover.db:/app/clover.db
+  - ./config/v2ray_server.json:/app/config/v2ray_server.json
+  expose:
+  - 3000
+v2ray:
+  image: v2ray/official
+  container_name: v2ray
+  privileged: false
+  ports:
+  - 443
+  volumes:
+  - ./config/v2ray_server.json:/etc/v2ray/config.json
