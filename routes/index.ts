@@ -9,10 +9,9 @@ import { resetPassword as resetPasswordMail } from "../lib/email";
 import log from "../lib/log";
 import Announce from "../models/announce";
 import User from "../models/user";
-// tslint:disable-next-line:no-var-requires
-const filesize: any = require("filesize");
 import { decode } from "../lib/jwt";
 import checkAuth from "./checkAuth";
+import { writeServerConfig } from "../lib/vmess";
 
 import adminRouter from "./admin";
 import muRouter from "./mu";
@@ -73,6 +72,8 @@ router.post("/reg", async (ctx) => {
     user.setConnPassword();
     await user.allocConnPort();
     await connection.getRepository(User).save(user);
+    // TODO: move this to database subscriber
+    await writeServerConfig();
     ctx.session.uid = user.id;
     ctx.response.redirect("/dashboard");
   }
@@ -92,6 +93,13 @@ router.get("/dashboard", async (ctx) => {
     site: { ...site },
     user: {
       ...ctx.user,
+      connPort: ctx.user.connPort,
+      connPassword: ctx.user.connPassword,
+      connUri: new Buffer(`${
+        ctx.user.connEnc}:${
+        ctx.user.connPassword}@${
+        config.get("ss_host")}:${
+        ctx.user.connPort}`).toString("base64"),
       vmess: {
         id: ctx.user.vmessUid,
         alterId: ctx.user.vmessAlterId,
@@ -109,6 +117,7 @@ router.get("/dashboard", async (ctx) => {
       },
     },
     cards,
+    server: config.get("ss_host"),
   });
 });
 router.get("/updates", async (ctx) => {
@@ -121,11 +130,6 @@ router.get("/updates", async (ctx) => {
   await ctx.render("updates", {
     site,
     user: { email: ctx.user.email },
-    // TODO: change these to real
-    bandwidth: {
-      used: filesize(ctx.user.bandwidthUsed),
-      start: config.get("bandwidth_start"),
-    },
     cards,
   });
 });
@@ -138,11 +142,6 @@ router.get("/reset_password", async (ctx) => {
   await ctx.render("reset-password", {
     site,
     user: { email: ctx.user.email },
-    // TODO: change these to real
-    bandwidth: {
-      used: filesize(ctx.user.bandwidthUsed),
-      start: config.get("bandwidth_start"),
-    },
   });
 });
 router.post("/reset_password", async (ctx) => {

@@ -12,7 +12,7 @@ export default () => {
   });
   describe("#checkPassword", () => {
     const user = new User("user@example.com");
-    user.setPassword("A");
+    before(() => user.setPassword("A"));
     it("returns true on success", async () => {
       // tslint:disable-next-line:no-unused-expression
       expect(await user.checkPassword("A")).to.be.true;

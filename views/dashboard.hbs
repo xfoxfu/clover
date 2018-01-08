@@ -2,7 +2,7 @@
 <div class="mdl-card">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text">
-      <i class="material-icons">settings</i> Config Guide
+      <i class="material-icons">settings</i> VMess 方式连接配置说明（推荐）
     </h2>
   </div>
   <div class="mdl-card__supporting-text">
@@ -31,6 +31,80 @@
       </div>
       <div class="mdl-tabs__panel is-active" id="targaryens-panel" style="overflow-x: auto;">
         <p data-anchor-id="hwku">本服务是 v2ray VMess 服务，请按照如下参数自行配置：</p>
+        <p>
+          <b>服务器地址：</b>
+          <br>{{server}}
+          <br>
+          <b>用户 ID：</b>
+          <br>{{user.vmess.id}}
+          <br>
+          <b>Alter ID：</b>
+          <br>{{user.vmess.alterId}}
+          <br>
+          <b>连接信息</b>
+          <br>WebSocket,
+          <br>path="/",
+          <br>headers["Host"]="server.cflink.cf"
+          <br>
+        </p>
+        <p>如果你的客户端支持配置文件，也可以点击下方的按钮下载配置文件：
+          <br>
+          <a href="/v2ray_config.json?id={{user.vmess.id}}&aid={{user.vmess.alterId}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Config
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mdl-card">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">
+      <i class="material-icons">settings</i> Shadowsocks 方式连接配置说明
+    </h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+      <div class="mdl-tabs__tab-bar">
+        <a href="#android-panel" class="mdl-tabs__tab is-active">Android</a>
+        <a href="#lannisters-panel" class="mdl-tabs__tab">iOS</a>
+        <a href="#targaryens-panel" class="mdl-tabs__tab">Others</a>
+      </div>
+
+      <div class="mdl-tabs__panel is-active" id="android-panel">
+        <ol data-anchor-id="0udc">
+          <li>下载客户端并安装</li>
+          <a href="https://github.com/shadowsocks/shadowsocks-android/releases" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            GitHub
+          </a>
+          <li>点击下面的按钮，按照系统提示用应用 Shadowsocks 打开，并按照应用提示确认添加。</li>
+          <a href="ss://{{user.connUri}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Config
+          </a>
+          <li>点击新增的配置文件右侧编辑图标。</li>
+          <li>在弹出的面板内，修改「配置名称」为自己喜欢的值。</li>
+          <li>下拉找到「路由」，选择「绕过局域网及中国大陆地址」；打开「IPv6 路由」；关闭「UDP 转发」。</li>
+          <li>点击右上角对号保存，回到主界面。</li>
+          <li>首先点击刚刚建立的配置文件，其左侧条变为绿色；然后点击下方纸飞机，待最下方文本框变为绿色后即可开始使用网络。个别系统可能会询问权限，请一律允许。</li>
+          <li>若网络没有问题，可点击主界面左上角图标打开菜单，选择「设置选项」并启用「自动连接」，代理将在开机且有网络时自动启动。</li>
+        </ol>
+      </div>
+      <div class="mdl-tabs__panel" id="lannisters-panel">
+        <ol data-anchor-id="0udc">
+          <li>在非中国大陆区域的 App Store 里购买并安装应用「Shadowrocket」（约合人民币 18 元）。</li>
+          <a href="https://itunes.apple.com/us/app/shadowrocket/id932747118?mt=8" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            App Store
+          </a>
+          <li>点击下面的按钮，按照系统提示用应用 Shadowrocket 打开，并按照应用提示确认添加。</li>
+          <a href="ss://{{user.connUri}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Config
+          </a>
+          <li>在主界面点击「未连接」的开关，按照系统提示允许建立 VPN 连接。</li>
+          <li>此后每次需要连接代理时，请手动打开应用连接。也可以在控制中心添加快捷开关。</li>
+        </ol>
+      </div>
+      <div class="mdl-tabs__panel" id="targaryens-panel">
+        <p data-anchor-id="hwku">本服务是 shadowsocks 服务，请按照如下参数自行配置：</p>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <tbody>
             <tr>
@@ -38,22 +112,22 @@
               <td>{{server}}</td>
             </tr>
             <tr>
-              <td class="mdl-data-table__cell--non-numeric">用户 ID</td>
-              <td>{{user.vmess.id}}</td>
+              <td class="mdl-data-table__cell--non-numeric">端口</td>
+              <td>{{user.connPort}}</td>
             </tr>
             <tr>
-              <td class="mdl-data-table__cell--non-numeric">Alter ID</td>
-              <td>{{user.vmess.alterId}}</td>
+              <td class="mdl-data-table__cell--non-numeric">密码</td>
+              <td>{{user.connPassword}}</td>
             </tr>
             <tr>
-              <td class="mdl-data-table__cell--non-numeric">连接方式</td>
-              <td>WebSocket, path="/", headers["Host"]="server.cflink.cf"</td>
+              <td class="mdl-data-table__cell--non-numeric">加密方式</td>
+              <td>{{user.connEnc}}</td>
             </tr>
           </tbody>
         </table>
-        <p>如果你的客户端支持配置文件，也可以点击下方的按钮下载配置文件：
+        <p>如果你的客户端支持配置链接，也可以点击下方的按钮：
           <br>
-          <a href="/v2ray_config.json?id={{user.vmess.id}}&aid={{user.vmess.alterId}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <a href="ss://{{user.connUri}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             Config
           </a>
         </p>
