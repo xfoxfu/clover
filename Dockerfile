@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:8-alpine
 MAINTAINER coderfox<docker@xfox.me>
 COPY . /app
 WORKDIR /app

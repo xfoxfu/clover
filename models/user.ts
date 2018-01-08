@@ -31,7 +31,7 @@ export default class User {
     this.email = email;
     this.vmessUid = uuid();
   }
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn()
   public id: number;
   @Column({ type: "text", nullable: true })
   public note: string;
