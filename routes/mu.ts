@@ -44,6 +44,7 @@ router.post("/users/:id/traffic", async (ctx) => {
     } else if ((!ctx.request.body.u) && (!ctx.request.body.d)) {
       ctx.throw(400);
     } else {
+      user.updatedAt = new Date();
       await connection.getRepository(User).save(user);
       ctx.response.set("Content-Type", "application/json");
       ctx.response.body = JSON.stringify({

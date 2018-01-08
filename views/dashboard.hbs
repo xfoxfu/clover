@@ -1,4 +1,18 @@
-{{> header}}
+{{> header}} {{#unless user.enabled}}
+<div class="mdl-card">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">
+      账号被停用
+    </h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p>您的账号已被停用。请联系
+      <a href="mailto:i@xfox.me">i@xfox.me</a> 重新启用您的账号。</p>
+    <p>可能的原因：您主动要求停用、您的账户发生欠费。</p>
+    <p>请您阅读下方描述信息确认您的缴费情况。</p>
+    <pre><code>{{user.note}}</code></pre>
+  </div>
+</div>{{/unless}}
 <div class="mdl-card">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text">
