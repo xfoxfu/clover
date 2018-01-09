@@ -11,7 +11,7 @@ import Announce from "../models/announce";
 import User from "../models/user";
 import { decode } from "../lib/jwt";
 import checkAuth from "./checkAuth";
-import { writeServerConfig } from "../lib/vmess";
+import { getClientConfig, writeServerConfig } from "../lib/vmess";
 
 import adminRouter from "./admin";
 import muRouter from "./mu";
@@ -218,12 +218,7 @@ router.post("/reset_password_email_callback", async (ctx) => {
 router.get("/v2ray_config.json", (ctx) => {
   ctx.set("Content-Type", "application/force-download");
   ctx.set("Content-disposition", "attachment; filename=v2ray_config.json");
-  const configBase = require("config.json");
-  configBase.outbound.settings.vnext[0].users = [{
-    id: ctx.query.id,
-    alterId: +ctx.query.aid,
-  }];
-  ctx.response.body = configBase;
+  ctx.response.body = getClientConfig(ctx.query.id, +ctx.query.aid);
 });
 
 router.use("/admin", adminRouter.routes(), adminRouter.allowedMethods());

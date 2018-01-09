@@ -6,7 +6,7 @@ import config from "./config";
 import { writeFile } from "fs-extra";
 import { reload } from "./docker";
 
-export const getClientConfig = (user: User) => ({
+export const getClientConfig = (id: string, aid: number) => ({
   log: {
     loglevel: "warning",
   },
@@ -27,8 +27,8 @@ export const getClientConfig = (user: User) => ({
         address: config.get("ss_host"),
         port: 443,
         users: [{
-          id: user.vmessUid,
-          alterId: user.vmessAlterId,
+          id,
+          alterId: aid,
         }],
       }],
     },
