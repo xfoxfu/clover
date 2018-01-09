@@ -26,6 +26,7 @@ Start
 -----
 
 ```sh
+tsc
 npm start
 ```
 

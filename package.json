@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/base64-js": "^1.2.5",
     "@types/bcrypt": "^1.0.0",
+    "@types/chai": "^4.0.1",
     "@types/chalk": "^0.4.31",
     "@types/dockerode": "^2.5.3",
     "@types/handlebars": "^4.0.35",
@@ -19,6 +20,7 @@
     "@types/koa-static": "^3.0.0",
     "@types/koa-views": "^2.0.1",
     "@types/markdown-it": "^0.0.4",
+    "@types/mocha": "^2.2.41",
     "@types/node": "^8.0.17",
     "@types/pino": "^3.0.1",
     "@types/reflect-metadata": "^0.0.5",
@@ -54,8 +56,6 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.0.1",
-    "@types/mocha": "^2.2.41",
     "chai": "^4.1.0",
     "coveralls": "^2.13.1",
     "mocha": "^3.4.2",
@@ -70,7 +70,6 @@
   "scripts": {
     "test": "nyc mocha",
     "test-cov": "nyc -r lcovonly mocha",
-    "postinstall": "tsc",
     "pretest": "tsc",
     "dev": "supervisor -w . bin/run",
     "start": "node ./bin/run",
