@@ -4,7 +4,7 @@ import * as Docker from "dockerode";
 import log from "./log";
 
 const docker = new Docker();
-const container = docker.getContainer('v2ray');
+const container = docker.getContainer("v2ray");
 
 export const init = async () => {
   try {
@@ -19,13 +19,13 @@ export const init = async () => {
   } catch (err) {
     log.error("cannot start docker container v2ray", err);
   }
-}
+};
 
 export const reload = async () => {
   try {
     await container.restart();
-    log.info("docker container v2ray is restarted")
+    log.info("docker container v2ray is restarted");
   } catch (err) {
     log.error("cannot restart docker container v2ray", err);
   }
-}
+};

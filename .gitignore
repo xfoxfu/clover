@@ -1,4 +1,5 @@
 v2ray_server.json
+dist
 
 # TypeScript ignores
 *.js

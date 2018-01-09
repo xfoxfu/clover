@@ -114,6 +114,33 @@ router.get("/dashboard", async (ctx) => {
           tls: "tls",
           type: "none",
         })).toString("base64"),
+        link: {
+          android: Buffer.from(JSON.stringify({
+            add: config.get("ss_host"),
+            aid: ctx.user.vmessAlterId,
+            host: `/;${config.get("ss_host")}`,
+            id: ctx.user.vmessUid,
+            net: "ws",
+            port: "443",
+            ps: site.title,
+            tls: "tls",
+            type: "none",
+          })).toString("base64"),
+          win: Buffer.from(JSON.stringify({
+            "ps": site.title,
+            "add": config.get("ss_host"),
+            "port": "443",
+            "id": ctx.user.vmessUid,
+            "aid": ctx.user.vmessAlterId,
+            "net": "ws",
+            "type": "none",
+            "host": `/;${config.get("ss_host")}`,
+            "tls": "tls"
+          })).toString("base64"),
+          ios: `${Buffer.from(
+            `chacha20-poly1305:${ctx.user.vmessUid}@${config.get("ss_host")}:443}`
+          )}?network=ws&remark=${site.title}&wspath=/&tls=1&allowInsecure=0`
+        }
       },
     },
     cards,
