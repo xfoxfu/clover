@@ -36,9 +36,28 @@ Use environment variables, and dotenv files are also supported.
 | VMESS_PORT            | 443                              |                                          |
 | VMESS_PORT_DYNAMIC    |                                  | leave it blank to disable the feature    |
 | VMESS_NETWORK         | ws                               | tcp, kcp or ws                           |
+| VMESS_TCP_HEADER      | {"type":"none"}                  | JSON representing HTTP header obfs config |
 | VMESS_WS_PATH         | /                                |                                          |
 | VMESS_WS_HOST         | the same as PROXY_HOST           |                                          |
 | VMESS_WS_HEADERS      | {}                               | JSON representing all the header keys, `Host` excluded |
+| VMESS_TLS             | out                              | `off` for disable / `in` for using v2ray TLS / `out` for using TLS provided outside v2ray |
+| VMESS_TLS_SERVER      | example.com                      | hostname for TLS                         |
+| VMESS_TLS_CERT_TRUST  | true                             | true/false, false for insecure(not-trusted) certs |
+| VMESS_TLS_CERT        | server.crt                       | path of TLS cert file, used only `VMESS_TLS` is `in` |
+| VMESS_TLS_KEY         | server.key                       | path of TLS key file, used only `VMESS_TLS` is `in` |
+
+Currently, not all features of vmess is implemented.
+
+- [ ] VMESS_PORT_DYNAMIC
+- [ ] VMESS_NETWORK
+  * [ ] tcp
+  * [ ] kcp
+  * [x] ws
+- [ ] VMESS_TCP_HEADER
+- [ ] VMESS_TLS
+  * [ ] off
+  * [ ] in
+  * [x] out
 
 Start
 -----

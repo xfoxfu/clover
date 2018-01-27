@@ -38,10 +38,22 @@ export const vmess = {
   dynamicPort: getEnv("VMESS_PORT_DYNAMIC", ""),
   // possible values are: tcp, kcp and ws
   network: getEnv("VMESS_NETWORK", "ws"),
+  tcp: {
+    header: JSON.parse(getEnv("VMESS_TCP_HEADER", JSON.stringify({ type: "none" }))),
+  },
   webSocket: {
     path: getEnv("VMESS_WS_PATH", "/"),
     host: getEnv("VMESS_WS_HOST", proxyHost),
     headers: JSON.parse(getEnv("VMESS_WS_HEADERS", "{}")),
+  },
+  tls: {
+    status: getEnv("VMESS_TLS", "out"),
+    server: getEnv("VMESS_TLS_SERVER", "example.com"),
+    cert: {
+      trust: getEnvBoolean("VMESS_TLS_CERT_TRUST"),
+      certificateFile: getEnv("VMESS_TLS_CERT", "server.crt"),
+      keyFile: getEnv("VMESS_TLS_KEY", "server.key"),
+    },
   },
 };
 
