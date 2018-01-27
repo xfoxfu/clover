@@ -25,6 +25,7 @@ declare module "koa" {
 
 const site = {
   title: config.get("site_title"),
+  admin: config.get("admin_email")
 };
 
 router.get("/", async (ctx) => {
@@ -127,20 +128,20 @@ router.get("/dashboard", async (ctx) => {
             type: "none",
           })).toString("base64"),
           win: Buffer.from(JSON.stringify({
-            "ps": site.title,
-            "add": config.get("ss_host"),
-            "port": "443",
-            "id": ctx.user.vmessUid,
-            "aid": ctx.user.vmessAlterId,
-            "net": "ws",
-            "type": "none",
-            "host": `/;${config.get("ss_host")}`,
-            "tls": "tls"
+            ps: site.title,
+            add: config.get("ss_host"),
+            port: "443",
+            id: ctx.user.vmessUid,
+            aid: ctx.user.vmessAlterId,
+            net: "ws",
+            type: "none",
+            host: `/;${config.get("ss_host")}`,
+            tls: "tls",
           })).toString("base64"),
           ios: `${Buffer.from(
-            `chacha20-poly1305:${ctx.user.vmessUid}@${config.get("ss_host")}:443}`
-          )}?network=ws&remark=${site.title}&wspath=/&tls=1&allowInsecure=0`
-        }
+            `chacha20-poly1305:${ctx.user.vmessUid}@${config.get("ss_host")}:443}`,
+          )}?network=ws&remark=${site.title}&wspath=/&tls=1&allowInsecure=0`,
+        },
       },
     },
     cards,

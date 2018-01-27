@@ -7,7 +7,7 @@
   </div>
   <div class="mdl-card__supporting-text">
     <p>您的账号已被停用。请联系
-      <a href="mailto:i@xfox.me">i@xfox.me</a> 重新启用您的账号。</p>
+      <a href="mailto:{{site.admin}}">i@xfox.me</a> 重新启用您的账号。</p>
     <p>可能的原因：您主动要求停用、您的账户发生欠费。</p>
     <p>请您阅读下方描述信息确认您的缴费情况。</p>
     <pre><code>{{user.note}}</code></pre>
@@ -50,9 +50,7 @@
         </ol>
       </div>
       <div class="mdl-tabs__panel" id="ios-panel">
-        <p>因为缺乏 iOS 设备进行测试，请 iOS 用户反馈配置过程，以便改善配置说明，谢谢。</p>
-        <p>购买了国区 Shadowrocket 的用户，可自行探索如何使用 Shadowrocket 进行配置，并请反馈配置过程，谢谢。</p>
-        <p>iOS 就是麻烦，封闭不仅仅会带来更安全的体验（然而并没有），也会导致审查制度的高效和严格。没事换台 Pixel 呗，体验并不差。</p>
+        <h2>应用 Kitsunebi（推荐）</h2>>
         <ol data-anchor-id="0udc">
           <li>在 App Store 购买应用 Kitsunebi（￥12），或申请免费的测试版（需要挂代理访问）。</li>
           <a href="https://itunes.apple.com/cn/app/kitsunebi/id1275446921" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
@@ -71,7 +69,28 @@
             <code>{{server}}</code>；Mux 随意，打开可以提升速度，但可能导致断流。
           </li>
           <li>点击右上角保存，点击新建的配置文件，使其左侧变为绿灯。</li>
+          <li>进入「高级特性」，找到「Tunnel 选项」，打开「Full Tunnel」。</li>
           <li>回到主界面，打开连接。系统可能多次询问权限，请一律允许。</li>
+        </ol>
+        <h2>应用 Shadowrocket</h2>
+        <ol data-anchor-id="0udc">
+          <li>在非中国大陆区域的 App Store 里购买并安装应用「Shadowrocket」（约合人民币 18 元）。</li>
+          <a href="https://itunes.apple.com/us/app/shadowrocket/id932747118?mt=8" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            App Store
+          </a>
+          <li>打开应用，点击右上角加号新建服务器。</li>
+          <li>「类型」选择&nsbp;
+            <code>Vmess</code>
+            <br>「地址」填写&nbsp;
+            <code>{{server}}</code>；「端口」填写&nbsp;
+            <code>443</code>；「密码.UUID」填写&nbsp;
+            <code>{{user.vmess.id}}</code>；（可选）加密方式选择&nbsp;
+            <code>chacha20-poly1305</code>；传输协议选择「ws」； 「WS 路径填写」&nbsp;
+            <code>/</code>；TLS 打开；「服务器名称」填写&nbsp;
+            <code>{{server}}</code>；Mux 随意，打开可以提升速度，但可能导致断流。
+          </li>
+          <li>点击右上角保存，点击新建的配置文件，使其左侧变为绿灯。</li>
+          <li>回到主界面，打开连接。系统可能多次询问权限，请一律允许。</li>x
         </ol>
       </div>
       <div class="mdl-tabs__panel" id="win-panel">

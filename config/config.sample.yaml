@@ -12,3 +12,4 @@ bandwidth_start: 'Jan. 1, 2017'
 jwt_key: 527877cb
 site_url: http://127.0.0.1:3000
 ss_host: 127.0.0.1
+admin_email: user@example.com
