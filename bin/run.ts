@@ -2,7 +2,7 @@
 
 if (process.env.NODE_ENV !== "test") {
   // tslint:disable-next-line:no-console
-  console.log(`ss-ui  Copyright (C) 2017 coderfox\n
+  console.log(`clover Copyright (C) 2017-2018 coderfox\n
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
 under certain conditions.

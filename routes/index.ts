@@ -3,7 +3,7 @@
 
 import Router = require("koa-router");
 const router = new Router();
-import { siteTitle, adminEmail, proxyHost } from "../lib/config";
+import { sourceCodeUrl, siteTitle, adminEmail, proxyHost } from "../lib/config";
 import { connection } from "../lib/db";
 import { resetPassword as resetPasswordMail } from "../lib/email";
 import log from "../lib/log";
@@ -26,6 +26,7 @@ declare module "koa" {
 const site = {
   title: siteTitle,
   admin: adminEmail,
+  source: sourceCodeUrl,
 };
 
 router.get("/", async (ctx) => {

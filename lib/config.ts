@@ -5,6 +5,7 @@ import log from "./log";
 const getEnv = (key: string, value: string): string => process.env[key.toUpperCase()] || value;
 const getEnvBoolean = (key: string, value = true) => getEnv(key, value ? "true" : "false").toLowerCase() === "true";
 
+export const sourceCodeUrl = "https://github.com/coderfox/clover";
 export const dbPath = getEnv("DB_PATH", "./clover.db");
 export const logLevel = getEnv("LOG_LEVEL", "debug");
 export const port = +getEnv("PORT", "3000");
