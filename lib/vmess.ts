@@ -2,7 +2,7 @@
 
 import User from "../models/user";
 import { getConnection } from "typeorm";
-import { proxyHost } from "./config";
+import { proxyHost, vmess } from "./config";
 import { writeFile } from "fs-extra";
 import { reload } from "./docker";
 
@@ -25,7 +25,7 @@ export const getClientConfig = (id: string, aid: number) => ({
     settings: {
       vnext: [{
         address: proxyHost,
-        port: 443,
+        port: vmess.port,
         users: [{
           id,
           alterId: aid,
@@ -175,6 +175,6 @@ export const getServerConfig = async () => ({
   },
 });
 export const writeServerConfig = async () => {
-  await writeFile(`${__dirname}/../config/v2ray_server.json`, JSON.stringify(await getServerConfig()));
+  await writeFile(`${__dirname}/../v2ray_server.json`, JSON.stringify(await getServerConfig()));
   await reload();
 };

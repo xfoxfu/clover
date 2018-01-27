@@ -4,7 +4,7 @@ clover:
   privileged: false
   volumes:
   - ./clover.db:/app/clover.db
-  - ./config/v2ray_server.json:/app/config/v2ray_server.json
+  - ./v2ray_server.json:/app/v2ray_server.json
   - /var/run/docker.sock:/var/run/docker.sock:ro
   expose:
   - 3000
@@ -15,4 +15,4 @@ v2ray:
   ports:
   - 443
   volumes:
-  - ./config/v2ray_server.json:/etc/v2ray/config.json
+  - ./v2ray_server.json:/etc/v2ray/config.json

@@ -48,7 +48,22 @@ tsc
 npm start
 ```
 
-or you may utilize the `docker-compose.yml`.
+Connect With Proxy Servers
+-----
+
+### Shadowsocks
+
+Use any server implementions support MU API v2.
+
+### v2ray
+
+Use docker to deploy v2ray, and the container name should be `v2ray`.
+
+*Clover* will generate `v2ray_server.json` as server config in root path of *Clover*.
+
+*Clover* will connect to docker daemon automatically and restart the server on demand.
+
+If you run *Clover* inside a container, you may create 2 volumes: `/var/run/docker.sock:/var/run/docker.sock:ro` and `./v2ray_server.json:/app/v2ray_server.json` to make the connection.
 
 License
 -----

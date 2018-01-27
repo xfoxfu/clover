@@ -10,6 +10,8 @@ For more information, see "${__dirname}/../LICENSE.md".
 `);
 }
 
+import "dotenv/config";
+
 import log from "../lib/log";
 
 if (process.env.NODE_ENV === "test") {
