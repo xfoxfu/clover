@@ -6,7 +6,7 @@ import {
   Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn,
   getConnection, FindOneOptions,
 } from "typeorm";
-import config from "../lib/config";
+import { passwordHashRounds, shadowsocksPortStart, shadowsocksDefaultEncryption } from "../lib/config";
 import * as uuid from "uuid/v4";
 
 const generatePassword = () => {
@@ -18,12 +18,6 @@ const generatePassword = () => {
   }
   return retVal;
 };
-
-// TODO: add more methods
-export declare type EncryptionMethods =
-  "aes-256-cfb" |
-  "chacha20-ietf-poly1305" |
-  "aes-256-gcm";
 
 @Entity()
 export default class User {
@@ -40,7 +34,7 @@ export default class User {
   @Column({ name: "password", type: "varchar" })
   public hashedPassword: string;
   public setPassword = async (password: string) => {
-    this.hashedPassword = await bcrypt.hash(password, config.get("password_hash_rounds"));
+    this.hashedPassword = await bcrypt.hash(password, passwordHashRounds);
   }
   public checkPassword = async (password: string) =>
     bcrypt.compare(password, this.hashedPassword)
@@ -65,13 +59,13 @@ export default class User {
     } as FindOneOptions<User>);
     if (!user) {
       // TODO: rename port_last_allocated to port_start
-      this.ssPort = config.get("port_last_allocated") + 1;
+      this.ssPort = shadowsocksPortStart + 1;
     } else {
       this.ssPort = user.ssPort + 1;
     }
   }
   @Column({ name: "ss_enc", type: "varchar", length: 25 })
-  public connEnc: EncryptionMethods = config.get("default_encryption");
+  public connEnc = shadowsocksDefaultEncryption;
   @Column({ name: "vmess_uid", nullable: true })
   public vmessUid: string;
   @Column({ type: "int", name: "vmess_alter_id", nullable: true })

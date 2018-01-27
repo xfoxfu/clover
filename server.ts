@@ -10,7 +10,7 @@ import "./lib/db";
 const sessionStore: any = require("koa-sqlite3-session");
 import * as mount from "koa-mount";
 import * as serve from "koa-static";
-import config from "./lib/config";
+import { dbPath } from "./lib/config";
 import log from "./lib/log";
 import router from "./routes";
 
@@ -53,7 +53,7 @@ app.use(views(`${__dirname}/views`, {
 // TODO: logger
 app.use(bodyParser());
 app.use(session({
-  store: new sessionStore(config.get("db_path")),
+  store: new sessionStore(dbPath),
 }));
 app.use(mount("/js", serve(`./node_modules/material-design-lite/dist`)));
 app.use(mount("/css",

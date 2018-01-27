@@ -2,12 +2,12 @@
 
 import Router = require("koa-router");
 const router = new Router();
-import config from "../lib/config";
+import { shadowsocksMuToken } from "../lib/config";
 import { connection } from "../lib/db";
 import User from "../models/user";
 
 router.get("/users", async (ctx) => {
-  if ((ctx.request.header.token || ctx.request.query.key) !== config.get("mu_token")) {
+  if ((ctx.request.header.token || ctx.request.query.key) !== shadowsocksMuToken) {
     ctx.throw(401);
   } else {
     const users = await connection.getRepository(User).find();
@@ -35,7 +35,7 @@ router.get("/users", async (ctx) => {
   }
 });
 router.post("/users/:id/traffic", async (ctx) => {
-  if ((ctx.request.header.token || ctx.request.query.key) !== config.get("mu_token")) {
+  if ((ctx.request.header.token || ctx.request.query.key) !== shadowsocksMuToken) {
     ctx.throw(401);
   } else {
     const user = await connection.getRepository(User).findOneById(ctx.params.id);

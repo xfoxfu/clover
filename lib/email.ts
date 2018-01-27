@@ -5,24 +5,24 @@ import * as fs from "fs-extra";
 import * as hbs from "handlebars";
 import { mail as helper } from "sendgrid";
 import * as sendgrid from "sendgrid";
-import config from "../lib/config";
+import { sendgrid as sendgrid_config, siteTitle, siteUrl } from "../lib/config";
 import { encode } from "../lib/jwt";
 import log from "../lib/log";
 import Announce from "../models/announce";
 import User from "../models/user";
 
-const mailer = sendgrid(config.get("sendgrid_key"));
+const mailer = sendgrid(sendgrid_config.key);
 
 const siteBasics = {
-  title: config.get("site_title"),
+  title: siteTitle,
 };
 const templates = {
   announce: hbs.compile(fs.readFileSync(`${__dirname}/../views/emails/announce.hbs`).toString()),
   resetPassword: hbs.compile(fs.readFileSync(`${__dirname}/../views/emails/reset-password.hbs`).toString()),
 };
 export const announce = async (ann: Announce, users: User[], alwaysSend = false) => {
-  const fromEmail = new helper.Email(config.get("email_from"));
-  const subject = `[${config.get("site_title")}]${ann.title}`;
+  const fromEmail = new helper.Email(sendgrid_config.email);
+  const subject = `[${siteTitle}]${ann.title}`;
   for (const currentUser of users) {
     if (alwaysSend || currentUser.isEmailVerified) {
       const toEmail = new helper.Email(currentUser.email);
@@ -50,14 +50,14 @@ export const announce = async (ann: Announce, users: User[], alwaysSend = false)
   }
 };
 export const resetPassword = async (user: User) => {
-  const fromEmail = new helper.Email(config.get("email_from"));
-  const subject = `[${config.get("site_title")}]Reset Password`;
+  const fromEmail = new helper.Email(sendgrid_config.email);
+  const subject = `[${siteTitle}]Reset Password`;
   const toEmail = new helper.Email(user.email);
   const token = await encode({ email: user.email, uid: user.id });
   const content = new helper.Content("text/html", templates.resetPassword({
     site: siteBasics,
     user,
-    link: `${config.get("site_url")}/reset_password_email_callback?token=${token}`,
+    link: `${siteUrl}/reset_password_email_callback?token=${token}`,
   }));
   const mail = new helper.Mail(fromEmail, subject, toEmail, content);
   log.info("prepared email", { user });
@@ -71,13 +71,13 @@ export const resetPassword = async (user: User) => {
     log.info("sent email", {
       user,
       response: res,
-      link: `${config.get("site_url")}/reset_password_callback?token=${token}`,
+      link: `${siteUrl}/reset_password_callback?token=${token}`,
     });
   } catch (err) {
     log.error("failed email", {
       user,
       error: err,
-      link: `${config.get("site_url")}/reset_password_callback?token=${token}`,
+      link: `${siteUrl}/reset_password_callback?token=${token}`,
     });
   }
 };

@@ -3,7 +3,6 @@
 import User from "../../models/user";
 import * as chai from "chai";
 const expect = chai.expect;
-import config from "../../lib/config";
 
 export default () => {
   describe("#setPassword", () => {
@@ -26,16 +25,6 @@ export default () => {
     const user = new User("user@example.com");
     it("should return the new password", () => {
       expect(user.setConnPassword()).to.eql(user.connPassword);
-    });
-  });
-  describe("#allocConnPort", () => {
-    const user = new User("user@example.com");
-    it("should return new port according to config", async () => {
-      const oldPort = config.get("port_last_allocated");
-      expect(await user.allocConnPort()).to.eql(oldPort + 1);
-    });
-    it("should write new port to config", async () => {
-      expect(await user.allocConnPort()).to.eql(config.get("port_last_allocated"));
     });
   });
 };

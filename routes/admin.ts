@@ -2,7 +2,7 @@
 
 import Router = require("koa-router");
 const router = new Router();
-import config from "../lib/config";
+import { siteTitle } from "../lib/config";
 import { connection } from "../lib/db";
 import { announce as announceMail } from "../lib/email";
 import Announce from "../models/announce";
@@ -13,7 +13,7 @@ import * as MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
 
 const site = {
-  title: config.get("site_title"),
+  title: siteTitle,
 };
 router.use("/", async (ctx, next) => {
   await checkAuth(ctx, false);

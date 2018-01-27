@@ -2,7 +2,7 @@
 
 import User from "../models/user";
 import { getConnection } from "typeorm";
-import config from "./config";
+import { proxyHost } from "./config";
 import { writeFile } from "fs-extra";
 import { reload } from "./docker";
 
@@ -24,7 +24,7 @@ export const getClientConfig = (id: string, aid: number) => ({
     protocol: "vmess",
     settings: {
       vnext: [{
-        address: config.get("ss_host"),
+        address: proxyHost,
         port: 443,
         users: [{
           id,
@@ -40,13 +40,13 @@ export const getClientConfig = (id: string, aid: number) => ({
       network: "ws",
       security: "tls",
       tlsSettings: {
-        serverName: config.get("ss_host"),
+        serverName: proxyHost,
         allowInsecure: false,
       },
       wsSettings: {
         path: "/",
         headers: {
-          Host: config.get("ss_host"),
+          Host: proxyHost,
         },
       },
     },
@@ -128,7 +128,7 @@ export const getServerConfig = async () => ({
       wsSettings: {
         path: "/",
         headers: {
-          Host: config.get("ss_host"),
+          Host: proxyHost,
         },
       },
     },

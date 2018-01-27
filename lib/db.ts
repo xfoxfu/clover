@@ -1,12 +1,12 @@
 "use strict";
 
 import { Connection, createConnection } from "typeorm";
-import config from "../lib/config";
+import { dbPath } from "../lib/config";
 
 export let connection: Connection;
 export default () => createConnection({
   type: "sqlite",
-  database: config.get("db_path"),
+  database: dbPath,
   entities: [
     __dirname + "/../models/*.js",
   ],

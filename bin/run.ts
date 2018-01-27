@@ -10,12 +10,7 @@ For more information, see "${__dirname}/../LICENSE.md".
 `);
 }
 
-import config from "../lib/config";
-import db from "../lib/db";
-import "../lib/email";
 import log from "../lib/log";
-import server from "../server";
-import { writeServerConfig } from "../lib/vmess";
 
 if (process.env.NODE_ENV === "test") {
   log.level = "silent";
@@ -25,12 +20,18 @@ if (process.env.NODE_ENV === "test") {
   log.level = "info";
 }
 
-const PORT = config.get("port") || 3000;
+import "../lib/email";
+import server from "../server";
+import { writeServerConfig } from "../lib/vmess";
+import { port, dbPath } from "../lib/config";
+import db from "../lib/db";
+
+const PORT = port || 3000;
 
 db()
   .then(() => writeServerConfig())
   .then(() => {
-    log.info(`database connected to ${config.get("db_path")}`);
+    log.info(`database connected to ${dbPath}`);
     server.listen(PORT);
     log.info(`server listening on port ${PORT}`);
   })

@@ -3,7 +3,7 @@
 
 import Router = require("koa-router");
 const router = new Router();
-import config from "../lib/config";
+import { siteTitle, adminEmail, proxyHost } from "../lib/config";
 import { connection } from "../lib/db";
 import { resetPassword as resetPasswordMail } from "../lib/email";
 import log from "../lib/log";
@@ -24,8 +24,8 @@ declare module "koa" {
 }
 
 const site = {
-  title: config.get("site_title"),
-  admin: config.get("admin_email")
+  title: siteTitle,
+  admin: adminEmail,
 };
 
 router.get("/", async (ctx) => {
@@ -99,15 +99,15 @@ router.get("/dashboard", async (ctx) => {
       connUri: new Buffer(`${
         ctx.user.connEnc}:${
         ctx.user.connPassword}@${
-        config.get("ss_host")}:${
+        proxyHost}:${
         ctx.user.connPort}`).toString("base64"),
       vmess: {
         id: ctx.user.vmessUid,
         alterId: ctx.user.vmessAlterId,
         androidLink: new Buffer(JSON.stringify({
-          add: config.get("ss_host"),
+          add: proxyHost,
           aid: ctx.user.vmessAlterId,
-          host: `/;${config.get("ss_host")}`,
+          host: `/;${proxyHost}`,
           id: ctx.user.vmessUid,
           net: "ws",
           port: "443",
@@ -117,9 +117,9 @@ router.get("/dashboard", async (ctx) => {
         })).toString("base64"),
         link: {
           android: Buffer.from(JSON.stringify({
-            add: config.get("ss_host"),
+            add: proxyHost,
             aid: ctx.user.vmessAlterId,
-            host: `/;${config.get("ss_host")}`,
+            host: `/;${proxyHost}`,
             id: ctx.user.vmessUid,
             net: "ws",
             port: "443",
@@ -129,23 +129,23 @@ router.get("/dashboard", async (ctx) => {
           })).toString("base64"),
           win: Buffer.from(JSON.stringify({
             ps: site.title,
-            add: config.get("ss_host"),
+            add: proxyHost,
             port: "443",
             id: ctx.user.vmessUid,
             aid: ctx.user.vmessAlterId,
             net: "ws",
             type: "none",
-            host: `/;${config.get("ss_host")}`,
+            host: `/;${proxyHost}`,
             tls: "tls",
           })).toString("base64"),
           ios: `${Buffer.from(
-            `chacha20-poly1305:${ctx.user.vmessUid}@${config.get("ss_host")}:443}`,
+            `chacha20-poly1305:${ctx.user.vmessUid}@${proxyHost}:443}`,
           )}?network=ws&remark=${site.title}&wspath=/&tls=1&allowInsecure=0`,
         },
       },
     },
     cards,
-    server: config.get("ss_host"),
+    server: proxyHost,
   });
 });
 router.get("/updates", async (ctx) => {
@@ -157,7 +157,7 @@ router.get("/updates", async (ctx) => {
   }
   await ctx.render("updates", {
     site,
-    user: { email: ctx.user.email },
+    user: { ...ctx.user },
     cards,
   });
 });

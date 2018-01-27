@@ -12,15 +12,33 @@ Yet another [shadowsocks](https://shadowsocks.org) multiuser frontend.
 Config
 -----
 
-Please use the built-in control panel at `/admin`.
+Use environment variables, and dotenv files are also supported.
 
-It discovers config file at the follwing sequence:
-
-1. environment variable `CLOVER_CONFIG`
-2. /config/config.yaml
-3. /config/config.sample.yaml
-
-And the default storage SQLite db is at `/clover.db`, unless defined in config file.
+| Key                   | Default                          | Description                              |
+| --------------------- | -------------------------------- | ---------------------------------------- |
+| DB_PATH               | ./clover.db                      |                                          |
+| LOG_LEVEL             | debug                            |                                          |
+| PORT                  | 3000                             |                                          |
+| PASSWORD_HASH_ROUNDS  | 12                               |                                          |
+| SITE_TITLE            | Clover                           |                                          |
+| SENDGRID_KEY          | KEY                              | get one at <http://sendgrid.com/>        |
+| SENDGRID_EMAIL        | clover@example.com               | email address used for sending announces and password recovery emails |
+| JWT_KEY               | 527877cb                         | JSON Web Token key used by generation of referrence codes |
+| SITE_URL              | http://127.0.0.1:3000            |                                          |
+| ADMIN_EMAIL           | user@example.com                 | administrator contact email              |
+| PROXY_HOST            | 127.0.0.1                        | shared host of shadowsocks and v2ray     |
+| SS_ENABLED            | true                             | true/false                               |
+| DEFAULT_ENCRYPTION    | chacha20-ietf-poly1305           | shadowsocks default encryption method    |
+| PORT_START            | 10000                            | start of shadowsocks port range          |
+| MU_TOKEN              | d6d0fbdc9483c27e6b653457879d3fbd | token of shadowsocks MU API v2           |
+| VMESS_ENABLED         | true                             | true/false                               |
+| VMESS_DEFAULT_ALTERID | 16                               |                                          |
+| VMESS_PORT            | 443                              |                                          |
+| VMESS_PORT_DYNAMIC    |                                  | leave it blank to disable the feature    |
+| VMESS_NETWORK         | ws                               | tcp, kcp or ws                           |
+| VMESS_WS_PATH         | /                                |                                          |
+| VMESS_WS_HOST         | the same as PROXY_HOST           |                                          |
+| VMESS_WS_HEADERS      | {}                               | JSON representing all the header keys, `Host` excluded |
 
 Start
 -----
@@ -29,6 +47,8 @@ Start
 tsc
 npm start
 ```
+
+or you may utilize the `docker-compose.yml`.
 
 License
 -----
