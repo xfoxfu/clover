@@ -19,6 +19,7 @@ const siteBasics = {
 const templates = {
   announce: hbs.compile(fs.readFileSync(`${__dirname}/../views/emails/announce.hbs`).toString()),
   resetPassword: hbs.compile(fs.readFileSync(`${__dirname}/../views/emails/reset-password.hbs`).toString()),
+  validateEmail: hbs.compile(fs.readFileSync(`${__dirname}/../views/emails/email-validate.hbs`).toString()),
 };
 export const announce = async (ann: Announce, users: User[], alwaysSend = false) => {
   const fromEmail = new helper.Email(sendgrid_config.email);
@@ -78,6 +79,38 @@ export const resetPassword = async (user: User) => {
       user,
       error: err,
       link: `${siteUrl}/reset_password_callback?token=${token}`,
+    });
+  }
+};
+export const validateEmail = async (user: User) => {
+  const fromEmail = new helper.Email(sendgrid_config.email);
+  const subject = `[${siteTitle}]Validate Email`;
+  const toEmail = new helper.Email(user.email);
+  const token = await encode({ email: user.email });
+  const content = new helper.Content("text/html", templates.resetPassword({
+    site: siteBasics,
+    user,
+    link: `${siteUrl}/validate_email_callback?token=${token}`,
+  }));
+  const mail = new helper.Mail(fromEmail, subject, toEmail, content);
+  log.info("prepared email", { user });
+  const request = mailer.emptyRequest({
+    method: "POST",
+    path: "/v3/mail/send",
+    body: mail.toJSON(),
+  });
+  try {
+    const res = await mailer.API(request);
+    log.info("sent email", {
+      user,
+      response: res,
+      link: `${siteUrl}/validate_email_callback?token=${token}`,
+    });
+  } catch (err) {
+    log.error("failed email", {
+      user,
+      error: err,
+      link: `${siteUrl}/validate_email_callback?token=${token}`,
     });
   }
 };

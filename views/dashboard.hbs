@@ -12,6 +12,21 @@
     <p>请您阅读下方描述信息确认您的缴费情况。</p>
     <pre><code>{{user.note}}</code></pre>
   </div>
+</div>{{/unless}}{{#unless user.isEmailVerified}}
+<div class="mdl-card">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">
+      邮件地址未激活
+    </h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    <p>您的邮件地址没有激活。</p>
+    <p>这将导致您无法收到本站的通知邮件。</p>
+    <p>请您检查您的收件箱，或点击下方链接重发邮件。</p>
+    <a href="/resend_validate_email" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+      重发验证邮件
+    </a>
+  </div>
 </div>{{/unless}} {{#with user.vmess}}{{#if enabled}}
 <div class="mdl-card">
   <div class="mdl-card__title">

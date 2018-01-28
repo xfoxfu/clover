@@ -6,7 +6,7 @@ const router = new Router();
 import { Context } from "koa";
 import { sourceCodeUrl, siteTitle, adminEmail, proxyHost, openRegister, vmess, shadowsocks } from "../lib/config";
 import { connection } from "../lib/db";
-import { resetPassword as resetPasswordMail } from "../lib/email";
+import { resetPassword as resetPasswordMail, validateEmail } from "../lib/email";
 import log from "../lib/log";
 import Announce from "../models/announce";
 import User from "../models/user";
@@ -170,6 +170,7 @@ router.post("/reg", async (ctx) => {
   await connection.getRepository(User).save(user);
   // TODO: move this to database subscriber
   await writeServerConfig();
+  await validateEmail(user);
   ctx.session.uid = user.id;
   ctx.response.redirect("/dashboard");
 });
@@ -229,6 +230,40 @@ router.post("/reset_password_email", async (ctx) => {
     ctx.response.status = 200;
     ctx.response.type = "text/html";
     ctx.response.body = `Succeeded.<a href= "/" > Go back< /a > `;
+  }
+});
+router.get("/resend_validate_email", async (ctx) => {
+  await checkAuth(ctx, false);
+  await validateEmail(ctx.user);
+  // TODO: better appearance
+  ctx.response.status = 200;
+  ctx.response.type = "text/html";
+  ctx.response.body = `Succeeded.<a href= "/" > Go back< /a > `;
+});
+router.get("/validate_email_callback", async (ctx) => {
+  if (!ctx.request.query.token) {
+    ctx.throw(400);
+  }
+  let token: any;
+  try {
+    token = await decode(ctx.request.query.token);
+  } catch (err) {
+    log.error(err, { action: "decode token", token: ctx.request.query.token });
+    if (err.name === "") {
+      ctx.throw(403);
+    }
+  }
+  if (!token.email) {
+    ctx.throw(400);
+  }
+  log.debug(token.email);
+  const user = await connection.getRepository(User).findOne({ email: token.email });
+  if (!user) {
+    ctx.throw(404);
+  } else {
+    user.isEmailVerified = true;
+    await connection.getRepository(User).save(user);
+    ctx.redirect("/");
   }
 });
 router.get("/reset_password_email_callback", async (ctx) => {
