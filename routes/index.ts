@@ -45,6 +45,16 @@ const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
       port: user.connPort,
       encryption: user.connEnc,
       password: user.connPassword,
+      uri: new Buffer(`${
+        user.connEnc}:${
+        user.connPassword}@${
+        shadowsocks.host}:${
+        user.connPort}`).toString("base64"),
+      qrcode: await makeQrCode("ss://" + Buffer.from(`${
+        user.connEnc}:${
+        user.connPassword}@${
+        shadowsocks.host}:${
+        user.connPort}`).toString("base64")),
     },
     vmess: {
       ...vmess,
