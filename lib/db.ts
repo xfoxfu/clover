@@ -10,7 +10,7 @@ export default () => createConnection({
   entities: [
     __dirname + "/../models/*.js",
   ],
-  synchronize: false,
+  synchronize: true,
 }).then((conn) => {
   connection = conn;
 });

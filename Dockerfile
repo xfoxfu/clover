@@ -19,7 +19,6 @@ RUN ./node_modules/.bin/tsc --outDir dist --sourceMap false
 FROM node:8-alpine
 COPY --from=build /app/dist /app
 COPY --from=build /app/views /app/views
-COPY --from=build /app/config /app/config
 COPY --from=deps /deps/node_modules /app/node_modules
 WORKDIR /app
 EXPOSE 3000
