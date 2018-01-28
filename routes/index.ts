@@ -26,12 +26,6 @@ declare module "koa" {
   }
 }
 
-const site = {
-  title: siteTitle,
-  admin: adminEmail,
-  source: sourceCodeUrl,
-};
-
 const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
   site: {
     title: siteTitle,
@@ -73,12 +67,12 @@ const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
           id: user.vmessUid,
           net: "ws",
           port: "443",
-          ps: site.title,
+          ps: siteTitle,
           tls: "tls",
           type: "none",
         })).toString("base64"),
         win: Buffer.from(JSON.stringify({
-          ps: site.title,
+          ps: siteTitle,
           add: proxyHost,
           port: vmess.port,
           id: user.vmessUid,
@@ -95,7 +89,7 @@ const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
       qrcode: {
         kitsunebi: await makeQrCode(`vmess://${Buffer.from(
           `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`,
-        ).toString("base64")}?network=ws&wspath=/&tls=1&allowInsecure=0&remark=${site.title}`),
+        ).toString("base64")}?network=ws&wspath=/&tls=1&allowInsecure=0&remark=${siteTitle}`),
       },
     },
   } : undefined,

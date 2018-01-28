@@ -3,7 +3,7 @@
   {{> admin-menu}}
   <form method="POST">
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <input class="mdl-textfield__input" type="text" id="email" name="email">
+      <input class="mdl-textfield__input" type="email" id="email" name="email">
       <label class="mdl-textfield__label" for="email">email</label>
     </div>
     <br>
@@ -16,5 +16,9 @@
       Send
     </button>
   </form>
+  <div class="mdl-textfield mdl-js-textfield">
+    <textarea class="mdl-textfield__input" type="text" id="code" name="code" disabled>{{code}}</textarea>
+    <label class="mdl-textfield__label" for="code">code</label>
+  </div>
 </div>
 {{> html-foot}}

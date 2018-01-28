@@ -1,5 +1,21 @@
 </main>
 <script src="/js/material.min.js"></script>
+<script>
+  document.querySelectorAll('textarea').forEach(function (value) {
+    value.addEventListener('keydown', autosize);
+    autosize.call(value);
+  });
+
+  function autosize() {
+    var el = this;
+    setTimeout(function () {
+      el.style.cssText = 'height:auto; padding:0';
+      // for box-sizing other than "content-box" use:
+      // el.style.cssText = '-moz-box-sizing:content-box';
+      el.style.cssText = 'height:' + el.scrollHeight + 'px';
+    }, 0);
+  }
+</script>
 </body>
 
 </html>

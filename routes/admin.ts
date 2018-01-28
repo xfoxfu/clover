@@ -27,9 +27,6 @@ router.get("/", async (ctx) => {
   await ctx.render("admin-index", {
     users: (await connection.getRepository(User).find()).map((value) => ({
       email: value.email,
-      pass: value.connPassword,
-      port: value.connPort,
-      enc: value.connEnc,
       note: value.note,
     })),
     site,
@@ -58,12 +55,12 @@ router.get("/refcode", async (ctx) => {
   });
 });
 router.post("/refcode", async (ctx) => {
-  // TODO: better appearance
-  ctx.response.status = 200;
-  ctx.response.type = "text/html";
-  ctx.response.body = await encode({
-    email: ctx.request.body.email,
-    note: ctx.request.body.note,
+  await ctx.render("admin-refcode", {
+    site,
+    code: await encode({
+      email: ctx.request.body.email,
+      note: ctx.request.body.note,
+    }),
   });
 });
 
