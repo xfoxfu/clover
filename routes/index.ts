@@ -57,6 +57,7 @@ const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
         ...vmess.webSocket,
         headersJson: JSON.stringify(vmess.webSocket.headers),
       },
+      tcpHeaderJson: JSON.stringify(vmess.tcp.header),
       remark: siteTitle,
       id: user.vmessUid,
       aid: user.vmessAlterId,
@@ -66,31 +67,45 @@ const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
           aid: user.vmessAlterId,
           host: `${vmess.webSocket.path};${proxyHost}`,
           id: user.vmessUid,
-          net: "ws",
-          port: "443",
+          net: vmess.network,
+          port: vmess.port,
           ps: siteTitle,
-          tls: "tls",
-          type: "none",
+          tls: vmess.tls.status === "off" ? "" : "tls",
+          type: vmess.network === "tcp" ?
+            vmess.tcp.header.type : (vmess.network === "kcp" ?
+              vmess.kcp.header.type : "none"),
         })).toString("base64"),
         win: Buffer.from(JSON.stringify({
-          ps: siteTitle,
           add: proxyHost,
-          port: vmess.port,
-          id: user.vmessUid,
           aid: user.vmessAlterId,
-          net: "ws",
-          type: "none",
-          host: `/;${proxyHost}`,
-          tls: "tls",
+          host: `${vmess.webSocket.path};${proxyHost}`,
+          id: user.vmessUid,
+          net: vmess.network,
+          port: vmess.port,
+          ps: siteTitle,
+          tls: vmess.tls.status === "off" ? "" : "tls",
+          type: vmess.network === "tcp" ?
+            vmess.tcp.header.type : (vmess.network === "kcp" ?
+              vmess.kcp.header.type : "none"),
         })).toString("base64"),
         shadowrocket: `${Buffer.from(
           `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`,
-        ).toString("base64")}?obfsParam=${vmess.webSocket.host}&path=${vmess.webSocket.path}&obfs=websocket&tls=1`,
+        ).toString("base64")}?obfsParam=${
+        vmess.webSocket.host}&path=${
+        vmess.network === "ws" ? vmess.webSocket.path : vmess.tcp.header.type}&obfs=${vmess.network === "ws" ?
+          "websocket" : (vmess.network === "tcp" ?
+            vmess.tcp.header.type : "none")}&tls=${
+        vmess.tls.status === "off" ? 0 : 1}`,
       },
       qrcode: {
-        kitsunebi: await makeQrCode(`vmess://${Buffer.from(
-          `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`,
-        ).toString("base64")}?network=ws&wspath=/&tls=1&allowInsecure=0&remark=${siteTitle}`),
+        kitsunebi: await makeQrCode(
+          `vmess://${Buffer.from(
+            `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`,
+          ).toString("base64")}?network=${vmess.network}` +
+            vmess.network === "ws" ? `&wspath=${vmess.webSocket.path}` : "" +
+            `&tls=${vmess.tls.status === "off" ? 0 : 1}&allowInsecure=${
+            vmess.tls.cert.trust ? 0 : 1}&remark=${siteTitle}`,
+        ),
       },
     },
   } : undefined,

@@ -37,18 +37,26 @@ export const getClientConfig = (id: string, aid: number) => ({
       concurrency: 8,
     },
     streamSettings: {
-      network: vmess.webSocket.host,
-      security: "tls",
-      tlsSettings: {
-        serverName: vmess.tls.server,
-        allowInsecure: !vmess.tls.cert.trust,
-      },
+      network: vmess.network,
+      tcpSettings: vmess.tcp,
+      kcpSettings: vmess.kcp,
       wsSettings: {
         path: vmess.webSocket.path,
         headers: {
           Host: proxyHost,
           ...vmess.webSocket.headers,
         },
+      },
+      security: vmess.tls.status === "in" ? "tls" : "none",
+      tlsSettings: {
+        serverName: vmess.tls.server,
+        allowInsecure: !vmess.tls.cert.trust,
+        certificates: [
+          {
+            certificateFile: vmess.tls.cert.certificateFile,
+            keyFile: vmess.tls.cert.keyFile,
+          },
+        ],
       },
     },
   },
@@ -126,12 +134,25 @@ export const getServerConfig = async () => ({
     },
     streamSettings: {
       network: vmess.network,
+      tcpSettings: vmess.tcp,
+      kcpSettings: vmess.kcp,
       wsSettings: {
         path: vmess.webSocket.path,
         headers: {
           Host: proxyHost,
           ...vmess.webSocket.headers,
         },
+      },
+      security: vmess.tls.status === "in" ? "tls" : "none",
+      tlsSettings: {
+        serverName: vmess.tls.server,
+        allowInsecure: !vmess.tls.cert.trust,
+        certificates: [
+          {
+            certificateFile: vmess.tls.cert.certificateFile,
+            keyFile: vmess.tls.cert.keyFile,
+          },
+        ],
       },
     },
   },

@@ -70,6 +70,8 @@
           <li>回到主界面，打开连接。系统可能多次询问权限，请一律允许。</li>
         </ol>
         <h5>应用 Shadowrocket</h5>
+        {{#eq network "kcp"}}
+        <p>本应用不支持服务器的此种配置。</p>{{/eq}}
         <ol data-anchor-id="0udc">
           <li>在非中国大陆区域的 App Store 里购买并安装应用「Shadowrocket」（约合人民币 18 元）。</li>
           <a href="https://itunes.apple.com/us/app/shadowrocket/id932747118?mt=8" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
@@ -136,9 +138,28 @@
           {{#eq network "ws"}}
           <li>打开「transport settings」，切换到「WebSocket」，勾选「connection reuse」，「path」填写
             <code>{{webSocket.path}}</code>。</li>
-          {{/eq}} {{#neq tls.status "off"}}
+          {{/eq}}{{#eq network "kcp"}}
+          <li>打开「transport settings」，切换到「KCP」，对应填写：
+            <br>
+            <b>uplink capacity</b>
+            <code>{{kcp.uplinkCapacity}}</code>
+            <br>
+            <b>downlink capacity</b>
+            <code>{{kcp.downlinkCapacity}}</code>
+            <br>
+            <b>congestion</b>
+            <code>{{#if kcp.congestion}}true{{/if}}{{#unless kcp.congestion}}false{{/unless}}</code>
+            <br>
+            <b>header type</b>
+            <code>{{kcp.header.type}}</code>
+          </li>{{/eq}}{{#eq network "tcp"}}
+          <li>打开「transport settings」，切换到「TCP」，勾选「connection reuse」，对应填写：
+            <br>
+            <b>header type</b>
+            <code>{{tcp.header.type}}</code>
+          </li>{{/eq}}{{#neq tls.status "off"}}
           <li>切换到「TLS」，勾选「Use TLS」，「Server Name」填写
-            <code>{{tls.server}}</code>{{/neq}}
+            <code>{{tls.server}}</code>{{#unless tls.cert.trust}}，勾选「Allow insecure」{{/unless}}。{{/neq}}
           </li>
           <li>切换到「Mux」，勾选「Enable」，多次点击「OK」关闭主界面。</li>
           <li>从托盘区找到 V 形图标，点击打开菜单，选择「V2Ray Rules」，点击「Start V2Ray」。</li>
@@ -166,7 +187,8 @@
           <b>连接信息</b>
           <br>
           <b>{{#eq network "ws"}}WebSocket{{/eq}}{{#neq network "ws"}}{{network}}{{/neq}}</b>
-          <br>{{#eq network "ws"}}Path={{webSocket.path}},Host={{webSocket.host}},Headers={{webSocket.headersJson}}{{/eq}}
+          <br>{{#eq network "ws"}}Path={{webSocket.path}},Host={{webSocket.host}},Headers={{webSocket.headersJson}}{{/eq}} {{#eq
+          network "tcp"}}Header={{tcpHeaderJson}}{{/eq}}{{#eq network "kcp"}}Upload={{kcp.uplinkCapacity}},Download={{kcp.downlinkCapacity}},Header={{kcp.header.type}}{{/eq}}
           <br>
           <b>{{#neq tls.status "off"}}+TLS{{/neq}}</b>,Host={{tls.server}},allowInsecure={{#if tls.cert.trust}}0{{/if}}{{#unless
           tls.cert.trust}}1{{/unless}}

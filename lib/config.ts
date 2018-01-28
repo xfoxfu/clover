@@ -41,7 +41,17 @@ export const vmess = {
   // possible values are: tcp, kcp and ws
   network: getEnv("VMESS_NETWORK", "ws"),
   tcp: {
-    header: JSON.parse(getEnv("VMESS_TCP_HEADER", JSON.stringify({ type: "none" }))),
+    header: {
+      type: getEnv("VMESS_TCP_HEADER_TYPE", "none"),
+    },
+  },
+  kcp: {
+    uplinkCapacity: +getEnv("VMESS_KCP_UP_CAP", "5"),
+    downlinkCapacity: +getEnv("VMESS_KCP_DOWN_CAP", "20"),
+    congestion: getEnvBoolean("VMESS_KCP_CONGESTION", false),
+    header: {
+      type: getEnv("VMESS_KCP_HEADER", "none"),
+    },
   },
   webSocket: {
     path: getEnv("VMESS_WS_PATH", "/"),
@@ -50,7 +60,7 @@ export const vmess = {
   },
   tls: {
     status: getEnv("VMESS_TLS", "out"),
-    server: getEnv("VMESS_TLS_SERVER", "example.com"),
+    server: getEnv("VMESS_TLS_SERVER", proxyHost),
     cert: {
       trust: getEnvBoolean("VMESS_TLS_CERT_TRUST"),
       certificateFile: getEnv("VMESS_TLS_CERT", "server.crt"),
