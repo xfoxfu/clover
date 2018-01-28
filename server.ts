@@ -19,6 +19,7 @@ const app = new Koa();
 app.use(async (ctx: Koa.Context, next: () => any) => {
   try {
     await next();
+    ctx.set("X-Powered-By", "Clover");
     // Handle 404 upstream.
     const status = ctx.status || 404;
     if (status >= 400) {
@@ -47,6 +48,28 @@ app.use(views(`${__dirname}/views`, {
       "html-foot": "./partials/html-foot",
       "html-head": "./partials/html-head",
       "sidebar": "./partials/sidebar",
+    },
+    helpers: {
+      eq: function fna(this: any, lvalue: any, rvalue: any, options: any) {
+        if (arguments.length < 3) {
+          throw new Error("Handlebars Helper equal needs 2 parameters");
+        }
+        if (lvalue !== rvalue) {
+          return options.inverse(this);
+        } else {
+          return options.fn(this);
+        }
+      },
+      neq: function fnb(this: any, lvalue: any, rvalue: any, options: any) {
+        if (arguments.length < 3) {
+          throw new Error("Handlebars Helper equal needs 2 parameters");
+        }
+        if (lvalue !== rvalue) {
+          return options.fn(this);
+        } else {
+          return options.inverse(this);
+        }
+      },
     },
   },
 }));

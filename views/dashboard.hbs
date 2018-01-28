@@ -12,7 +12,7 @@
     <p>请您阅读下方描述信息确认您的缴费情况。</p>
     <pre><code>{{user.note}}</code></pre>
   </div>
-</div>{{/unless}}
+</div>{{/unless}} {{#with user.vmess}}{{#if enabled}}
 <div class="mdl-card">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text">
@@ -39,18 +39,18 @@
             Google Play
           </a>
           <li>点击下面的按钮，按照系统提示用应用 v2rayNG 打开，并按照应用提示确认添加。</li>
-          <a href="vmess://{{user.vmess.link.android}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+          <a href="vmess://{{link.android}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             Config
           </a>
           <li>点击新增的配置文件右侧编辑图标。</li>
           <li>（可选）在弹出的面板内，修改「security」为「chacha20-poly1305」，点击右上角对号保存。</li>
           <li>点击右上角菜单，选择「Settings」。</li>
-          <li>打开「Bypass Mainland」；（可选）打开「Enable Mux」。</li>
+          <li>打开「Bypass Mainland」，（可选）打开「Enable Mux」。</li>
           <li>返回首页；然后点击下方纸飞机，待提示「Start Server Success」后即可开始使用网络。个别系统可能会询问权限，请一律允许。</li>
         </ol>
       </div>
       <div class="mdl-tabs__panel" id="ios-panel">
-        <h2>应用 Kitsunebi（推荐）</h2>
+        <h5>应用 Kitsunebi（推荐）</h5>
         <ol data-anchor-id="0udc">
           <li>在 App Store 购买应用 Kitsunebi（￥12），或申请免费的测试版（需要挂代理访问）。</li>
           <a href="https://itunes.apple.com/cn/app/kitsunebi/id1275446921" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
@@ -59,38 +59,28 @@
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSekOGRE7cXk3vBTVjlHiv6RJRXfeItZvjQCDRxyigKYq6ChmA/viewform" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             TestFlight
           </a>
-          <li>打开应用，选择「服务器」，点击右上角加号新建服务器。</li>
-          <li>「地址」填写&nbsp;
-            <code>{{server}}</code>；「端口」填写&nbsp;
-            <code>443</code>；「密码.UUID」填写&nbsp;
-            <code>{{user.vmess.id}}</code>；（可选）加密方式选择&nbsp;
-            <code>chacha20-poly1305</code>；传输协议选择「ws」； 「WS 路径填写」&nbsp;
-            <code>/</code>；TLS 打开；「服务器名称」填写&nbsp;
-            <code>{{server}}</code>；Mux 随意，打开可以提升速度，但可能导致断流。
+          <li>打开应用，点击左上角📷图标扫描下方二维码，
+            <br>移动设备可以长按保存二维码后，点击左上角📷图标，再点击右上角文件夹图标，从相册中选择二维码图片。
+            <br>
+            <img src="{{qrcode.kitsunebi}}">
           </li>
-          <li>点击右上角保存，点击新建的配置文件，使其左侧变为绿灯。</li>
+          <li>点击确认，进入「服务器」，点击「{{remark}}」右侧信息图标，编辑配置，关闭「Mux」。</li>
+          <li>点击保存返回，选择「{{remark}}」，使左侧图标变为绿色。</li>
           <li>进入「高级特性」，找到「Tunnel 选项」，打开「Full Tunnel」。</li>
           <li>回到主界面，打开连接。系统可能多次询问权限，请一律允许。</li>
         </ol>
-        <h2>应用 Shadowrocket</h2>
+        <h5>应用 Shadowrocket</h5>
         <ol data-anchor-id="0udc">
           <li>在非中国大陆区域的 App Store 里购买并安装应用「Shadowrocket」（约合人民币 18 元）。</li>
           <a href="https://itunes.apple.com/us/app/shadowrocket/id932747118?mt=8" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
             App Store
           </a>
-          <li>打开应用，点击右上角加号新建服务器。</li>
-          <li>「类型」选择&nsbp;
-            <code>Vmess</code>
-            <br>「地址」填写&nbsp;
-            <code>{{server}}</code>；「端口」填写&nbsp;
-            <code>443</code>；「密码.UUID」填写&nbsp;
-            <code>{{user.vmess.id}}</code>；（可选）加密方式选择&nbsp;
-            <code>chacha20-poly1305</code>；传输协议选择「ws」； 「WS 路径填写」&nbsp;
-            <code>/</code>；TLS 打开；「服务器名称」填写&nbsp;
-            <code>{{server}}</code>；Mux 随意，打开可以提升速度，但可能导致断流。
-          </li>
-          <li>点击右上角保存，点击新建的配置文件，使其左侧变为绿灯。</li>
-          <li>回到主界面，打开连接。系统可能多次询问权限，请一律允许。</li>x
+          <li>点击下面的按钮，按照系统提示用应用 Shadowrocket 打开，并按照应用提示确认添加。</li>
+          <a href="vmess://{{link.shadowrocket}}" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            Config
+          </a>
+          <li>在主界面点击「未连接」的开关，按照系统提示允许建立 VPN 连接。</li>
+          <li>此后每次需要连接代理时，请手动打开应用连接。也可以在控制中心添加快捷开关。</li>
         </ol>
       </div>
       <div class="mdl-tabs__panel" id="win-panel">
@@ -104,7 +94,7 @@
           </a>
           <li>打开 v2rayN.exe，从系统托盘区找到粉色图标，双击打开主界面。</li>
           <li>复制下面的内容到剪贴板（三击鼠标左键选中整行）：
-            <pre><code>vmess://{{user.vmess.link.win}}</code></pre>
+            <pre style="white-space: pre-wrap;}"><code>vmess://{{link.win}}</code></pre>
           </li>
           <li>选择「服务器」，从菜单中选择「添加一个服务器」。</li>
           <li>点击最上方「导入配置文件」，选择「从剪贴板导入 URL」。</li>
@@ -123,19 +113,35 @@
           <li>打开应用，系统可能多次询问权限，请一律允许。从托盘区找到 V 形图标，点击打开菜单，选择「Configure」。</li>
           <li>勾选「Support UDP」。</li>
           <li>在「V2Ray Servers」处点击减号删除原有的服务器，点击加号添加新的服务器。</li>
-          <li>「Address」填写&nbsp;
-            <code>{{server}}</code>；冒号后填写&nbsp;
-            <code>443</code>；「User ID」填写&nbsp;
-            <code>{{user.vmess.id}}</code>；「alterId」填写&nbsp;
-            <code>{{user.vmess.alterId}}</code>；（可选）「Security」选择&nbsp;
-            <code>aes-128-gcm</code>；「Network」选择「WebSocket」。
+          <li>对应填写：
+            <br>
+            <b>Address</b>
+            <code>{{host}}</code>
+            <br>
+            <b>冒号后</b>
+            <code>443</code>
+            <br>
+            <b>User ID</b>
+            <code>{{id}}</code>
+            <br>
+            <b>alterId</b>
+            <code>{{aid}}</code>
+            <br>
+            <b>Security</b>
+            <code>aes-128-gcm</code>
+            <br>
+            <b>Network</b>
+            <code>{{#eq network "ws"}}WebSocket{{/eq}}{{#neq network "ws"}}{{network}}{{/neq}}</code>
           </li>
+          {{#eq network "ws"}}
           <li>打开「transport settings」，切换到「WebSocket」，勾选「connection reuse」，「path」填写
-            <code>/</code>；切换到「TLS」，勾选「Use TLS」，「Server Name」填写
-            <code>{{server}}</code>；切换到「Mux」，勾选「Enable」，多次点击「OK」关闭主界面。
+            <code>{{webSocket.path}}</code>。</li>
+          {{/eq}} {{#neq tls.status "off"}}
+          <li>切换到「TLS」，勾选「Use TLS」，「Server Name」填写
+            <code>{{tls.server}}</code>{{/neq}}
           </li>
-          <li>从托盘区找到 V 形图标，点击打开菜单，选择「V2Ray Rules」，点击「Start V2Ray」。
-          </li>
+          <li>切换到「Mux」，勾选「Enable」，多次点击「OK」关闭主界面。</li>
+          <li>从托盘区找到 V 形图标，点击打开菜单，选择「V2Ray Rules」，点击「Start V2Ray」。</li>
         </ol>
       </div>
       <div class="mdl-tabs__panel" id="targaryens-panel" style="overflow-x: auto;">
@@ -143,22 +149,27 @@
         <p>
           <b>服务器地址：</b>
           <br>
-          <code>{{server}}</code>
+          <code>{{host}}</code>
           <br>
           <b>端口：</b>
           <br>
-          <code>443</code>
+          <code>{{port}}</code>
           <br>
           <b>用户 ID：</b>
           <br>
-          <code>{{user.vmess.id}}</code>
+          <code>{{id}}</code>
           <br>
           <b>Alter ID：</b>
           <br>
-          <code>{{user.vmess.alterId}}</code>
+          <code>{{aid}}</code>
           <br>
           <b>连接信息</b>
-          <br>WebSocket+TLS,Path=/,Server=server.cflink.cf
+          <br>
+          <b>{{#eq network "ws"}}WebSocket{{/eq}}{{#neq network "ws"}}{{network}}{{/neq}}</b>
+          <br>{{#eq network "ws"}}Path={{webSocket.path}},Host={{webSocket.host}},Headers={{webSocket.headersJson}}{{/eq}}
+          <br>
+          <b>{{#neq tls.status "off"}}+TLS{{/neq}}</b>,Host={{tls.server}},allowInsecure={{#if tls.cert.trust}}0{{/if}}{{#unless
+          tls.cert.trust}}1{{/unless}}
           <br>
         </p>
         <p>如果你的客户端支持配置文件，也可以点击下方的按钮下载配置文件：
@@ -171,7 +182,7 @@
     </div>
     <p>使用火狐浏览器的特别说明：请在「设置」-「代理设置」中打开「当使用 SOCKS v5 时代理 DNS 请求」。</p>
   </div>
-</div>
+</div>{{/if}}{{/with}} {{#with user.ss}}{{#if enabled}}
 <div class="mdl-card">
   <div class="mdl-card__title">
     <h2 class="mdl-card__title-text">
@@ -249,5 +260,4 @@
       </div>
     </div>
   </div>
-</div>
-{{#each cards}} {{> card}} {{/each}} {{> footer}}
+</div>{{/if}}{{/with}} {{#each cards}} {{> card}} {{/each}} {{> footer}}

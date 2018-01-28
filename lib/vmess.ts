@@ -24,7 +24,7 @@ export const getClientConfig = (id: string, aid: number) => ({
     protocol: "vmess",
     settings: {
       vnext: [{
-        address: proxyHost,
+        address: vmess.host,
         port: vmess.port,
         users: [{
           id,
@@ -37,16 +37,17 @@ export const getClientConfig = (id: string, aid: number) => ({
       concurrency: 8,
     },
     streamSettings: {
-      network: "ws",
+      network: vmess.webSocket.host,
       security: "tls",
       tlsSettings: {
-        serverName: proxyHost,
-        allowInsecure: false,
+        serverName: vmess.tls.server,
+        allowInsecure: !vmess.tls.cert.trust,
       },
       wsSettings: {
-        path: "/",
+        path: vmess.webSocket.path,
         headers: {
           Host: proxyHost,
+          ...vmess.webSocket.headers,
         },
       },
     },
@@ -112,7 +113,7 @@ export const getServerConfig = async () => ({
     loglevel: "warning",
   },
   inbound: {
-    port: 443,
+    port: vmess.port,
     protocol: "vmess",
     settings: {
       clients: (await getConnection().getRepository(User).find())
@@ -124,11 +125,12 @@ export const getServerConfig = async () => ({
         })),
     },
     streamSettings: {
-      network: "ws",
+      network: vmess.network,
       wsSettings: {
-        path: "/",
+        path: vmess.webSocket.path,
         headers: {
           Host: proxyHost,
+          ...vmess.webSocket.headers,
         },
       },
     },

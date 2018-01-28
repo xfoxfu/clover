@@ -3,7 +3,8 @@
 
 import Router = require("koa-router");
 const router = new Router();
-import { sourceCodeUrl, siteTitle, adminEmail, proxyHost } from "../lib/config";
+import { Context } from "koa";
+import { sourceCodeUrl, siteTitle, adminEmail, proxyHost, vmess, shadowsocks } from "../lib/config";
 import { connection } from "../lib/db";
 import { resetPassword as resetPasswordMail } from "../lib/email";
 import log from "../lib/log";
@@ -12,6 +13,8 @@ import User from "../models/user";
 import { decode } from "../lib/jwt";
 import checkAuth from "./checkAuth";
 import { getClientConfig, writeServerConfig } from "../lib/vmess";
+//  tslint:disable-next-line:no-var-requires
+const makeQrCode: (text: string) => Promise<string> = require("qrcode").toDataURL;
 
 import adminRouter from "./admin";
 import muRouter from "./mu";
@@ -29,11 +32,75 @@ const site = {
   source: sourceCodeUrl,
 };
 
+const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
+  site: {
+    title: siteTitle,
+    admin: adminEmail,
+    source: sourceCodeUrl,
+  },
+  user: user ? {
+    ...user,
+    ss: {
+      ...shadowsocks,
+      port: user.connPort,
+      encryption: user.connEnc,
+      password: user.connPassword,
+    },
+    vmess: {
+      ...vmess,
+      webSocket: {
+        ...vmess.webSocket,
+        headersJson: JSON.stringify(vmess.webSocket.headers),
+      },
+      remark: siteTitle,
+      id: user.vmessUid,
+      aid: user.vmessAlterId,
+      link: {
+        android: Buffer.from(JSON.stringify({
+          add: proxyHost,
+          aid: user.vmessAlterId,
+          host: `${vmess.webSocket.path};${proxyHost}`,
+          id: user.vmessUid,
+          net: "ws",
+          port: "443",
+          ps: site.title,
+          tls: "tls",
+          type: "none",
+        })).toString("base64"),
+        win: Buffer.from(JSON.stringify({
+          ps: site.title,
+          add: proxyHost,
+          port: vmess.port,
+          id: user.vmessUid,
+          aid: user.vmessAlterId,
+          net: "ws",
+          type: "none",
+          host: `/;${proxyHost}`,
+          tls: "tls",
+        })).toString("base64"),
+        shadowrocket: `${Buffer.from(
+          `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`,
+        ).toString("base64")}?obfsParam=${vmess.webSocket.host}&path=${vmess.webSocket.path}&obfs=websocket&tls=1`,
+      },
+      qrcode: {
+        kitsunebi: await makeQrCode(`vmess://${Buffer.from(
+          `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`,
+        ).toString("base64")}?network=ws&wspath=/&tls=1&allowInsecure=0&remark=${site.title}`),
+      },
+    },
+  } : undefined,
+  cards,
+  ...data,
+});
+const render = async (ctx: Context, template: string, cards?: any[], data?: any) => {
+  const locals = await buildRenderParams(ctx.user, cards, data);
+  log.debug(`rendering ${template}`, locals);
+  await ctx.render(template, locals);
+};
+
 router.get("/", async (ctx) => {
   await checkAuth(ctx, true, false);
-  await ctx.render("index", {
-    site: { ...site },
-  });
+  await ctx.render("index", await buildRenderParams());
 });
 router.post("/login", async (ctx) => {
   if ((!ctx.request.body.email) || (!ctx.request.body.password)) {
@@ -91,63 +158,7 @@ router.get("/dashboard", async (ctx) => {
     }
   }
   cards.sort((a, b) => (a.updatedAt > b.createdAt ? -1 : 1));
-  await ctx.render("dashboard", {
-    site: { ...site },
-    user: {
-      ...ctx.user,
-      connPort: ctx.user.connPort,
-      connPassword: ctx.user.connPassword,
-      connUri: new Buffer(`${
-        ctx.user.connEnc}:${
-        ctx.user.connPassword}@${
-        proxyHost}:${
-        ctx.user.connPort}`).toString("base64"),
-      vmess: {
-        id: ctx.user.vmessUid,
-        alterId: ctx.user.vmessAlterId,
-        androidLink: new Buffer(JSON.stringify({
-          add: proxyHost,
-          aid: ctx.user.vmessAlterId,
-          host: `/;${proxyHost}`,
-          id: ctx.user.vmessUid,
-          net: "ws",
-          port: "443",
-          ps: site.title,
-          tls: "tls",
-          type: "none",
-        })).toString("base64"),
-        link: {
-          android: Buffer.from(JSON.stringify({
-            add: proxyHost,
-            aid: ctx.user.vmessAlterId,
-            host: `/;${proxyHost}`,
-            id: ctx.user.vmessUid,
-            net: "ws",
-            port: "443",
-            ps: site.title,
-            tls: "tls",
-            type: "none",
-          })).toString("base64"),
-          win: Buffer.from(JSON.stringify({
-            ps: site.title,
-            add: proxyHost,
-            port: "443",
-            id: ctx.user.vmessUid,
-            aid: ctx.user.vmessAlterId,
-            net: "ws",
-            type: "none",
-            host: `/;${proxyHost}`,
-            tls: "tls",
-          })).toString("base64"),
-          ios: `${Buffer.from(
-            `chacha20-poly1305:${ctx.user.vmessUid}@${proxyHost}:443}`,
-          )}?network=ws&remark=${site.title}&wspath=/&tls=1&allowInsecure=0`,
-        },
-      },
-    },
-    cards,
-    server: proxyHost,
-  });
+  await render(ctx, "dashboard", cards);
 });
 router.get("/updates", async (ctx) => {
   await checkAuth(ctx, false);
@@ -156,11 +167,7 @@ router.get("/updates", async (ctx) => {
   for (const card of cards) {
     card.isAnnouncement = true;
   }
-  await ctx.render("updates", {
-    site,
-    user: { ...ctx.user },
-    cards,
-  });
+  await ctx.render("updates", await buildRenderParams(ctx.user, cards));
 });
 router.get("/logout", (ctx) => {
   ctx.session = null;
@@ -168,10 +175,7 @@ router.get("/logout", (ctx) => {
 });
 router.get("/reset_password", async (ctx) => {
   await checkAuth(ctx, false);
-  await ctx.render("reset-password", {
-    site,
-    user: { email: ctx.user.email },
-  });
+  await ctx.render("reset-password", await buildRenderParams(ctx.user));
 });
 router.post("/reset_password", async (ctx) => {
   await checkAuth(ctx, false);
@@ -217,11 +221,10 @@ router.get("/reset_password_email_callback", async (ctx) => {
   if (!token.email) {
     ctx.throw(400);
   }
-  await ctx.render("reset-password-email-callback", {
-    site,
+  await ctx.render("reset-password-email-callback", await buildRenderParams(undefined, undefined, {
     email: token.email,
     token: ctx.request.query.token,
-  });
+  }));
 });
 router.post("/reset_password_email_callback", async (ctx) => {
   const user = await connection.getRepository(User).findOneById(
