@@ -11,6 +11,7 @@ export const logLevel = getEnv("LOG_LEVEL", "debug");
 export const port = +getEnv("PORT", "3000");
 export const passwordHashRounds = +getEnv("PASSWORD_HASH_ROUNDS", "12");
 export const siteTitle = getEnv("SITE_TITLE", "Clover");
+export const openRegister = getEnvBoolean("OPEN_REGISTER", false);
 export const sendgrid = {
   key: getEnv("SENDGRID_KEY", "KEY"),
   email: getEnv("SENDGRID_EMAIL", "clover@example.com"),

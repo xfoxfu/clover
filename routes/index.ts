@@ -4,7 +4,7 @@
 import Router = require("koa-router");
 const router = new Router();
 import { Context } from "koa";
-import { sourceCodeUrl, siteTitle, adminEmail, proxyHost, vmess, shadowsocks } from "../lib/config";
+import { sourceCodeUrl, siteTitle, adminEmail, proxyHost, openRegister, vmess, shadowsocks } from "../lib/config";
 import { connection } from "../lib/db";
 import { resetPassword as resetPasswordMail } from "../lib/email";
 import log from "../lib/log";
@@ -31,6 +31,7 @@ const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
     title: siteTitle,
     admin: adminEmail,
     source: sourceCodeUrl,
+    reg: openRegister,
   },
   user: user ? {
     ...user,
@@ -127,29 +128,32 @@ router.post("/login", async (ctx) => {
 router.post("/reg", async (ctx) => {
   if ((!ctx.request.body.email) ||
     (!ctx.request.body.password) ||
-    (!ctx.request.body.password2) ||
-    (!ctx.request.body.refcode)) {
+    (!ctx.request.body.password2)) {
     // TODO: better output
     ctx.throw(400);
   }
-  const refData = await decode<any>(ctx.request.body.refcode);
-  if (ctx.request.body.password !== ctx.request.body.password2) {
-    // TODO: better output
-    ctx.throw(400, "password and password2 mismatch");
-  } else if (refData.email !== ctx.request.body.email) {
-    ctx.throw(400, "invalid refcode");
-  } else {
-    const user = new User(ctx.request.body.email);
-    user.note = refData.note;
-    await user.setPassword(ctx.request.body.password);
-    user.setConnPassword();
-    await user.allocConnPort();
-    await connection.getRepository(User).save(user);
-    // TODO: move this to database subscriber
-    await writeServerConfig();
-    ctx.session.uid = user.id;
-    ctx.response.redirect("/dashboard");
+  if (!(openRegister || ctx.request.body.refcode)) {
+    ctx.throw(400);
   }
+  const user = new User(ctx.request.body.email);
+  await user.setPassword(ctx.request.body.password);
+  user.setConnPassword();
+  await user.allocConnPort();
+  if (!openRegister) {
+    const refData = await decode<any>(ctx.request.body.refcode);
+    if (ctx.request.body.password !== ctx.request.body.password2) {
+      // TODO: better output
+      ctx.throw(400, "password and password2 mismatch");
+    } else if (refData.email !== ctx.request.body.email) {
+      ctx.throw(400, "invalid refcode");
+      user.note = refData.note;
+    }
+  }
+  await connection.getRepository(User).save(user);
+  // TODO: move this to database subscriber
+  await writeServerConfig();
+  ctx.session.uid = user.id;
+  ctx.response.redirect("/dashboard");
 });
 router.get("/dashboard", async (ctx) => {
   await checkAuth(ctx, false);

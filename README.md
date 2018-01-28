@@ -20,6 +20,7 @@ Use environment variables, and dotenv files are also supported.
 | PORT                  | 3000                             |                                          |
 | PASSWORD_HASH_ROUNDS  | 12                               |                                          |
 | SITE_TITLE            | Clover                           |                                          |
+| OPEN_REGISTER         | false                            | true/false                               |
 | SENDGRID_KEY          | KEY                              | get one at <http://sendgrid.com/>        |
 | SENDGRID_EMAIL        | clover@example.com               | email address used for sending announces and password recovery emails |
 | JWT_KEY               | 527877cb                         | JSON Web Token key used by generation of referrence codes |
