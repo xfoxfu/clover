@@ -99,12 +99,15 @@ const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
       },
       qrcode: {
         kitsunebi: await makeQrCode(
-          `vmess://${Buffer.from(
-            `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`,
-          ).toString("base64")}?network=${vmess.network}` +
-            vmess.network === "ws" ? `&wspath=${vmess.webSocket.path}` : "" +
-            `&tls=${vmess.tls.status === "off" ? 0 : 1}&allowInsecure=${
-            vmess.tls.cert.trust ? 0 : 1}&remark=${siteTitle}`,
+          "vmess://" +
+          Buffer.from(`chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`).toString("base64") +
+          `?network=${vmess.network}` +
+          (vmess.network === "ws" ? `&wspath=${vmess.webSocket.path}` : "") +
+          `&tls=${
+          vmess.tls.status === "off" ? 0 : 1
+          }&allowInsecure=${
+          vmess.tls.cert.trust ? 0 : 1
+          }&remark=${siteTitle}`,
         ),
       },
     },
