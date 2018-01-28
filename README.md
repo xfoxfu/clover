@@ -88,6 +88,12 @@ Use docker to deploy v2ray, and the container name should be `v2ray`.
 
 If you run *Clover* inside a container, you may create 2 volumes: `/var/run/docker.sock:/var/run/docker.sock:ro` and `./v2ray_server.json:/app/v2ray_server.json` to make the connection.
 
+### Docker
+
+1. Modify docker-compose.yml, set the env vars to your value.
+2. Modify ss.py, replace `<API_KEY>` to env var `MU_TOKEN`.
+3. `docker-compose up -d`
+
 License
 -----
 
