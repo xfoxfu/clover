@@ -3,6 +3,9 @@
 <script>
   document.querySelectorAll('textarea').forEach(function (value) {
     value.addEventListener('keydown', autosize);
+
+  });
+  document.querySelectorAll('textarea[disabled=""]').forEach(function (value) {
     autosize.call(value);
   });
 

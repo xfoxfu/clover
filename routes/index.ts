@@ -123,7 +123,7 @@ const render = async (ctx: Context, template: string, cards?: any[], data?: any)
 
 router.get("/", async (ctx) => {
   await checkAuth(ctx, true, false);
-  await ctx.render("index", await buildRenderParams());
+  await render(ctx, "index");
 });
 router.post("/login", async (ctx) => {
   if ((!ctx.request.body.email) || (!ctx.request.body.password)) {
@@ -193,7 +193,7 @@ router.get("/updates", async (ctx) => {
   for (const card of cards) {
     card.isAnnouncement = true;
   }
-  await ctx.render("updates", await buildRenderParams(ctx.user, cards));
+  await render(ctx, "updates", cards);
 });
 router.get("/logout", (ctx) => {
   ctx.session = null;
@@ -201,7 +201,7 @@ router.get("/logout", (ctx) => {
 });
 router.get("/reset_password", async (ctx) => {
   await checkAuth(ctx, false);
-  await ctx.render("reset-password", await buildRenderParams(ctx.user));
+  await render(ctx, "reset-password");
 });
 router.post("/reset_password", async (ctx) => {
   await checkAuth(ctx, false);
@@ -247,10 +247,10 @@ router.get("/reset_password_email_callback", async (ctx) => {
   if (!token.email) {
     ctx.throw(400);
   }
-  await ctx.render("reset-password-email-callback", await buildRenderParams(undefined, undefined, {
+  await render(ctx, "reset-password-email-callback", undefined, {
     email: token.email,
     token: ctx.request.query.token,
-  }));
+  });
 });
 router.post("/reset_password_email_callback", async (ctx) => {
   const user = await connection.getRepository(User).findOneById(
