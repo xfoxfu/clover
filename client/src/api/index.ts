@@ -39,7 +39,7 @@ export const getRefCode = async (token: string, email: string, note?: string): P
   request("get_refcode", { token, email, note });
 export const getAllUsers = async (token: string): Promise<User[]> =>
   request("all_users", { token });
-export const editUser = async (token: string, user: Partial<User>): Promise<Message> =>
+export const editUser = async (token: string, user: Partial<User> & { regenerate?: boolean }): Promise<Message> =>
   request("edit_user", {
     token,
     uid: user.id,
@@ -48,6 +48,7 @@ export const editUser = async (token: string, user: Partial<User>): Promise<Mess
     isAdmin: user.isAdmin,
     isEmailVerified: user.isEmailVerified,
     note: user.note,
+    regenerate: user.regenerate,
   });
 export const resendValidateEmail = async (token: string): Promise<Message> =>
   request("resend_validate_email", { token });

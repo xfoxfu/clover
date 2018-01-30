@@ -13,6 +13,7 @@ import { validateEmail, resetPassword, announce as announceMail } from "../lib/e
 import { Context } from "koa";
 import * as MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
+import * as uuid from "uuid/v4";
 
 const raiseApiError = (code: number, message: string) => {
   const error: any = new Error(message);
@@ -186,11 +187,11 @@ router.post("/get_refcode", async (ctx) => {
 });
 router.post("/edit_user", async (ctx) => {
   await authToken(ctx, true);
-  const { uid, email, note, enabled, isAdmin, isEmailVerified } = ctx.request.body;
+  const { uid, email, note, enabled, isAdmin, isEmailVerified, regenerate } = ctx.request.body;
   if (!uid) {
     return raiseApiError(400, "请求格式错误");
   }
-  const user: any = await getRepository(User).findOneById(uid);
+  const user = await getRepository(User).findOneById(uid);
   if (!user) {
     return raiseApiError(404, "用户不存在");
   }
@@ -199,6 +200,11 @@ router.post("/edit_user", async (ctx) => {
   user.enabled = enabled || user.enabled;
   user.isAdmin = isAdmin || user.isAdmin;
   user.isEmailVerified = isEmailVerified || user.isEmailVerified;
+  if (regenerate) {
+    user.setConnPassword();
+    await user.allocConnPort();
+    user.vmessUid = uuid();
+  }
   await getRepository(User).save(user);
   ctx.body = { message: "操作成功" };
 });

@@ -20,6 +20,8 @@ import Dialog, {
   DialogTitle,
 } from 'material-ui/Dialog';
 import { CircularProgress } from 'material-ui/Progress';
+import Checkbox from 'material-ui/Checkbox';
+import { FormControlLabel } from 'material-ui/Form';
 
 import User from '../models/user';
 import { getAllUsers, editUser } from '../api/index';
@@ -33,6 +35,7 @@ interface IState {
     isAdmin: boolean,
     isEmailVerified: boolean,
     note: string,
+    regenerate: boolean,
   },
   open: boolean,
   loading: boolean;
@@ -58,15 +61,15 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
   handleClickOpen = (user: User) => () => {
     this.setState({
       open: true,
-      editorUser: user,
+      editorUser: { ...user, regenerate: false },
     });
   };
   handleClose = () => {
     if (!this.state.editorUser) { return; }
     const token = this.props.state.user && this.props.state.user.token;
     if (!token) { return; }
-    const { id, email, enabled, isAdmin, isEmailVerified, note } = this.state.editorUser;
-    editUser(token, { id, email, enabled, isAdmin, isEmailVerified, note })
+    const { id, email, enabled, isAdmin, isEmailVerified, note, regenerate } = this.state.editorUser;
+    editUser(token, { id, email, enabled, isAdmin, isEmailVerified, note, regenerate })
       .then((message) => {
         this.props.state.emitMessage(message.message);
         this.setState({ open: false });
@@ -222,6 +225,16 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
                   onChange={this.handleInputChange('note')}
                   fullWidth
                   multiline
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={this.state.editorUser && this.state.editorUser.regenerate}
+                      onChange={this.handleCheckboxChange('regenerate')}
+                      value="重新生成配置"
+                    />
+                  }
+                  label="重新生成配置"
                 />
               </DialogContent>
               <DialogActions>
