@@ -50,7 +50,7 @@ const getGuide = async (user: User, siteName?: string): Promise<Guide> => {
             content: '点击下面的按钮，按照系统提示用应用 v2rayNG 打开，并按照应用提示确认添加。',
             links: [
               {
-                name: '配置', href: Buffer.from(JSON.stringify({
+                name: '配置', href: 'vmess://' + Buffer.from(JSON.stringify({
                   add: user.vmess.host,
                   aid: user.vmess.aid,
                   host: `${user.vmess.webSocket.path};${user.vmess.webSocket.host}`,
@@ -132,7 +132,7 @@ const getGuide = async (user: User, siteName?: string): Promise<Guide> => {
             content: '点击下面的按钮，按照系统提示用应用 Shadowrocket 打开，并按照应用提示确认添加。',
             links:
               [{
-                name: '配置', href: `${Buffer.from(
+                name: '配置', href: `vmess://${Buffer.from(
                   `chacha20-poly1305:${user.vmess.id}@${user.vmess.host}:${user.vmess.port}`,
                 ).toString('base64')}?obfsParam=${
                   user.vmess.webSocket.host}&path=${
@@ -166,7 +166,7 @@ const getGuide = async (user: User, siteName?: string): Promise<Guide> => {
             content: '复制下面的内容到剪贴板。选择「服务器」，从菜单中选择「添加一个服务器」。点击最上方「导入配置文件」，选择「从剪贴板导入 URL」。点击确定，回到主界面。',
             fields: [{
               name: 'URL',
-              data: Buffer.from(JSON.stringify({
+              data: 'vmess://' + Buffer.from(JSON.stringify({
                 add: user.vmess.host,
                 aid: user.vmess.aid,
                 host: `${user.vmess.webSocket.path};${user.vmess.webSocket.host}`,
