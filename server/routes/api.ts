@@ -197,15 +197,16 @@ router.post("/edit_user", async (ctx) => {
   }
   user.email = email || user.email;
   user.note = note || user.note;
-  user.enabled = enabled || user.enabled;
-  user.isAdmin = isAdmin || user.isAdmin;
-  user.isEmailVerified = isEmailVerified || user.isEmailVerified;
+  user.enabled = enabled;
+  user.isAdmin = isAdmin;
+  user.isEmailVerified = isEmailVerified;
   if (regenerate) {
     user.setConnPassword();
     await user.allocConnPort();
     user.vmessUid = uuid();
   }
   await getRepository(User).save(user);
+  await writeServerConfig();
   ctx.body = { message: "操作成功" };
 });
 

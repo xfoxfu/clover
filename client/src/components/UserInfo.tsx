@@ -24,14 +24,14 @@ class Dashboard extends React.Component<RouteComponentProps<{}> & { state: AppSt
               color="primary"
             />
           </Typography>
-          <Typography>
-            <p>
-              <ResetPasswordDialog state={this.props.state} />
-              <Button onClick={this.props.state.logout} style={{ margin: theme.spacing.unit }}>
-                登出
+          <Typography component="p">
+            <ResetPasswordDialog state={this.props.state} />
+            <Button onClick={this.props.state.logout} style={{ margin: theme.spacing.unit }}>
+              登出
               </Button>
-            </p>
-            <p>{this.props.state.user && this.props.state.user.note}</p>
+          </Typography>
+          <Typography component="p">
+            {this.props.state.user && this.props.state.user.note}
           </Typography>
         </CardContent>
       </Card>

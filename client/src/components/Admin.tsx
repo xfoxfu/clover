@@ -189,53 +189,55 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
                 <DialogContentText>
                   请修改下方的选项，然后点击保存。
                 </DialogContentText>
-                <TextField
-                  margin="dense"
-                  id="name"
-                  label="邮箱"
-                  type="email"
-                  value={editorUser && editorUser.email}
-                  onChange={this.handleInputChange('email')}
-                  fullWidth
-                />
-                启用：
+                <Typography>
+                  <TextField
+                    margin="dense"
+                    id="name"
+                    label="邮箱"
+                    type="email"
+                    value={editorUser && editorUser.email}
+                    onChange={this.handleInputChange('email')}
+                    fullWidth
+                  />
+                  启用：
                   <Switch
-                  checked={editorUser && editorUser.enabled}
-                  aria-label="checkedA"
-                  onChange={this.handleCheckboxChange('enabled')}
-                />
-                <br />管理员：
+                    checked={editorUser && editorUser.enabled}
+                    aria-label="checkedA"
+                    onChange={this.handleCheckboxChange('enabled')}
+                  />
+                  <br />管理员：
                 <Switch
-                  checked={editorUser && editorUser.isAdmin}
-                  aria-label="checkedB"
-                  onChange={this.handleCheckboxChange('isAdmin')}
-                />
-                <br />邮箱验证：
+                    checked={editorUser && editorUser.isAdmin}
+                    aria-label="checkedB"
+                    onChange={this.handleCheckboxChange('isAdmin')}
+                  />
+                  <br />邮箱验证：
                 <Switch
-                  checked={editorUser && editorUser.isEmailVerified}
-                  aria-label="checkedC"
-                  onChange={this.handleCheckboxChange('isEmailVerified')}
-                />
-                <TextField
-                  margin="dense"
-                  id="note"
-                  label="备注"
-                  type=" text"
-                  value={editorUser && editorUser.note}
-                  onChange={this.handleInputChange('note')}
-                  fullWidth
-                  multiline
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={this.state.editorUser && this.state.editorUser.regenerate}
-                      onChange={this.handleCheckboxChange('regenerate')}
-                      value="重新生成配置"
-                    />
-                  }
-                  label="重新生成配置"
-                />
+                    checked={editorUser && editorUser.isEmailVerified}
+                    aria-label="checkedC"
+                    onChange={this.handleCheckboxChange('isEmailVerified')}
+                  />
+                  <TextField
+                    margin="dense"
+                    id="note"
+                    label="备注"
+                    type=" text"
+                    value={editorUser && editorUser.note}
+                    onChange={this.handleInputChange('note')}
+                    fullWidth
+                    multiline
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.editorUser && this.state.editorUser.regenerate}
+                        onChange={this.handleCheckboxChange('regenerate')}
+                        value="重新生成配置"
+                      />
+                    }
+                    label="重新生成配置"
+                  />
+                </Typography>
               </DialogContent>
               <DialogActions>
                 <Button onClick={this.handleSimpleClose} color="primary">

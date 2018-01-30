@@ -122,7 +122,8 @@ const render = async (ctx: Context, template: string, cards?: any[], data?: any)
   await ctx.render(template, locals);
 };
 
-router.get("/", async (ctx) => {
+router.get("/", (ctx) => ctx.redirect("/app"));
+router.get("/old", async (ctx) => {
   await checkAuth(ctx, true, false);
   await render(ctx, "index");
 });
@@ -266,7 +267,7 @@ router.get("/validate_email_callback", async (ctx) => {
   } else {
     user.isEmailVerified = true;
     await connection.getRepository(User).save(user);
-    ctx.redirect("/");
+    ctx.redirect("/old");
   }
 });
 router.get("/reset_password_email_callback", async (ctx) => {
