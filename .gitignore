@@ -1,60 +1,4 @@
-v2ray_server.json
-dist
-
-# TypeScript ignores
-*.js
-*.js.map
-
-# Unit Test ignores
-config.yaml
-html-report
-
-# Database ignores
-clover.db
-
-# Created by https://www.gitignore.io/api/node,macos,linux,windows,visualstudiocode,istanbul
-
-### Linux ###
-*~
-
-# temporary files which can be created if a process still has a handle open of a deleted file
-.fuse_hidden*
-
-# KDE directory preferences
-.directory
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-# .nfs files are created when an open file is removed but is still being accessed
-.nfs*
-
-### macOS ###
-*.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+# Created by https://www.gitignore.io/api/node,visualstudiocode
 
 ### Node ###
 # Logs
@@ -123,25 +67,18 @@ typings/
 !.vscode/launch.json
 !.vscode/extensions.json
 
-### Windows ###
-# Windows thumbnail cache files
-Thumbs.db
-ehthumbs.db
-ehthumbs_vista.db
+# End of https://www.gitignore.io/api/node,visualstudiocode
 
-# Folder config file
-Desktop.ini
+v2ray_server.json
+dist
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# TypeScript ignores
+*.js
+*.js.map
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
+# Unit Test ignores
+config.yaml
+html-report
 
-# Windows shortcuts
-*.lnk
-
-# End of https://www.gitignore.io/api/node,macos,linux,windows,visualstudiocode,istanbul
+# Database ignores
+clover.db

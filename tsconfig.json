@@ -10,19 +10,22 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "plugins": [{
-      "name": "tslint-language-service",
-      "alwaysShowRuleFailuresAsWarnings": true,
-      // "ignoreDefinitionFiles": true,
-      "configFile": "./tslint.json",
-      //"disableNoUnusedVariableRule": false,
-      "exclude": "${workspaceRoot}/node_modules/*",
-      "autoFixOnSave": true
-    }]
+    "plugins": [
+      {
+        "name": "tslint-language-service",
+        "alwaysShowRuleFailuresAsWarnings": true,
+        // "ignoreDefinitionFiles": true,
+        "configFile": "./tslint.json",
+        //"disableNoUnusedVariableRule": false,
+        "exclude": "${workspaceRoot}/node_modules/*",
+        "autoFixOnSave": true
+      }
+    ]
   },
   "exclude": [
     ".vscode",
     "logs",
-    "node_modules"
+    "node_modules",
+    "client"
   ]
 }

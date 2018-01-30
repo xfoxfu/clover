@@ -2,3 +2,5 @@
 node_modules
 .vscode
 LICENSE.md
+build
+.gitignore

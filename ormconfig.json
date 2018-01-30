@@ -1,8 +1,0 @@
-{
-  "type": "sqlite",
-  "database": "./clover.db",
-  "entities": [
-    "./models/*.js"
-  ],
-  "synchronize": false
-}

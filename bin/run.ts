@@ -11,8 +11,9 @@ For more information, see "${__dirname}/../LICENSE.md".
 }
 
 import "dotenv/config";
+import "reflect-metadata";
 
-import log from "../lib/log";
+import log from "../server/lib/log";
 
 if (process.env.NODE_ENV === "test") {
   log.level = "silent";
@@ -22,11 +23,12 @@ if (process.env.NODE_ENV === "test") {
   log.level = "info";
 }
 
-import "../lib/email";
-import server from "../server";
-import { writeServerConfig } from "../lib/vmess";
-import { port, dbPath } from "../lib/config";
-import db from "../lib/db";
+import "../server/lib/email";
+import server from "../index";
+import serverOnly from "../server/server";
+import { writeServerConfig } from "../server/lib/vmess";
+import { port, dbPath } from "../server/lib/config";
+import db from "../server/lib/db";
 
 const PORT = port || 3000;
 
@@ -34,7 +36,12 @@ db()
   .then(() => writeServerConfig())
   .then(() => {
     log.info(`database connected to ${dbPath}`);
-    server.listen(PORT);
-    log.info(`server listening on port ${PORT}`);
+    if (process.env.SERVER_ONLY) {
+      serverOnly.listen(PORT);
+      log.info(`only server listening on port ${PORT}`);
+    } else {
+      server.listen(PORT);
+      log.info(`full server listening on port ${PORT}`);
+    }
   })
   .catch((err: any) => log.error(err));
