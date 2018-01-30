@@ -15,7 +15,7 @@ COPY . /app
 WORKDIR /app
 RUN ./node_modules/.bin/tsc --outDir dist --sourceMap false
 WORKDIR /app/client
-ENV REACT_APP_PUBLIC_URL /app
+ENV PUBLIC_URL /app
 RUN yarn run build
 
 FROM node:8-alpine
