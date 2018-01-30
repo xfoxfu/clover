@@ -164,6 +164,9 @@ router.post("/all_users", async (ctx) => {
 router.post("/add_announce", async (ctx) => {
   await authToken(ctx, true);
   const { title, content } = ctx.request.body;
+  if (!title) {
+    return raiseApiError(400, "未填写通知标题");
+  }
   const announce = new Announce(title, md.render(content));
   await getRepository(Announce).save(announce);
   await announceMail(announce, await getRepository(User).find());

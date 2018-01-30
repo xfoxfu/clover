@@ -25,7 +25,7 @@ export const announce = async (ann: Announce, users: User[], alwaysSend = false)
   const fromEmail = new helper.Email(sendgrid_config.email);
   const subject = `[${siteTitle}]${ann.title}`;
   for (const currentUser of users) {
-    if (alwaysSend || currentUser.isEmailVerified) {
+    if (alwaysSend || (currentUser.isEmailVerified && currentUser.enabled)) {
       const toEmail = new helper.Email(currentUser.email);
       const content = new helper.Content("text/html", templates.announce({
         site: siteBasics,

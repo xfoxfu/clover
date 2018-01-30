@@ -39,3 +39,10 @@ export const getRefCode = async (token: string, email: string, note?: string): P
   request("get_refcode", { token, email, note });
 export const getAllUsers = async (token: string): Promise<User[]> =>
   request("all_users", { token });
+export const switchUserFlags = async (
+  email: string,
+  enabled: boolean,
+  isAdmin: boolean,
+  isEmailVerified: boolean
+): Promise<Message> =>
+  request("switch_user_status", { email, enabled, isAdmin, isEmailVerified });
