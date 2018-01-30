@@ -107,13 +107,15 @@ router.post("/reg", async (ctx) => {
     raiseApiError(400, "请求格式错误");
   }
   if (!(config.openRegister || refcode)) {
-    raiseApiError(400, "未开放注册，请填写邀请码");
+    if (email !== config.adminEmail) {
+      raiseApiError(400, "未开放注册，请填写邀请码");
+    }
   }
   const user = new User(email);
   await user.setPassword(password);
   user.setConnPassword();
   await user.allocConnPort();
-  if (!config.openRegister) {
+  if (!config.openRegister && email !== config.adminEmail) {
     try {
       const refData = await decode<any>(refcode);
       if (refData.email !== email) {
@@ -142,7 +144,7 @@ router.post("/reset_password", async (ctx) => {
   ctx.body = { message: "修改成功" };
 });
 router.post("/resend_validate_email", async (ctx) => {
-  const user = await auth(ctx);
+  const user = await authToken(ctx);
   await validateEmail(user);
   ctx.body = { message: "邮件已发送，请到收件箱查收" };
 });

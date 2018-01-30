@@ -9,3 +9,4 @@ const expiresIn = 6 * 60 * 60 * 1000;
 
 export const getToken = () => store.get(TOKEN_KEY);
 export const setToken = (token: string) => store.set(TOKEN_KEY, token, new Date().getTime() + expiresIn);
+export const deleteToken = () => store.remove(TOKEN_KEY);

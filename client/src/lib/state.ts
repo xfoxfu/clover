@@ -4,7 +4,7 @@ import Site from '../models/site';
 import Announce from '../models/announce';
 import { getSiteInfo, login, getAnnounces, reg, resetPassword, resetPasswordEmail, userInfoByToken, addAnnounce } from '../api';
 import getGuide, { Guide } from './guide';
-import { getToken, setToken } from './store';
+import { getToken, setToken, deleteToken } from './store';
 
 export default class AppState {
   @observable site?: Site;
@@ -27,6 +27,7 @@ export default class AppState {
   }
   @action logout = () => {
     this.user = undefined;
+    deleteToken();
   }
   @action refreshUserInfo = async (token?: string) => {
     try {

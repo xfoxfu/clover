@@ -47,3 +47,5 @@ export const switchUserFlags = async (
   isEmailVerified: boolean
 ): Promise<Message> =>
   request("switch_user_status", { token, email, enabled, isAdmin, isEmailVerified });
+export const resendValidateEmail = async (token: string): Promise<Message> =>
+  request("resend_validate_email", { token });

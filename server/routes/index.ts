@@ -152,7 +152,9 @@ router.post("/reg", async (ctx) => {
     ctx.throw(400);
   }
   if (!(openRegister || ctx.request.body.refcode)) {
-    ctx.throw(400);
+    if (ctx.request.body.email !== adminEmail) {
+      ctx.throw(400);
+    }
   }
   const user = new User(ctx.request.body.email);
   await user.setPassword(ctx.request.body.password);

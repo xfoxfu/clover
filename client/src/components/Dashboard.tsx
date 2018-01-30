@@ -14,6 +14,7 @@ import TextField from 'material-ui/TextField/TextField';
 
 import theme from '../lib/theme';
 import { GuideItem } from '../lib/guide';
+import { resendValidateEmail } from '../api/index';
 
 @inject('state') @observer
 class Dashboard extends React.Component<RouteComponentProps<{}> & { state: AppState }, {
@@ -47,8 +48,19 @@ class Dashboard extends React.Component<RouteComponentProps<{}> & { state: AppSt
     }));
   }
 
+  handleResendEmail = () => {
+    if (!this.props.state.user) { return; }
+    resendValidateEmail(this.props.state.user.token)
+      .then((msg) => this.props.state.emitMessage(msg.message))
+      .catch(this.props.state.emitError);
+  }
+
   render() {
     const guide = this.props.state.guide;
+    const { enabled, isEmailVerified } = this.props.state.user || {
+      enabled: false,
+      isEmailVerified: false
+    };
     const makeGuideUi = (title: string, guide: GuideItem[], index: number) => (
       <Card style={{ marginTop: '10px' }}>
         <CardContent>
@@ -151,6 +163,48 @@ class Dashboard extends React.Component<RouteComponentProps<{}> & { state: AppSt
     );
     return (
       <span>
+        {(!enabled) &&
+          <Card style={{ marginTop: '10px' }}>
+            <CardContent>
+              <Typography type="headline" component="h2">
+                用户账户已停用
+              </Typography>
+              <Typography>
+                <p>
+                  您的账号已被停用。请联系
+                  <a href={`mailto:${this.props.state.site && this.props.state.site.adminEmail}`}>
+                    {this.props.state.site && this.props.state.site.adminEmail}
+                  </a>
+                  重新启用您的账号。
+                </p>
+                <p>可能的原因：您主动要求停用、您的账户发生欠费。</p>
+                <p>请您阅读下方描述信息确认您的缴费情况。</p>
+                <pre><code>{this.props.state.user && this.props.state.user.note}</code></pre>
+              </Typography>
+            </CardContent>
+          </Card>
+        }
+        {(!isEmailVerified) &&
+          <Card style={{ marginTop: '10px' }}>
+            <CardContent>
+              <Typography type="headline" component="h2">
+                邮件地址未激活
+              </Typography>
+              <Typography>
+                <p>您的邮件地址没有激活。</p>
+                <p>这将导致您无法收到本站的通知邮件。</p>
+                <p>请您检查您的收件箱，或点击下方链接重发邮件。</p>
+                <Button
+                  raised
+                  color="primary"
+                  onClick={this.handleResendEmail}
+                >
+                  重发验证邮件
+                </Button>
+              </Typography>
+            </CardContent>
+          </Card>
+        }
         {guide &&
           <div>
             {[
