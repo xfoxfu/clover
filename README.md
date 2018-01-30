@@ -50,18 +50,9 @@ Use environment variables, and dotenv files are also supported.
 | VMESS_TLS_CERT        | server.crt                       | path of TLS cert file, used only `VMESS_TLS` is `in` |
 | VMESS_TLS_KEY         | server.key                       | path of TLS key file, used only `VMESS_TLS` is `in` |
 
-Currently, not all features of vmess is implemented.
+Currently, VMESS_PORT_DYNAMIC is not implemented.
 
-- [ ] VMESS_PORT_DYNAMIC
-- [x] VMESS_NETWORK
-  * [x] tcp
-  * [x] kcp
-  * [x] ws
-- [x] VMESS_TCP_HEADER
-- [x] VMESS_TLS
-  * [x] off
-  * [x] in
-  * [x] out
+The user with email ADMIN_EMAIL will automatically become the admin.
 
 Start
 -----

@@ -164,6 +164,9 @@ router.post("/all_users", async (ctx) => {
 router.post("/add_announce", async (ctx) => {
   await authToken(ctx, true);
   const { title, content } = ctx.request.body;
+  if (!title) {
+    return raiseApiError(400, "未填写通知标题");
+  }
   const announce = new Announce(title, md.render(content));
   await getRepository(Announce).save(announce);
   await announceMail(announce, await getRepository(User).find());
@@ -178,6 +181,36 @@ router.post("/get_refcode", async (ctx) => {
   ctx.body = {
     refcode: await encode({ email, note }),
   };
+});
+router.post("/switch_user_status", async (ctx) => {
+  await authToken(ctx, true);
+  const { email, enabled, isAdmin, isEmailVerified } = ctx.request.body;
+  if (!email) {
+    return raiseApiError(400, "请求格式错误");
+  }
+  const user = await getRepository(User).findOne({ email });
+  if (!user) {
+    return raiseApiError(404, "用户不存在");
+  }
+  user.enabled = enabled;
+  user.isAdmin = isAdmin;
+  user.isEmailVerified = isEmailVerified;
+  await getRepository(User).save(user);
+  ctx.body = { message: "操作成功" };
+});
+router.post("/edit_user", async (ctx) => {
+  await authToken(ctx, true);
+  const { email, field, data } = ctx.request.body;
+  if (!email || !field) {
+    return raiseApiError(400, "请求格式错误");
+  }
+  const user: any = await getRepository(User).findOne({ email });
+  if (!user) {
+    return raiseApiError(404, "用户不存在");
+  }
+  user[field] = data;
+  await getRepository(User).save(user);
+  ctx.body = { message: "操作成功" };
 });
 
 export default router;

@@ -26,6 +26,9 @@ const generatePassword = () => {
 export default class User {
   constructor(email: string) {
     this.email = email;
+    if (email === config.adminEmail) {
+      this.isAdmin = true;
+    }
     this.vmessUid = uuid();
   }
   @PrimaryGeneratedColumn()

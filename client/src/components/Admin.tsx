@@ -11,16 +11,37 @@ import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField/TextField';
 import Grid from 'material-ui/Grid';
 import Switch from 'material-ui/Switch';
+import Button from 'material-ui/Button';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from 'material-ui/Dialog';
+import { CircularProgress } from 'material-ui/Progress';
 
 import User from '../models/user';
-import { getAllUsers } from '../api/index';
+import { getAllUsers, switchUserFlags } from '../api/index';
 
 interface IState {
-  users: User[]
+  users: User[],
+  editorUser?: {
+    email: string,
+    enabled: boolean,
+    isAdmin: boolean,
+    isEmailVerified: boolean,
+  },
+  open: boolean,
+  loading: boolean;
 }
 @inject('state') @observer
 class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState }, IState> {
-  state: IState = { users: [] };
+  state: IState = {
+    users: [],
+    open: false,
+    loading: false,
+  };
+
   componentDidMount() {
     const token = this.props.state.user && this.props.state.user.token;
     if (!token) {
@@ -30,8 +51,42 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
       .then((users) => this.setState({ users }))
       .catch(this.props.state.emitError);
   }
+
+  handleClickOpen = (user: User) => () => {
+    this.setState({
+      open: true,
+      editorUser: user,
+    });
+  };
+  handleClose = () => {
+    if (!this.state.editorUser) { return; }
+    const token = this.props.state.user && this.props.state.user.token;
+    if (!token) { return; }
+    const { email, enabled, isAdmin, isEmailVerified } = this.state.editorUser;
+    switchUserFlags(token, email, enabled, isAdmin, isEmailVerified)
+      .then((message) => {
+        this.props.state.emitMessage(message.message);
+        this.setState({ open: false });
+      })
+      .then(() => getAllUsers(token))
+      .then((users) => this.setState({ users }))
+      .catch(this.props.state.emitError);
+  };
+  handleSimpleClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleChange = (name: string) => (event: React.ChangeEvent<{}>, checked: boolean) => {
+    this.setState((state) => ({
+      editorUser: {
+        ...state.editorUser,
+        [name]: checked,
+      }
+    }) as any);
+  };
+
   render() {
-    const { users } = this.state;
+    const { users, editorUser } = this.state;
     const admin = this.props.state.user;
     return (
       <div>
@@ -75,47 +130,93 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
                           <b>{user.enabled ? "" : "账户已停用"}</b>
                         </p>
                         <TextField
-                          fullWidth
-                          disabled
+                          fullWidth disabled
                           label="VMess UID"
                           value={user.vmess.id}
                         />
                         <TextField
-                          fullWidth
-                          disabled
+                          fullWidth disabled
                           label="VMess Alter ID"
                           value={user.vmess.aid}
                         />
                         <TextField
-                          fullWidth
-                          disabled
+                          fullWidth disabled
                           label="Shadowsocks Port"
                           value={user.ss.port}
                         />
                         <TextField
-                          fullWidth
-                          disabled
+                          fullWidth disabled
                           label="Shadowsocks Password"
                           value={user.ss.password}
                         />
                         <TextField
-                          fullWidth
-                          disabled
+                          fullWidth disabled
                           label="Shadowsocks Encryption"
                           value={user.ss.encryption}
                         />
                         <TextField
-                          fullWidth
-                          multiline
-                          disabled
-                          label="Note"
-                          value={user.note}
+                          fullWidth multiline disabled
+                          label="Note" value={user.note}
                         />
+                        <Button onClick={this.handleClickOpen(user)}>编辑用户</Button>
                       </Typography>
                     </CardContent>
                   </Card>
                 </Grid>
               ))}
+            <Dialog
+              open={this.state.open}
+              onClose={this.handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">修改用户</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  请修改下方的选项，然后点击保存。
+                </DialogContentText>
+                <TextField
+                  margin="dense"
+                  id="name"
+                  label="邮箱"
+                  type="email"
+                  value={editorUser && editorUser.email}
+                  fullWidth
+                  disabled
+                />
+                启用：
+                  <Switch
+                  checked={editorUser && editorUser.enabled}
+                  aria-label="checkedA"
+                  onChange={this.handleChange('enabled')}
+                />
+                <br />管理员：
+                <Switch
+                  checked={editorUser && editorUser.isAdmin}
+                  aria-label="checkedB"
+                  onChange={this.handleChange('isAdmin')}
+                />
+                <br />邮箱验证：
+                <Switch
+                  checked={editorUser && editorUser.isEmailVerified}
+                  aria-label="checkedC"
+                  onChange={this.handleChange('isEmailVerified')}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleSimpleClose} color="primary">
+                  取消
+                </Button>
+                <Button
+                  onClick={this.handleClose}
+                  color="primary"
+                  disabled={this.state.loading}
+                  raised
+                >
+                  提交
+                </Button>
+                {this.state.loading && <CircularProgress />}
+              </DialogActions>
+            </Dialog>
           </Grid>
         </p>
       </div>
