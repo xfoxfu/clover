@@ -2,6 +2,7 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import AppState from '../lib/state';
 import { RouteComponentProps } from 'react-router-dom';
+import { ChangeEvent } from 'react';
 
 import AddAnnounceDialog from './AddAnnounceDialog';
 import GetRefCodeDialog from './GetRefCodeDialog';
@@ -21,15 +22,17 @@ import Dialog, {
 import { CircularProgress } from 'material-ui/Progress';
 
 import User from '../models/user';
-import { getAllUsers, switchUserFlags } from '../api/index';
+import { getAllUsers, editUser } from '../api/index';
 
 interface IState {
   users: User[],
   editorUser?: {
+    id: number;
     email: string,
     enabled: boolean,
     isAdmin: boolean,
     isEmailVerified: boolean,
+    note: string,
   },
   open: boolean,
   loading: boolean;
@@ -62,8 +65,8 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
     if (!this.state.editorUser) { return; }
     const token = this.props.state.user && this.props.state.user.token;
     if (!token) { return; }
-    const { email, enabled, isAdmin, isEmailVerified } = this.state.editorUser;
-    switchUserFlags(token, email, enabled, isAdmin, isEmailVerified)
+    const { id, email, enabled, isAdmin, isEmailVerified, note } = this.state.editorUser;
+    editUser(token, { id, email, enabled, isAdmin, isEmailVerified, note })
       .then((message) => {
         this.props.state.emitMessage(message.message);
         this.setState({ open: false });
@@ -76,7 +79,16 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
     this.setState({ open: false });
   };
 
-  handleChange = (name: string) => (event: React.ChangeEvent<{}>, checked: boolean) => {
+  handleInputChange = (name: string) => (event: ChangeEvent<{ value: string }>) => {
+    const value = event.target.value;
+    this.setState((state) => ({
+      editorUser: {
+        ...this.state.editorUser,
+        [name]: value,
+      },
+    }) as any);
+  };
+  handleCheckboxChange = (name: string) => (event: React.ChangeEvent<{}>, checked: boolean) => {
     this.setState((state) => ({
       editorUser: {
         ...state.editorUser,
@@ -180,26 +192,36 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
                   label="邮箱"
                   type="email"
                   value={editorUser && editorUser.email}
+                  onChange={this.handleInputChange('email')}
                   fullWidth
-                  disabled
                 />
                 启用：
                   <Switch
                   checked={editorUser && editorUser.enabled}
                   aria-label="checkedA"
-                  onChange={this.handleChange('enabled')}
+                  onChange={this.handleCheckboxChange('enabled')}
                 />
                 <br />管理员：
                 <Switch
                   checked={editorUser && editorUser.isAdmin}
                   aria-label="checkedB"
-                  onChange={this.handleChange('isAdmin')}
+                  onChange={this.handleCheckboxChange('isAdmin')}
                 />
                 <br />邮箱验证：
                 <Switch
                   checked={editorUser && editorUser.isEmailVerified}
                   aria-label="checkedC"
-                  onChange={this.handleChange('isEmailVerified')}
+                  onChange={this.handleCheckboxChange('isEmailVerified')}
+                />
+                <TextField
+                  margin="dense"
+                  id="note"
+                  label="备注"
+                  type=" text"
+                  value={editorUser && editorUser.note}
+                  onChange={this.handleInputChange('note')}
+                  fullWidth
+                  multiline
                 />
               </DialogContent>
               <DialogActions>

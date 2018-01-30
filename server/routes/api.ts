@@ -184,33 +184,21 @@ router.post("/get_refcode", async (ctx) => {
     refcode: await encode({ email, note }),
   };
 });
-router.post("/switch_user_status", async (ctx) => {
-  await authToken(ctx, true);
-  const { email, enabled, isAdmin, isEmailVerified } = ctx.request.body;
-  if (!email) {
-    return raiseApiError(400, "请求格式错误");
-  }
-  const user = await getRepository(User).findOne({ email });
-  if (!user) {
-    return raiseApiError(404, "用户不存在");
-  }
-  user.enabled = enabled;
-  user.isAdmin = isAdmin;
-  user.isEmailVerified = isEmailVerified;
-  await getRepository(User).save(user);
-  ctx.body = { message: "操作成功" };
-});
 router.post("/edit_user", async (ctx) => {
   await authToken(ctx, true);
-  const { email, field, data } = ctx.request.body;
-  if (!email || !field) {
+  const { uid, email, note, enabled, isAdmin, isEmailVerified } = ctx.request.body;
+  if (!uid) {
     return raiseApiError(400, "请求格式错误");
   }
-  const user: any = await getRepository(User).findOne({ email });
+  const user: any = await getRepository(User).findOneById(uid);
   if (!user) {
     return raiseApiError(404, "用户不存在");
   }
-  user[field] = data;
+  user.email = email || user.email;
+  user.note = note || user.note;
+  user.enabled = enabled || user.enabled;
+  user.isAdmin = isAdmin || user.isAdmin;
+  user.isEmailVerified = isEmailVerified || user.isEmailVerified;
   await getRepository(User).save(user);
   ctx.body = { message: "操作成功" };
 });
