@@ -26,7 +26,7 @@ clover:
   restart: always
   volumes:
   - ./clover.db:/app/clover.db
-  - ./v2ray.json:/app/config/v2ray_server.json
+  - ./v2ray.json:/app/v2ray.json
   - /var/run/docker.sock:/var/run/docker.sock:ro
   environment:
   - LETSENCRYPT_HOST=<CLOVER_HOST>
@@ -50,6 +50,8 @@ shadowsocks:
   - 10000-10099:10000-10099/udp
   volumes:
   - ./ss.py:/shadowsocks/shadowsocks/config.py
+  environment:
+  - MU_TOKEN=<API_KEY>
   links:
   - clover
 v2ray:
@@ -65,3 +67,5 @@ v2ray:
   - LETSENCRYPT_HOST=<WS_HOST>
   volumes:
   - ./v2ray.json:/etc/v2ray/config.json
+  volumes_from:
+  - clover

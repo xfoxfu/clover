@@ -1,6 +1,7 @@
 # !!! Please rename config_example.py as config.py BEFORE editing it !!!
 
 import logging
+import os
 # !!! Only edit this line when you update your configuration file !!!
 # After you update, the values of CONFIG_VERSION in config.py and
 # config_example.py should be the same in order to start the server
@@ -28,7 +29,7 @@ MYSQL_TIMEOUT = 30
 # Shadowsocks MultiUser API Settings
 API_URL = 'http://clover:3000/mu/v2'
 # API Key (you can find this in the .env file if you are using SS-Panel V3)
-API_PASS = '<API_KEY>'
+API_PASS = os.environ['MU_TOKEN']
 NODE_ID = '1'
 
 # Time interval between 2 pulls from the database or API

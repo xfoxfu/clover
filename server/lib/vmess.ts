@@ -198,6 +198,6 @@ export const getServerConfig = async () => ({
   },
 });
 export const writeServerConfig = async () => {
-  await writeFile(`${__dirname}/../v2ray_server.json`, JSON.stringify(await getServerConfig()));
+  await writeFile(`${__dirname}/../../v2ray.json`, JSON.stringify(await getServerConfig()));
   await reload();
 };

@@ -82,8 +82,7 @@ If you run *Clover* inside a container, you may create 2 volumes: `/var/run/dock
 ### Docker
 
 1. Modify docker-compose.yml, set the env vars to your value.
-2. Modify ss.py, replace `<API_KEY>` to env var `MU_TOKEN`.
-3. `docker-compose up -d`
+3. `touch clover.db v2ray.json && docker-compose up -d`
 
 License
 -----

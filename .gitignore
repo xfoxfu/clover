@@ -82,3 +82,5 @@ html-report
 
 # Database ignores
 clover.db
+docker
+v2ray.json
