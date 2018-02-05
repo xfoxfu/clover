@@ -118,7 +118,6 @@ class FormDialog extends React.Component<{
                 label="邀请码"
                 type="text"
                 fullWidth
-                disabled
                 value={this.state.code}
               />
             </div>

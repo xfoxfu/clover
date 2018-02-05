@@ -111,7 +111,6 @@ class Dashboard extends React.Component<RouteComponentProps<{}> & { state: AppSt
                             value={value.data}
                             margin="normal"
                             fullWidth
-                            disabled
                           />
                         )}
                       </p>

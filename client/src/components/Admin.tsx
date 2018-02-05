@@ -118,12 +118,10 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
                   <Typography>
                     <p><b>VMess</b>
                       <Switch
-                        disabled
                         checked={admin && admin.vmess.enabled}
                         aria-label="checkedA"
                       /><br /><b>Shadowsocks</b>
                       <Switch
-                        disabled
                         checked={admin && admin.ss.enabled}
                         aria-label="checkedA"
                       />
@@ -145,32 +143,32 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
                           <b>{user.enabled ? "" : "账户已停用"}</b>
                         </p>
                         <TextField
-                          fullWidth disabled
+                          fullWidth
                           label="VMess UID"
                           value={user.vmess.id}
                         />
                         <TextField
-                          fullWidth disabled
+                          fullWidth
                           label="VMess Alter ID"
                           value={user.vmess.aid}
                         />
                         <TextField
-                          fullWidth disabled
+                          fullWidth
                           label="Shadowsocks Port"
                           value={user.ss.port}
                         />
                         <TextField
-                          fullWidth disabled
+                          fullWidth
                           label="Shadowsocks Password"
                           value={user.ss.password}
                         />
                         <TextField
-                          fullWidth disabled
+                          fullWidth
                           label="Shadowsocks Encryption"
                           value={user.ss.encryption}
                         />
                         <TextField
-                          fullWidth multiline disabled
+                          fullWidth multiline
                           label="Note" value={user.note}
                         />
                         <Button onClick={this.handleClickOpen(user)}>编辑用户</Button>
