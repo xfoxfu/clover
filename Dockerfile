@@ -1,29 +1,40 @@
-FROM node:8-alpine AS deps
+FROM node:8-alpine as base
 LABEL maintainer=coderfox<docker@xfox.me>
 
-RUN apk add --no-cache make gcc g++ python yarn 
+# install build tools
+RUN apk add --no-cache make gcc g++ python
+RUN yarn global add pkg pkg-fetch
 
-COPY ./package.json /deps/
-COPY ./yarn.lock /deps/
-WORKDIR /deps
+ENV NODE node8
+ENV PLATFORM alpine
+ENV ARCH x64
+RUN pkg-fetch ${NODE} ${PLATFORM} ${ARCH}
+
+# install dependencies
+COPY package.json /app/
+COPY yarn.lock /app/
+WORKDIR /app
 RUN yarn install
 RUN npm rebuild bcrypt --build-from-source
 
-FROM node:8-alpine AS build
-COPY --from=deps /deps/node_modules /app/node_modules
-COPY . /app
-WORKDIR /app
-RUN ./node_modules/.bin/tsc --outDir dist --sourceMap false
+# build server
+COPY . .
+RUN ./node_modules/.bin/tsc --sourceMap false
+# build client
 WORKDIR /app/client
 ENV PUBLIC_URL /app
 RUN yarn run build
 
-FROM node:8-alpine
-ENV NODE_ENV production
-COPY --from=deps /deps/node_modules /app/node_modules
-COPY --from=build /app/dist /app
-COPY --from=build /app/server/views /app/server/views
-COPY --from=build /app/client/build /app/client/build
+# build binary
 WORKDIR /app
+RUN pkg . --targets ${NODE}-${PLATFORM}-${ARCH} --out-path=build
+RUN cp ./node_modules/bcrypt/lib/binding/*.node build/
+RUN cp ./node_modules/sqlite3/lib/binding/**/*.node build/
+
+FROM node:8-alpine AS release
+
+COPY --from=base /app/build /app
+WORKDIR /app
+
 EXPOSE 3000
-CMD ["node", "bin/run"]
+CMD [ "./clover" ]

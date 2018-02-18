@@ -84,3 +84,5 @@ html-report
 clover.db
 docker
 v2ray.json
+clover
+build

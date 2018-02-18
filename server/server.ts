@@ -85,9 +85,9 @@ app.use(bodyParser());
 app.use(session({
   store: new sessionStore(dbPath),
 }));
-app.use(mount("/js", serve(`./node_modules/material-design-lite/dist`)));
+app.use(mount("/js", serve(`${__dirname}/../node_modules/material-design-lite/dist`)));
 app.use(mount("/css",
-  serve(`./node_modules/material-design-lite/dist`)));
+  serve(`${__dirname}/../node_modules/material-design-lite/dist`)));
 app
   .use(router.routes())
   .use(router.allowedMethods());

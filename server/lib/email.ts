@@ -10,6 +10,7 @@ import { encode } from "../lib/jwt";
 import log from "../lib/log";
 import Announce from "../models/announce";
 import User from "../models/user";
+import { join } from "path";
 
 const mailer = sendgrid(sendgrid_config.key);
 
@@ -17,9 +18,9 @@ const siteBasics = {
   title: siteTitle,
 };
 const templates = {
-  announce: hbs.compile(fs.readFileSync(`${__dirname}/../views/emails/announce.hbs`).toString()),
-  resetPassword: hbs.compile(fs.readFileSync(`${__dirname}/../views/emails/reset-password.hbs`).toString()),
-  validateEmail: hbs.compile(fs.readFileSync(`${__dirname}/../views/emails/email-validate.hbs`).toString()),
+  announce: hbs.compile(fs.readFileSync(join(__dirname, "../views/emails/announce.hbs")).toString()),
+  resetPassword: hbs.compile(fs.readFileSync(join(__dirname, "../views/emails/reset-password.hbs")).toString()),
+  validateEmail: hbs.compile(fs.readFileSync(join(__dirname, "../views/emails/email-validate.hbs")).toString()),
 };
 export const announce = async (ann: Announce, users: User[], alwaysSend = false) => {
   const fromEmail = new helper.Email(sendgrid_config.email);

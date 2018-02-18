@@ -4,3 +4,9 @@ node_modules
 LICENSE.md
 build
 .gitignore
+clover.db
+docker
+v2ray.json
+clover
+*.js
+*.js.map
