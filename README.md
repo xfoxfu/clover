@@ -49,6 +49,7 @@ Use environment variables, and dotenv files are also supported.
 | VMESS_TLS_CERT_TRUST  | true                             | true/false, false for insecure(not-trusted) certs |
 | VMESS_TLS_CERT        | server.crt                       | path of TLS cert file, used only `VMESS_TLS` is `in` |
 | VMESS_TLS_KEY         | server.key                       | path of TLS key file, used only `VMESS_TLS` is `in` |
+| SENTRY_URL            | empty                            | log tracing of <https://sentry.io>       |
 
 Currently, VMESS_PORT_DYNAMIC is not implemented.
 

@@ -9,12 +9,14 @@ const sessionStore: any = require("koa-sqlite3-session");
 import * as mount from "koa-mount";
 import * as serve from "koa-static";
 import * as cors from "koa2-cors";
-import { dbPath } from "./lib/config";
+import { dbPath, SENTRY_URL } from "./lib/config";
 import log from "./lib/log";
 import router from "./routes";
+import { config, captureException } from "raven";
 
 const app = new Koa();
 
+config(SENTRY_URL).install();
 app.use(cors({
   origin: (ctx) => ctx.url.startsWith("/api") ? "*" : false,
   allowMethods: ["POST"],
@@ -30,6 +32,7 @@ app.use(async (ctx: Koa.Context, next: () => any) => {
     }
   } catch (error) {
     if (!error.status) {
+      captureException(error);
       log.error(error);
     }
     ctx.status = error.status || 500;

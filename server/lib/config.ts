@@ -68,5 +68,6 @@ export const vmess = {
     },
   },
 };
+export const SENTRY_URL = getEnv("SENTRY_URL", "");
 
 log.debug("configuration loaded", exports);
