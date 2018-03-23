@@ -2,23 +2,33 @@ import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import AppState from '../lib/state';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography/Typography';
+import { Menu, Icon } from 'antd';
 
 @inject('state') @observer
-class Menu extends React.Component<RouteComponentProps<{}> & { state: AppState }, {}> {
+class MenuComponent extends React.Component<RouteComponentProps<{}> & { state: AppState }, {}> {
   render() {
     return (
       <div>
-        <Typography type="headline" component="h1">
+        <h1>
           {this.props.state.site && this.props.state.site.siteTitle}
-        </Typography>
-        <Button component={props => <Link to={`${process.env.PUBLIC_URL}/dashboard`} {...props} />}>首页</Button>
-        <Button component={props => <Link to={`${process.env.PUBLIC_URL}/announces`} {...props} />}>公告</Button>
-        {this.props.state.user && this.props.state.user.isAdmin &&
-          <Button component={props => <Link to={`${process.env.PUBLIC_URL}/admin`} {...props} />}>管理</Button>}
+        </h1>
+        <Menu
+          selectedKeys={[this.props.location.pathname]}
+          mode="horizontal"
+        >
+          <Menu.Item key="/dashboard"><Link to="/dashboard">
+            <Icon type="mail" />首页</Link>
+          </Menu.Item>
+          <Menu.Item key="/announces"><Link to="/announces">
+            <Icon type="mail" />公告</Link>
+          </Menu.Item>
+          {this.props.state.user && this.props.state.user.isAdmin &&
+            <Menu.Item key="/admin"><Link to="/admin">
+              <Icon type="mail" />管理</Link>
+            </Menu.Item>}
+        </Menu>
       </div>
     );
   }
 }
-export default Menu;
+export default MenuComponent;

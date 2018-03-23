@@ -121,8 +121,8 @@ router.post("/reg", async (ctx) => {
       const refData = await decode<any>(refcode);
       if (refData.email !== email) {
         raiseApiError(403, "邀请码不适用于当前邮件地址");
-        user.note = refData.note;
       }
+      user.note = refData.note;
     } catch (err) {
       if (err.status === 403) {
         throw err;

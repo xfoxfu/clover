@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import AppState from '../lib/state';
-import Card from 'material-ui/Card/Card';
-import CardContent from 'material-ui/Card/CardContent';
-import Typography from 'material-ui/Typography';
-import LinearProgress from 'material-ui/Progress/LinearProgress';
+import { Card } from 'antd';
 
 @inject('state') @observer
 class Announces extends React.Component<{ state: AppState, count?: number }, {}> {
@@ -13,27 +10,22 @@ class Announces extends React.Component<{ state: AppState, count?: number }, {}>
       this.props.state.loadAnnounces();
     }
   }
+
   render() {
     const { announces } = this.props.state;
     const { count } = this.props;
     return (
       <div>
-        {announces ?
+        {announces &&
           announces.slice(0, count).map((value) => (
-            <Card style={{ marginTop: '10px' }}>
-              <CardContent>
-                <Typography type="headline" component="h2">
-                  {value.title}
-                </Typography>
-                <Typography dangerouslySetInnerHTML={{ __html: value.content }}>
-                </Typography>
-              </CardContent>
+            <Card style={{ marginTop: '8px' }} title={value.title}>
+              <div dangerouslySetInnerHTML={{ __html: value.content }} />
             </Card>
-          )) :
-          <LinearProgress />
+          ))
         }
       </div>
     );
   }
 }
+
 export default Announces;

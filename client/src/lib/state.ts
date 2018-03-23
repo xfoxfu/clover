@@ -5,12 +5,12 @@ import Announce from '../models/announce';
 import { getSiteInfo, login, getAnnounces, reg, resetPassword, resetPasswordEmail, userInfoByToken, addAnnounce } from '../api';
 import getGuide, { Guide } from './guide';
 import { getToken, setToken, deleteToken } from './store';
+import {notification}from'antd';
 
 export default class AppState {
   @observable site?: Site;
   @observable user?: User;
   @observable announces?: Announce[];
-  @observable message?: string;
   @observable guide?: Guide;
 
   constructor() {
@@ -51,12 +51,17 @@ export default class AppState {
   }
 
   @action emitMessage = (message: string) => {
-    this.message = message;
+    notification.info({
+        message: '提示',
+        description: message,
+    });
   }
   @action emitError = (error: Error) => {
-    this.message = `发生了一个错误：「${error.message}」，请检查输入或稍后重试。`;
+      notification.error({
+          message: '错误',
+          description: error.message,
+      });
   }
-  @action clearMessage = () => this.message = '';
 
   @action reg = async (email: string, password: string, ref?: string) => {
     const result = await reg(email, password, ref);

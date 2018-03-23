@@ -1,18 +1,9 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import AppState from '../lib/state';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
+import { Button, Modal, Form, Input } from 'antd';
 import { ChangeEvent } from 'react';
-import { CircularProgress } from 'material-ui/Progress';
 import { getRefCode } from '../api/index';
-import theme from '../lib/theme';
 
 @inject('state') @observer
 class FormDialog extends React.Component<{
@@ -34,7 +25,7 @@ class FormDialog extends React.Component<{
 
   handleClickOpen = () => {
     this.setState({ open: true });
-  };
+  }
   handleClose = () => {
     const { email, note } = this.state;
     const token = this.props.state.user && this.props.state.user.token;
@@ -51,9 +42,9 @@ class FormDialog extends React.Component<{
       }))
       .catch((err) => {
         this.setState({ loading: false });
-        this.props.state.emitError(err)
+        this.props.state.emitError(err);
       });
-  };
+  }
   simpleClose = () => {
     this.setState({ open: false });
   }
@@ -70,64 +61,48 @@ class FormDialog extends React.Component<{
       <span>
         <Button
           onClick={this.handleClickOpen}
-          color="secondary"
-          style={{ margin: theme.spacing.unit }}
-        >生成邀请码</Button>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">生成邀请码</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              邀请码有效期 6 小时。
-            </DialogContentText>
-            <TextField
+          生成邀请码
+        </Button>
+        <Modal
+          visible={this.state.open}
+          onCancel={this.simpleClose}
+          title="生成邀请码"
+          footer={<Button key="back" onClick={this.simpleClose}>关闭</Button>}
+        >
+          邀请码有效期 6 小时。
+          <Form.Item label="邮箱">
+            <Input
               autoFocus
-              margin="dense"
               id="email"
-              label="邮箱"
               type="email"
-              fullWidth
               onChange={this.handleChange('email')}
             />
-            <TextField
-              multiline
-              margin="dense"
+          </Form.Item>
+          <Form.Item label="用户备注">
+            <Input.TextArea
+              autosize
               id="note"
-              label="用户备注"
-              type="text"
-              fullWidth
               onChange={this.handleChange('note')}
             />
-            <div style={{ position: 'relative', }}>
-              <Button
-                onClick={this.handleClose}
-                color="primary"
-                disabled={loading}
-                raised
-              >
-                提交
-             </Button>
-              {loading && <CircularProgress />}
-              <TextField
-                multiline
-                margin="dense"
+          </Form.Item>
+          <div style={{ position: 'relative', }}>
+            <Button
+              type="primary"
+              onClick={this.handleClose}
+              loading={loading}
+            >
+              提交
+            </Button>
+            <Form.Item label="邀请码">
+              <Input.TextArea
                 id="code"
-                label="邀请码"
-                type="text"
-                fullWidth
+                autosize
                 value={this.state.code}
               />
-            </div>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.simpleClose} color="secondary">
-              完成
-            </Button>
-          </DialogActions>
-        </Dialog >
+            </Form.Item>
+          </div>
+        </Modal>
       </span >
     );
   }

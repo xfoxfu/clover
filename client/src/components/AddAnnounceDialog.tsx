@@ -1,17 +1,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import AppState from '../lib/state';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
 import { ChangeEvent } from 'react';
-import { CircularProgress } from 'material-ui/Progress';
-import theme from '../lib/theme';
+import { Button, Modal, Form, Input } from 'antd';
 
 @inject('state') @observer
 class FormDialog extends React.Component<{
@@ -22,17 +13,17 @@ class FormDialog extends React.Component<{
   content: string;
   loading: boolean;
 }> {
-  state = {
+  public state = {
     open: false,
     title: '',
     content: '',
     loading: false,
   };
 
-  handleClickOpen = () => {
+  public handleClickOpen = () => {
     this.setState({ open: true });
-  };
-  handleClose = () => {
+  }
+  public handleClose = () => {
     const { title, content } = this.state;
     this.setState({ loading: true });
     this.props.state.addAnnounce(title, content)
@@ -40,78 +31,55 @@ class FormDialog extends React.Component<{
         open: false,
         title: '',
         content: '',
-        loading: false
+        loading: false,
       }))
       .catch((err) => {
         this.setState({ loading: false });
-        this.props.state.emitError(err)
+        this.props.state.emitError(err);
       });
-  };
-  simpleClose = () => {
+  }
+  public simpleClose = () => {
     this.setState({ open: false });
   }
-  handleChange = (name: string) => (event: ChangeEvent<{ value: string }>) => {
+  public handleChange = (name: string) => (event: ChangeEvent<{ value: string }>) => {
     this.setState({
       ...this.state,
       [name]: event.target.value,
     });
   }
 
-  render() {
+  public render() {
     const { loading } = this.state;
     return (
       <span>
         <Button
           onClick={this.handleClickOpen}
-          color="secondary"
-          style={{ margin: theme.spacing.unit }}
-        >创建公告</Button>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">创建公告</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              将会自动发送邮件给已激活邮箱的用户。
-            </DialogContentText>
-            <TextField
+          创建公告
+        </Button>
+        <Modal
+          visible={this.state.open}
+          onOk={this.handleClose}
+          onCancel={this.simpleClose}
+          title="创建公告"
+          confirmLoading={this.state.loading}
+        >
+          将会自动发送邮件给已激活邮箱的用户。
+          <Form.Item label="标题">
+            <Input
               autoFocus
-              margin="dense"
               id="title"
-              label="标题"
-              type="text"
-              fullWidth
               onChange={this.handleChange('title')}
             />
-            <TextField
-              multiline
-              margin="dense"
+          </Form.Item>
+          <Form.Item label="正文">
+            <Input.TextArea
               id="content"
-              label="正文（支持 Markdown）"
-              type="text"
-              fullWidth
               onChange={this.handleChange('content')}
             />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.simpleClose} color="secondary">
-              取消
-            </Button>
-            <div style={{ position: 'relative', }}>
-              <Button
-                onClick={this.handleClose}
-                color="secondary"
-                disabled={loading}
-              >
-                提交
-             </Button>
-              {loading && <CircularProgress />}
-            </div>
-          </DialogActions>
-        </Dialog >
-      </span>
+          </Form.Item>
+        </Modal>
+      </span >
     );
   }
 }

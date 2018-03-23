@@ -37,7 +37,7 @@ const getGuide = async (user: User, siteName?: string): Promise<Guide> => {
   return {
     vmess: [
       {
-        os: 'android',
+        os: 'Android',
         descriptions: [
           {
             title: '下载应用',
@@ -77,7 +77,7 @@ const getGuide = async (user: User, siteName?: string): Promise<Guide> => {
           }
         ],
       }, {
-        os: 'ios(kitsunebi)',
+        os: 'iOS(Kitsunebi)',
         descriptions: [
           {
             title: '下载应用',
@@ -119,7 +119,7 @@ const getGuide = async (user: User, siteName?: string): Promise<Guide> => {
           }
         ],
       }, {
-        os: 'ios(shadowrocket)',
+        os: 'iOS(Shadowrocket)',
         descriptions: [
           {
             title: '下载应用',
@@ -149,7 +149,7 @@ const getGuide = async (user: User, siteName?: string): Promise<Guide> => {
           }
         ],
       }, {
-        os: 'windows',
+        os: 'Windows',
         descriptions: [
           {
             title: '下载应用',
@@ -247,7 +247,7 @@ const getGuide = async (user: User, siteName?: string): Promise<Guide> => {
           }
         ],
       }, {
-        os: 'others',
+        os: '其它',
         descriptions: [{
           title: '配置参数',
           content: '本服务是 v2ray VMess 服务，请按照如下参数自行配置：',

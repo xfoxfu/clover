@@ -47,5 +47,8 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "theme": {
+    "primary-color": "#CDDC39"
   }
 }

@@ -7,28 +7,15 @@ import { ChangeEvent } from 'react';
 import AddAnnounceDialog from './AddAnnounceDialog';
 import GetRefCodeDialog from './GetRefCodeDialog';
 
-import Card, { CardContent } from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
-import TextField from 'material-ui/TextField/TextField';
-import Grid from 'material-ui/Grid';
-import Switch from 'material-ui/Switch';
-import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from 'material-ui/Dialog';
-import { CircularProgress } from 'material-ui/Progress';
-import Checkbox from 'material-ui/Checkbox';
-import { FormControlLabel } from 'material-ui/Form';
+import { Row, Col, Card, Switch, Input, Form, Button, Modal, Checkbox } from 'antd';
 
 import User from '../models/user';
 import { getAllUsers, editUser } from '../api/index';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 interface IState {
-  users: User[],
-  editorUser?: {
+  users: User[];
+  editorUser?: User & {
     id: number;
     email: string,
     enabled: boolean,
@@ -36,8 +23,8 @@ interface IState {
     isEmailVerified: boolean,
     note: string,
     regenerate: boolean,
-  },
-  open: boolean,
+  };
+  open: boolean;
   loading: boolean;
 }
 @inject('state') @observer
@@ -63,7 +50,7 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
       open: true,
       editorUser: { ...user, regenerate: false },
     });
-  };
+  }
   handleClose = () => {
     if (!this.state.editorUser) { return; }
     const token = this.props.state.user && this.props.state.user.token;
@@ -77,10 +64,10 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
       .then(() => getAllUsers(token))
       .then((users) => this.setState({ users }))
       .catch(this.props.state.emitError);
-  };
+  }
   handleSimpleClose = () => {
     this.setState({ open: false });
-  };
+  }
 
   handleInputChange = (name: string) => (event: ChangeEvent<{ value: string }>) => {
     const value = event.target.value;
@@ -90,171 +77,143 @@ class Admin extends React.Component<RouteComponentProps<{}> & { state: AppState 
         [name]: value,
       },
     }) as any);
-  };
-  handleCheckboxChange = (name: string) => (event: React.ChangeEvent<{}>, checked: boolean) => {
+  }
+  handleCheckboxChange = (name: string) => (event: CheckboxChangeEvent) => {
     this.setState((state) => ({
       editorUser: {
         ...state.editorUser,
-        [name]: checked,
+        [name]: event.target.checked,
       }
     }) as any);
-  };
+  }
 
   render() {
     const { users, editorUser } = this.state;
     const admin = this.props.state.user;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
     return (
       <div>
         <p>
-          <AddAnnounceDialog state={this.props.state} />
-          <GetRefCodeDialog state={this.props.state} />
-          <Grid container>
-            <Grid item xs={12} lg={12}>
-              <Card>
-                <CardContent>
-                  <Typography type="headline" component="h2">
-                    服务器状态
-                  </Typography>
-                  <Typography>
-                    <p><b>VMess</b>
-                      <Switch
-                        checked={admin && admin.vmess.enabled}
-                        aria-label="checkedA"
-                      /><br /><b>Shadowsocks</b>
-                      <Switch
-                        checked={admin && admin.ss.enabled}
-                        aria-label="checkedA"
-                      />
-                    </p>
-                  </Typography>
-                </CardContent>
+          <Row>
+            <AddAnnounceDialog state={this.props.state} />
+            <GetRefCodeDialog state={this.props.state} />
+          </Row>
+          <Row gutter={8}>
+            <Col>
+              <Card title="服务器状态">
+                <p>
+                  <b>VMess</b>
+                  <Switch
+                    checked={admin && admin.vmess.enabled}
+                  />
+                  <b>Shadowsocks</b>
+                  <Switch
+                    checked={admin && admin.ss.enabled}
+                  />
+                </p>
               </Card>
-            </Grid>
+            </Col>
             {
               users.length && users.map((user) => (
-                <Grid item xs={12} lg={6}>
-                  <Card>
-                    <CardContent>
-                      <Typography>
-                        <p><b>{user.email}</b></p>
-                        <p>
-                          {user.isAdmin ? <b>管理员</b> : "用户"}&nbsp;
-                          <b>{user.isEmailVerified ? "" : "邮箱未激活"}</b>&nbsp;
-                          <b>{user.enabled ? "" : "账户已停用"}</b>
-                        </p>
-                        <TextField
-                          fullWidth
-                          label="VMess UID"
-                          value={user.vmess.id}
-                        />
-                        <TextField
-                          fullWidth
-                          label="VMess Alter ID"
-                          value={user.vmess.aid}
-                        />
-                        <TextField
-                          fullWidth
-                          label="Shadowsocks Port"
-                          value={user.ss.port}
-                        />
-                        <TextField
-                          fullWidth
-                          label="Shadowsocks Password"
-                          value={user.ss.password}
-                        />
-                        <TextField
-                          fullWidth
-                          label="Shadowsocks Encryption"
-                          value={user.ss.encryption}
-                        />
-                        <TextField
-                          fullWidth multiline
-                          label="Note" value={user.note}
-                        />
-                        <Button onClick={this.handleClickOpen(user)}>编辑用户</Button>
-                      </Typography>
-                    </CardContent>
+                <Col xs={24} lg={12}>
+                  <Card title={user.email}>
+                    <p>
+                      {user.isAdmin ? <b>管理员</b> : '用户'}&nbsp;
+                          <b>{user.isEmailVerified ? '' : '邮箱未激活'}</b>&nbsp;
+                          <b>{user.enabled ? '' : '账户已停用'}</b>
+                    </p>
+                    <p>{user.note}</p>
+                    <Button onClick={this.handleClickOpen(user)}>编辑用户</Button>
                   </Card>
-                </Grid>
+                </Col>
               ))}
-            <Dialog
-              open={this.state.open}
-              onClose={this.handleClose}
-              aria-labelledby="form-dialog-title"
-            >
-              <DialogTitle id="form-dialog-title">修改用户</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  请修改下方的选项，然后点击保存。
-                </DialogContentText>
-                <Typography>
-                  <TextField
-                    margin="dense"
-                    id="name"
-                    label="邮箱"
-                    type="email"
-                    value={editorUser && editorUser.email}
-                    onChange={this.handleInputChange('email')}
-                    fullWidth
-                  />
-                  启用：
-                  <Switch
-                    checked={editorUser && editorUser.enabled}
-                    aria-label="checkedA"
-                    onChange={this.handleCheckboxChange('enabled')}
-                  />
-                  <br />管理员：
-                <Switch
-                    checked={editorUser && editorUser.isAdmin}
-                    aria-label="checkedB"
-                    onChange={this.handleCheckboxChange('isAdmin')}
-                  />
-                  <br />邮箱验证：
-                <Switch
-                    checked={editorUser && editorUser.isEmailVerified}
-                    aria-label="checkedC"
-                    onChange={this.handleCheckboxChange('isEmailVerified')}
-                  />
-                  <TextField
-                    margin="dense"
-                    id="note"
-                    label="备注"
-                    type=" text"
-                    value={editorUser && editorUser.note}
-                    onChange={this.handleInputChange('note')}
-                    fullWidth
-                    multiline
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={this.state.editorUser && this.state.editorUser.regenerate}
-                        onChange={this.handleCheckboxChange('regenerate')}
-                        value="重新生成配置"
-                      />
-                    }
-                    label="重新生成配置"
-                  />
-                </Typography>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleSimpleClose} color="primary">
-                  取消
-                </Button>
-                <Button
-                  onClick={this.handleClose}
-                  color="primary"
-                  disabled={this.state.loading}
-                  raised
-                >
-                  提交
-                </Button>
-                {this.state.loading && <CircularProgress />}
-              </DialogActions>
-            </Dialog>
-          </Grid>
+          </Row>
+          <Modal
+            visible={this.state.open}
+            onOk={this.handleClose}
+            onCancel={this.handleSimpleClose}
+            title="修改用户"
+            confirmLoading={this.state.loading}
+          >
+            <Form>
+              <Form.Item label="邮箱" {...formItemLayout}>
+                <Input
+                  id="name"
+                  type="email"
+                  value={editorUser && editorUser.email}
+                  onChange={this.handleInputChange('email')}
+                />
+              </Form.Item>
+              <Form.Item label="启用" {...formItemLayout}>
+                <Checkbox
+                  checked={editorUser && editorUser.enabled}
+                  onChange={this.handleCheckboxChange('enabled')}
+                />
+              </Form.Item>
+              <Form.Item label="管理员" {...formItemLayout}>
+                <Checkbox
+                  checked={editorUser && editorUser.isAdmin}
+                  onChange={this.handleCheckboxChange('isAdmin')}
+                />
+              </Form.Item>
+              <Form.Item label="邮箱验证" {...formItemLayout}>
+                <Checkbox
+                  checked={editorUser && editorUser.isEmailVerified}
+                  onChange={this.handleCheckboxChange('isEmailVerified')}
+                />
+              </Form.Item>
+              <Form.Item label="备注" {...formItemLayout}>
+                <Input.TextArea
+                  id="note"
+                  value={editorUser && editorUser.note}
+                  onChange={this.handleInputChange('note')}
+                  autosize
+                />
+              </Form.Item>
+              <Form.Item label="重新生成配置" {...formItemLayout}>
+                <Checkbox
+                  checked={this.state.editorUser && this.state.editorUser.regenerate}
+                  onChange={this.handleCheckboxChange('regenerate')}
+                />
+              </Form.Item>
+              <Form.Item label="VMess UID" {...formItemLayout}>
+                <Input
+                  value={editorUser && editorUser.vmess.id}
+                />
+              </Form.Item>
+              <Form.Item label="VMess Alter ID" {...formItemLayout}>
+                <Input
+                  value={editorUser && editorUser.vmess.aid}
+                />
+              </Form.Item>
+              <Form.Item label="Shadowsocks Port" {...formItemLayout}>
+                <Input
+                  value={editorUser && editorUser.ss.port}
+                />
+              </Form.Item>
+              <Form.Item label="Shadowsocks Password" {...formItemLayout}>
+                <Input
+                  value={editorUser && editorUser.ss.password}
+                />
+              </Form.Item>
+              <Form.Item label="Shadowsocks Encryption" {...formItemLayout}>
+                <Input
+                  value={editorUser && editorUser.ss.encryption}
+                />
+              </Form.Item>
+            </Form>
+          </Modal>
         </p>
-      </div>
+      </div >
     );
   }
 }
