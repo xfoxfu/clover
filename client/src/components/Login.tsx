@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import AppState from '../lib/state';
 import { RouteComponentProps } from 'react-router-dom';
 import { Button, Form, Input, Tabs } from 'antd';
+import * as qs from 'query-string';
 
 const { TabPane } = Tabs;
 const FormItem = Form.Item;
@@ -28,7 +29,7 @@ class Dashboard extends React.Component<RouteComponentProps<{}> & { state: AppSt
         email: '',
         password: '',
         password2: '',
-        ref: '',
+        ref: qs.parse(this.props.location.search).ref || '',
         tab: 0,
         err: '',
         loading: false,
@@ -106,7 +107,11 @@ class Dashboard extends React.Component<RouteComponentProps<{}> & { state: AppSt
                         (this.state.tab === TABS.REGISTER &&
                             (this.props.state.site && !this.props.state.site.openRegister)) &&
                         <FormItem label="邀请码">
-                            <Input.TextArea autosize onChange={this.handleChange('ref')} />
+                            <Input.TextArea
+                                autosize
+                                onChange={this.handleChange('ref')}
+                                defaultValue={qs.parse(this.props.location.search).ref}
+                            />
                         </FormItem>
                     }
                     <Button

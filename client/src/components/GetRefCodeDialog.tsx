@@ -4,6 +4,7 @@ import AppState from '../lib/state';
 import { Button, Modal, Form, Input } from 'antd';
 import { ChangeEvent } from 'react';
 import { getRefCode } from '../api/index';
+import { Link } from 'react-router-dom';
 
 @inject('state') @observer
 class FormDialog extends React.Component<{
@@ -101,6 +102,9 @@ class FormDialog extends React.Component<{
                 value={this.state.code}
               />
             </Form.Item>
+            <Link to={'/?ref=' + encodeURI(this.state.code)}>
+              <Button>链接</Button>
+            </Link>
           </div>
         </Modal>
       </span >
