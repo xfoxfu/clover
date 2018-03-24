@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import AppState from '../lib/state';
 import { RouteComponentProps } from 'react-router-dom';
 import { Button, Form, Input, Tabs } from 'antd';
-import * as qs from 'query-string';
+import * as qs from 'qs';
 
 const { TabPane } = Tabs;
 const FormItem = Form.Item;

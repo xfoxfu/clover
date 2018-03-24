@@ -2,10 +2,19 @@ import { observable, action } from 'mobx';
 import User from '../models/user';
 import Site from '../models/site';
 import Announce from '../models/announce';
-import { getSiteInfo, login, getAnnounces, reg, resetPassword, resetPasswordEmail, userInfoByToken, addAnnounce } from '../api';
+import {
+  getSiteInfo,
+  login,
+  getAnnounces,
+  reg,
+  resetPassword,
+  resetPasswordEmail,
+  userInfoByToken,
+  addAnnounce
+} from '../api';
 import getGuide, { Guide } from './guide';
 import { getToken, setToken, deleteToken } from './store';
-import {notification}from'antd';
+import { notification } from 'antd';
 
 export default class AppState {
   @observable site?: Site;
@@ -52,15 +61,15 @@ export default class AppState {
 
   @action emitMessage = (message: string) => {
     notification.info({
-        message: '提示',
-        description: message,
+      message: '提示',
+      description: message,
     });
   }
   @action emitError = (error: Error) => {
-      notification.error({
-          message: '错误',
-          description: error.message,
-      });
+    notification.error({
+      message: '错误',
+      description: error.message,
+    });
   }
 
   @action reg = async (email: string, password: string, ref?: string) => {
