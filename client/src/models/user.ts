@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 interface User {
   token: string;
@@ -22,10 +22,10 @@ interface User {
     host: string;
     port: number;
     dynamicPort: string;
-    network: 'tcp' | 'kcp' | 'ws';
+    network: "tcp" | "kcp" | "ws";
     tcp: {
       header: {
-        type: 'http' | 'none';
+        type: "http" | "none";
       };
     };
     kcp: {
@@ -33,7 +33,7 @@ interface User {
       downlinkCapacity: number;
       congestion: boolean;
       header: {
-        type: 'none' | 'srtp' | 'utp' | 'wechat-video';
+        type: "none" | "srtp" | "utp" | "wechat-video";
       };
     };
     webSocket: {
@@ -43,7 +43,7 @@ interface User {
       headers: any;
     };
     tls: {
-      status: 'off' | 'in' | 'out';
+      status: "off" | "in" | "out";
       server: string;
       cert: {
         trust: boolean;

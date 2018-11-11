@@ -6,4 +6,4 @@ export default interface Announce {
   content: string;
   createdAt: Date;
   updatedAt: Date;
-};
+}

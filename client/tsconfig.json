@@ -1,17 +1,12 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
     "module": "commonjs",
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom"
-    ],
+    "lib": ["es6", "dom"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -19,7 +14,8 @@
     "strict": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules",
@@ -29,9 +25,8 @@
     "webpack",
     "jest",
     "src/setupTests.ts",
-    "../../node_modules"
+    "../../node_modules",
+    "dist"
   ],
-  "types": [
-    "typePatches"
-  ]
+  "types": ["typePatches"]
 }
