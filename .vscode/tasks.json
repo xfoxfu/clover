@@ -1,21 +1,36 @@
-// Available variables which can be used inside of strings.
-// ${workspaceRoot}: the root folder of the team
-// ${file}: the current opened file
-// ${fileBasename}: the current opened file's basename
-// ${fileDirname}: the current opened file's dirname
-// ${fileExtname}: the current opened file's extension
-// ${cwd}: the current working directory of the spawned process
-
 {
-	"version": "0.1.0",
-
-	"command": "tsc",
-
-	"isShellCommand": true,
-
-	"showOutput": "silent",
-
-	"args": ["--watch"],
-
-	"problemMatcher": "$tsc-watch"
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "problemMatcher": ["$tsc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "option": "watch",
+      "problemMatcher": ["$tsc-watch"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "npm",
+      "script": "start:dev",
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "start:debug",
+      "problemMatcher": []
+    }
+  ]
 }

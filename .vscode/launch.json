@@ -1,30 +1,31 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"name": "Launch",
-			"type": "node",
-			"request": "launch",
-			"program": "bin/www",
-			"stopOnEntry": false,
-			"args": [],
-			"cwd": ".",
-			"runtimeExecutable": null,
-			"runtimeArgs": [
-				"--nolazy"
-			],
-			"env": {
-				"NODE_ENV": "development"
-			},
-			"externalConsole": false,
-			"sourceMaps": false,
-			"outDir": null
-		},
-		{
-			"name": "Attach",
-			"type": "node",
-			"request": "attach",
-			"port": 5858
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "nodemon",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "nodemon",
+        "-x",
+        "node -r ts-node/register -r tsconfig-paths/register --inspect",
+        "src/main.ts"
+      ],
+      // "program": "${workspaceFolder}/src/main.ts",
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["run", "start:debug"],
+      "port": 9229,
+      "restart": true
+    }
+  ]
 }

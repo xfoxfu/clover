@@ -1,0 +1,17 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:recommended",
+    "tslint-consistent-codestyle",
+    "tslint-config-prettier"
+  ],
+  "jsRules": {
+    "no-unused-expression": true
+  },
+  "rules": {
+    "object-literal-sort-keys": false,
+    "max-classes-per-file": false,
+    "variable-name": [true, "allow-snake-case"]
+  },
+  "rulesDirectory": []
+}
