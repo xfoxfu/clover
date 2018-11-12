@@ -675,6 +675,13 @@
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.5.1.tgz#a38f69c62528d56ba7bd1f91335a8004988d72f7"
   integrity sha512-mNhVdZHdtKHMMxbqzNK3RzkBcN1cux3AvuCYGTvjEIQT2uheH3eCAyYsbMbh2Bq8nXkeOWs1kyDiF7geWRFQ4Q==
 
+"@types/react-document-title@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@types/react-document-title/-/react-document-title-2.0.3.tgz#32d0b3d0d36a9041d13b01106c64309388a0153a"
+  integrity sha512-d37BZ9KzPQ7HJ9ILeAkSjJLB2EhiPxCbQduNSyS6BmwyZXcRstme2EwfmpzHwdkqoGfOwpbxMtSaO6MrIRQ0MQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@^16.0.9":
   version "16.0.9"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.9.tgz#73ceb7abe6703822eab6600e65c5c52efd07fb91"
@@ -2383,6 +2390,11 @@ execa@^0.7.0:
     p-finally "^1.0.0"
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
+
+exenv@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
+  integrity sha1-KueOhdmJQVhnCwPUe+wfA72Ru50=
 
 expand-brackets@^2.1.4:
   version "2.1.4"
@@ -4165,19 +4177,10 @@ pako@~1.0.5:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.6.tgz#0101211baa70c4bca4a0f63f2206e97b7dfaf258"
   integrity sha512-lQe48YPsMJAig+yngZ87Lus+NF+3mtu7DVOBu6b/gHO1YpKwIj5AWjZ/TOS7i46HD/UixzWb1zeWDZfGZ3iYcg==
 
-parcel-plugin-sw-precache@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/parcel-plugin-sw-precache/-/parcel-plugin-sw-precache-1.0.2.tgz#fb63b81c18aa7a682a9a3ef99458739989062e95"
-  integrity sha512-bWjLtadG27t38QmpbjVwx8POD9Beuz8cUKYm4A0AL/3UYjWZAaKQfRHTQw93lQFhnUzB760GAXHMslOKkHY0aQ==
-  dependencies:
-    sw-precache "^5.2.1"
-    uglify-es "^3.3.9"
-    url-join "^4.0.0"
-
-parcel@^1.10.3:
+parcel-bundler@^1.10.3:
   version "1.10.3"
-  resolved "https://registry.yarnpkg.com/parcel/-/parcel-1.10.3.tgz#8b989984cdd9d44935db1dde7705585b2b159769"
-  integrity sha512-YLpMPE74gxYQSOV2tIaIzIV2rkTGyeMc6P16dTOERbKSZwQjyjWvsST04HSOrPXv84usNz6iYPkvnxs7FNrgYQ==
+  resolved "https://registry.yarnpkg.com/parcel-bundler/-/parcel-bundler-1.10.3.tgz#8502b40d3f23139093b25e82658f6060f025c024"
+  integrity sha512-Lj31fr5o2AZFbazghL/MrubzvJEXLwx24rd3MiR3lncmqCXbd5q0hgl1kpV6X+vRaN9/cSDR8G0lotmgl5OyZg==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@babel/core" "^7.0.0"
@@ -4236,6 +4239,15 @@ parcel@^1.10.3:
     tomlify-j0.4 "^3.0.0"
     v8-compile-cache "^2.0.0"
     ws "^5.1.1"
+
+parcel-plugin-sw-precache@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/parcel-plugin-sw-precache/-/parcel-plugin-sw-precache-1.0.2.tgz#fb63b81c18aa7a682a9a3ef99458739989062e95"
+  integrity sha512-bWjLtadG27t38QmpbjVwx8POD9Beuz8cUKYm4A0AL/3UYjWZAaKQfRHTQw93lQFhnUzB760GAXHMslOKkHY0aQ==
+  dependencies:
+    sw-precache "^5.2.1"
+    uglify-es "^3.3.9"
+    url-join "^4.0.0"
 
 parse-asn1@^5.0.0:
   version "5.1.1"
@@ -5516,6 +5528,14 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-document-title@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-document-title/-/react-document-title-2.0.3.tgz#bbf922a0d71412fc948245e4283b2412df70f2b9"
+  integrity sha1-u/kioNcUEvyUgkXkKDskEt9w8rk=
+  dependencies:
+    prop-types "^15.5.6"
+    react-side-effect "^1.0.2"
+
 react-dom@^16.6.1:
   version "16.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.6.1.tgz#5476e08694ae504ae385a28b62ecc4fe3a29add9"
@@ -5582,6 +5602,14 @@ react-router@^4.3.1:
     path-to-regexp "^1.7.0"
     prop-types "^15.6.1"
     warning "^4.0.1"
+
+react-side-effect@^1.0.2:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.1.5.tgz#f26059e50ed9c626d91d661b9f3c8bb38cd0ff2d"
+  integrity sha512-Z2ZJE4p/jIfvUpiUMRydEVpQRf2f8GMHczT6qLcARmX7QRb28JDBTpnM2g/i5y/p7ZDEXYGHWg0RbhikE+hJRw==
+  dependencies:
+    exenv "^1.2.1"
+    shallowequal "^1.0.1"
 
 react-slick@~0.23.2:
   version "0.23.2"

@@ -4,3 +4,5 @@ version = "0.4.0"
 authors = ["Yuze Fu <i@xfox.me>"]
 
 [dependencies]
+rocket = "0.4.0-rc.1"
+rocket_contrib = "0.4.0-rc.1"

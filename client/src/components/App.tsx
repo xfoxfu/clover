@@ -14,52 +14,56 @@ import { Redirect } from "react-router";
 import "antd/dist/antd.css";
 import { Row, Col } from "antd";
 import { hot } from "react-hot-loader";
-import { APP_ROOT } from "../lib/const.ts";
+import DocumentTitle from "react-document-title";
+import { APP_ROOT } from "../lib/const";
 
 @observer
 class App extends React.Component<{ state: AppState }, {}> {
   public render() {
     return (
-      <Provider state={this.props.state}>
-        <Router basename={APP_ROOT}>
-          <Row type="flex" justify="center">
-            <Col xs={24} lg={18}>
-              {this.props.state.user && this.props.state.user.token ? (
-                <Switch>
-                  <Redirect from="/" to="/dashboard" />
-                </Switch>
-              ) : (
+      <DocumentTitle title="My Web App">
+        <Provider state={this.props.state}>
+          <Router basename={APP_ROOT}>
+            <Row type="flex" justify="center">
+              <Col xs={24} lg={18}>
+                {this.props.state.user && this.props.state.user.token ? (
+                  <Switch>
+                    <Redirect from="/" to="/dashboard" />
+                  </Switch>
+                ) : (
+                  <Switch>
+                    <Route path="/" exact />
+                    <Redirect to="/" />
+                  </Switch>
+                )}
                 <Switch>
                   <Route path="/" exact />
-                  <Redirect to="/" />
+                  <Route component={Menu} />
                 </Switch>
-              )}
-              <Switch>
-                <Route path="/" exact />
-                <Route component={Menu} />
-              </Switch>
-              <Row gutter={8}>
-                <Col xs={24} lg={14}>
-                  <Switch>
-                    <Route path="/" exact component={IndexPage} />
-                    <Route path="/dashboard" exact component={Dashboard} />
-                    <Route path="/announces" exact component={Announces} />
-                    <Route path="/admin" exact component={Admin} />
-                  </Switch>
-                </Col>
-                <Col xs={24} lg={10}>
-                  <Switch>
-                    <Route path="/" exact component={Login} />
-                    <Route component={UserInfo} />
-                  </Switch>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Router>
-      </Provider>
+                <Row gutter={8}>
+                  <Col xs={24} lg={14}>
+                    <Switch>
+                      <Route path="/" exact component={IndexPage} />
+                      <Route path="/dashboard" exact component={Dashboard} />
+                      <Route path="/announces" exact component={Announces} />
+                      <Route path="/admin" exact component={Admin} />
+                    </Switch>
+                  </Col>
+                  <Col xs={24} lg={10}>
+                    <Switch>
+                      <Route path="/" exact component={Login} />
+                      <Route component={UserInfo} />
+                    </Switch>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Router>
+        </Provider>
+      </DocumentTitle>
     );
   }
 }
 
 export default hot(module)(App);
+// export default App;
