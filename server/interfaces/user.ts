@@ -4,6 +4,9 @@ interface IUser {
   token: string;
   id: number;
   note: string;
+  fee_base: number;
+  fee_start: number;
+  fee_total: number;
   email: string;
   isAdmin: boolean;
   isEmailVerified: boolean;

@@ -3,10 +3,18 @@
 import * as bcrypt from "bcrypt";
 import {
   Entity,
-  Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn,
-  getConnection, FindOneOptions,
+  Column,
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  getConnection,
+  FindOneOptions,
 } from "typeorm";
-import { passwordHashRounds, shadowsocksPortStart, shadowsocksDefaultEncryption } from "../lib/config";
+import {
+  passwordHashRounds,
+  shadowsocksPortStart,
+  shadowsocksDefaultEncryption,
+} from "../lib/config";
 import * as uuid from "uuid/v4";
 import IUser from "../interfaces/user";
 import * as config from "../lib/config";
@@ -33,6 +41,10 @@ export default class User {
   }
   @PrimaryGeneratedColumn()
   public id: number;
+  @Column({ type: "int", nullable: false, default: 5 })
+  public monthFee: number;
+  @Column({ type: "int", nullable: false, default: 0 })
+  public startMonth: number;
   @Column({ type: "text", nullable: true })
   public note: string;
   @Column({ length: 50, nullable: false, unique: true })
@@ -50,7 +62,7 @@ export default class User {
     return this.ssPassword;
   }
   public setConnPassword = () => {
-    return this.ssPassword = generatePassword();
+    return (this.ssPassword = generatePassword());
   }
   @Column({ name: "ss_port", type: "int" })
   private ssPort: number;
@@ -58,11 +70,13 @@ export default class User {
     return this.ssPort;
   }
   public allocConnPort = async () => {
-    const user = await getConnection().getRepository(User).findOne({
-      order: {
-        ssPort: "DESC",
-      },
-    } as FindOneOptions<User>);
+    const user = await getConnection()
+      .getRepository(User)
+      .findOne({
+        order: {
+          ssPort: "DESC",
+        },
+      } as FindOneOptions<User>);
     if (!user) {
       // TODO: rename port_last_allocated to port_start
       this.ssPort = shadowsocksPortStart + 1;
@@ -88,11 +102,16 @@ export default class User {
   public updatedAt: Date;
 
   public wrap = async (generateToken = true): Promise<IUser> => ({
-    token: generateToken ? await encode({
-      uid: this.id,
-    }) : "NOT_GENERATED",
+    token: generateToken
+      ? await encode({
+          uid: this.id,
+        })
+      : "NOT_GENERATED",
     id: this.id,
     note: this.note,
+    fee_base: this.monthFee,
+    fee_start: this.startMonth,
+    fee_total: this.monthFee * (new Date().getMonth() - this.startMonth),
     email: this.email,
     isAdmin: this.isAdmin,
     isEmailVerified: this.isEmailVerified,
@@ -122,7 +141,11 @@ export default class User {
         downlinkCapacity: config.vmess.kcp.downlinkCapacity,
         congestion: config.vmess.kcp.congestion,
         header: {
-          type: config.vmess.kcp.header.type as "none" | "srtp" | "utp" | "wechat-video",
+          type: config.vmess.kcp.header.type as
+            | "none"
+            | "srtp"
+            | "utp"
+            | "wechat-video",
         },
       },
       webSocket: {

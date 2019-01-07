@@ -1,9 +1,12 @@
-'use strict';
+"use strict";
 
 interface User {
   token: string;
   id: number;
   note: string;
+  fee_base: number;
+  fee_start: number;
+  fee_total: number;
   email: string;
   isAdmin: boolean;
   isEmailVerified: boolean;
@@ -22,10 +25,10 @@ interface User {
     host: string;
     port: number;
     dynamicPort: string;
-    network: 'tcp' | 'kcp' | 'ws';
+    network: "tcp" | "kcp" | "ws";
     tcp: {
       header: {
-        type: 'http' | 'none';
+        type: "http" | "none";
       };
     };
     kcp: {
@@ -33,7 +36,7 @@ interface User {
       downlinkCapacity: number;
       congestion: boolean;
       header: {
-        type: 'none' | 'srtp' | 'utp' | 'wechat-video';
+        type: "none" | "srtp" | "utp" | "wechat-video";
       };
     };
     webSocket: {
@@ -43,7 +46,7 @@ interface User {
       headers: any;
     };
     tls: {
-      status: 'off' | 'in' | 'out';
+      status: "off" | "in" | "out";
       server: string;
       cert: {
         trust: boolean;
