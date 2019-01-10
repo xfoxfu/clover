@@ -1,100 +1,122 @@
-export const PORT = process.env.CLOVER_PORT || 3000;
-export const DB = process.env.CLOVER_DB || "clover.db";
+import { Module } from "@nestjs/common";
+import envalid, { bool, email, json, num, port, str, url } from "envalid";
 
-export enum EnvTypes {
-  Development,
-  Production,
-  Testing,
+interface IEnvironment extends envalid.CleanEnv {
+  DB_PATH: string;
+  LOG_LEVEL: string;
+  PORT: number;
+  PASSWORD_HASH_ROUNDS: number;
+  SITE_TITLE: string;
+  OPEN_REGISTER: boolean;
+  SENDGRID_KEY: string;
+  SENDGRID_EMAIL: string;
+  JWT_KEY: string;
+  SITE_URL: string;
+  ADMIN_EMAIL: string;
+  PROXY_HOST: string;
+  DEFAULT_ENCRYPTION: string;
+  PORT_START: number;
+  MU_TOKEN: string;
+  SS_ENABLED: boolean;
+  VMESS_ENABLED: boolean;
+  VMESS_DEFAULT_ALTERID: string;
+  VMESS_PORT: number;
+  VMESS_PORT_DYNAMIC: string;
+  VMESS_NETWORK: string;
+  VMESS_TCP_HEADER_TYPE: string;
+  VMESS_KCP_UP_CAP: string;
+  VMESS_KCP_DOWN_CAP: string;
+  VMESS_KCP_CONGESTION: boolean;
+  VMESS_KCP_HEADER: string;
+  VMESS_WS_PATH: string;
+  VMESS_WS_HOST: string;
+  VMESS_WS_HEADERS: string;
+  VMESS_TLS: string;
+  VMESS_TLS_SERVER: string;
+  VMESS_TLS_CERT_TRUST: boolean;
+  VMESS_TLS_CERT: string;
+  VMESS_TLS_KEY: string;
+  SENTRY_URL: string;
 }
-export const ENV =
-  process.env.NODE_ENV! in ["test"]
-    ? EnvTypes.Testing
-    : process.env.NODE_ENV! in ["prod", "production"]
-      ? EnvTypes.Production
-      : EnvTypes.Development;
-export const ENV_IS_DEV = ENV === EnvTypes.Development;
-export const ENV_IS_PROD = ENV === EnvTypes.Production;
-export const ENV_IS_TEST = ENV === EnvTypes.Testing;
 
-export const JWT_TOKEN = "faffc0d1";
+export class ConfigService {
+  private readonly envConfig: IEnvironment;
 
-export const SHADOWSOCKS_PORT_RANGE = [10000, 10100];
-export const SHADOWSOCKS_DEFAULT_ENCRYPTION = "chacha20-ietf-poly1305";
+  constructor() {
+    this.envConfig = envalid.cleanEnv<
+      {
+        [K in Exclude<
+          keyof IEnvironment,
+          keyof envalid.CleanEnv
+        >]: IEnvironment[K]
+      }
+    >(
+      process.env,
+      {
+        DB_PATH: str({ default: "clover.db" }),
+        LOG_LEVEL: str({
+          default: "info",
+          choices: ["error", "warn", "info", "debug", "trace"],
+        }),
+        PORT: port({ default: 3000 }),
+        PASSWORD_HASH_ROUNDS: num({ default: 12, devDefault: 1 }),
+        SITE_TITLE: str({ default: "Clover" }),
+        OPEN_REGISTER: bool({ default: false }),
+        SENDGRID_KEY: str({ default: "KEY" }),
+        SENDGRID_EMAIL: str({ default: "clover@example.com" }),
+        JWT_KEY: str({ default: "527877cb" }),
+        SITE_URL: str({ default: "http://127.0.0.1:3000" }),
+        ADMIN_EMAIL: str({ default: "user@example.com" }),
+        PROXY_HOST: str({ default: "127.0.0.1" }),
+        DEFAULT_ENCRYPTION: str({ default: "chacha20-ietf-poly1305" }),
+        PORT_START: port({ default: 10000 }),
+        MU_TOKEN: str({ default: "d6d0fbdc9483c27e6b653457879d3fbd" }),
+        SS_ENABLED: bool({ default: true }),
+        VMESS_ENABLED: bool({ default: true }),
+        VMESS_DEFAULT_ALTERID: str({ default: "16" }),
+        VMESS_PORT: port({ default: 443 }),
+        VMESS_PORT_DYNAMIC: str({ default: "" }),
+        VMESS_NETWORK: str({ default: "ws" }),
+        VMESS_TCP_HEADER_TYPE: str({ default: "none" }),
+        VMESS_KCP_UP_CAP: str({ default: "5" }),
+        VMESS_KCP_DOWN_CAP: str({ default: "20" }),
+        VMESS_KCP_CONGESTION: bool({ default: false }),
+        VMESS_KCP_HEADER: str({ default: "none" }),
+        VMESS_WS_PATH: str({ default: "/" }),
+        VMESS_WS_HOST: str({ default: "" }),
+        VMESS_WS_HEADERS: str({ default: "{}" }),
+        VMESS_TLS: str({ default: "out" }),
+        VMESS_TLS_SERVER: str({ default: "" }),
+        VMESS_TLS_CERT_TRUST: bool({ default: true }),
+        VMESS_TLS_CERT: str({ default: "server.crt" }),
+        VMESS_TLS_KEY: str({ default: "server.key" }),
+        SENTRY_URL: url({ default: "" }),
+      },
+      { strict: true },
+    );
+  }
 
-export const PASSWORD_HASH_ROUNDS = 12;
+  public get<K extends keyof IEnvironment>(key: K): IEnvironment[K] {
+    return this.envConfig[key];
+  }
 
-const getEnv = (key: string, value: string): string =>
-  process.env[key.toUpperCase()] || value;
-const getEnvBoolean = (key: string, value = true) =>
-  getEnv(key, value ? "true" : "false").toLowerCase() === "true";
+  public get SOURCE_URL(): string {
+    return "https://github.com/coderfox/clover";
+  }
 
-export const sourceCodeUrl = "https://github.com/coderfox/clover";
-export const dbPath = getEnv("DB_PATH", "./clover.db");
-export const logLevel = getEnv("LOG_LEVEL", "debug");
-export const port = +getEnv("PORT", "3000");
-export const passwordHashRounds = +getEnv("PASSWORD_HASH_ROUNDS", "12");
-export const siteTitle = getEnv("SITE_TITLE", "Clover");
-export const openRegister = getEnvBoolean("OPEN_REGISTER", false);
-export const sendgrid = {
-  key: getEnv("SENDGRID_KEY", "KEY"),
-  email: getEnv("SENDGRID_EMAIL", "clover@example.com"),
-};
-export const jwtKey = getEnv("JWT_KEY", "527877cb");
-export const siteUrl = getEnv("SITE_URL", "http://127.0.0.1:3000");
-export const adminEmail = getEnv("ADMIN_EMAIL", "user@example.com");
-export const proxyHost = getEnv("PROXY_HOST", "127.0.0.1");
-// TODO: deprecate shadowsocksDefaultEncryption, shadowsocksMuToken and shadowsocksPortStart
-export const shadowsocksDefaultEncryption = getEnv(
-  "DEFAULT_ENCRYPTION",
-  "chacha20-ietf-poly1305",
-);
-export const shadowsocksPortStart = +getEnv("PORT_START", "10000");
-export const shadowsocksMuToken = getEnv(
-  "MU_TOKEN",
-  "d6d0fbdc9483c27e6b653457879d3fbd",
-);
-export const shadowsocks = {
-  enabled: getEnvBoolean("SS_ENABLED"),
-  defaultEncryption: shadowsocksDefaultEncryption,
-  portStart: shadowsocksPortStart,
-  muToken: shadowsocksMuToken,
-  host: proxyHost,
-};
-export const vmess = {
-  enabled: getEnvBoolean("VMESS_ENABLED"),
-  host: proxyHost,
-  defaultAlterId: +getEnv("VMESS_DEFAULT_ALTERID", "16"),
-  port: +getEnv("VMESS_PORT", "443"),
-  // write a range of ports, or leave it blank for not enable this feature
-  dynamicPort: getEnv("VMESS_PORT_DYNAMIC", ""),
-  // possible values are: tcp, kcp and ws
-  network: getEnv("VMESS_NETWORK", "ws"),
-  tcp: {
-    header: {
-      type: getEnv("VMESS_TCP_HEADER_TYPE", "none"),
-    },
-  },
-  kcp: {
-    uplinkCapacity: +getEnv("VMESS_KCP_UP_CAP", "5"),
-    downlinkCapacity: +getEnv("VMESS_KCP_DOWN_CAP", "20"),
-    congestion: getEnvBoolean("VMESS_KCP_CONGESTION", false),
-    header: {
-      type: getEnv("VMESS_KCP_HEADER", "none"),
-    },
-  },
-  webSocket: {
-    path: getEnv("VMESS_WS_PATH", "/"),
-    host: getEnv("VMESS_WS_HOST", proxyHost),
-    headers: JSON.parse(getEnv("VMESS_WS_HEADERS", "{}")),
-  },
-  tls: {
-    status: getEnv("VMESS_TLS", "out"),
-    server: getEnv("VMESS_TLS_SERVER", proxyHost),
-    cert: {
-      trust: getEnvBoolean("VMESS_TLS_CERT_TRUST"),
-      certificateFile: getEnv("VMESS_TLS_CERT", "server.crt"),
-      keyFile: getEnv("VMESS_TLS_KEY", "server.key"),
-    },
-  },
-};
-export const SENTRY_URL = getEnv("SENTRY_URL", "");
+  public get SHADOWSOCKS() {
+    return {
+      enabled: this.get("SS_ENABLED"),
+      defaultEncryption: this.get("DEFAULT_ENCRYPTION"),
+      portStart: this.get("PORT_START"),
+      muToken: this.get("MU_TOKEN"),
+      host: this.get("PROXY_HOST"),
+    };
+  }
+}
+
+@Module({
+  providers: [ConfigService],
+  exports: [ConfigService],
+})
+export class ConfigModule {}

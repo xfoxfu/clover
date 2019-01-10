@@ -6,8 +6,9 @@ import {
 } from "@nestjs/typeorm";
 import { Connection, Repository } from "typeorm";
 import { SqliteConnectionOptions } from "typeorm/driver/sqlite/SqliteConnectionOptions";
-import * as CONFIG from "~/common/config";
+import { ConfigModule, ConfigService } from "~/common/config";
 import { User } from "~/entity/user";
+import { require_classes_sync } from "./loader";
 import {
   LoggerModule,
   PinoLoggerService,
@@ -25,22 +26,21 @@ export class DbService {
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [LoggerModule],
-      useFactory: async (logger: TypeOrmLoggerService) =>
-        ({
-          type: "sqlite",
-          database: CONFIG.DB,
-          migrationsRun: !CONFIG.ENV_IS_PROD,
-          synchronize: CONFIG.ENV_IS_DEV,
-          logging: true,
-          logger,
-          entities: ["dist/entity/**/*.js", "src/entity/**/*.ts"],
-          migrations: ["dist/migration/**/*.js", "src/migration/**/*.ts"],
-          subscribers: ["dist/subscriber/**/*.js", "src/subscriber/**/*.ts"],
-        } as SqliteConnectionOptions),
-      inject: [TypeOrmLoggerService],
+      imports: [ConfigModule, LoggerModule],
+      inject: [ConfigService, TypeOrmLoggerService],
+      useFactory: (config: ConfigService, logger: TypeOrmLoggerService) => ({
+        type: "sqlite",
+        url: config.get("DB_PATH"),
+        migrationsRun: !config.get("isProd"),
+        synchronize: config.get("isDev"),
+        logging: true,
+        logger,
+        entities: require_classes_sync(__dirname, "../entity"),
+        migrations: require_classes_sync(__dirname, "../migration"),
+        subscribers: require_classes_sync(__dirname, "../subscriber"),
+      }),
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature(require_classes_sync(__dirname, "../entity")),
   ],
   providers: [DbService],
   exports: [DbService],

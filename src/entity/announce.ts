@@ -1,3 +1,5 @@
+"use strict";
+
 import {
   Column,
   CreateDateColumn,
@@ -5,9 +7,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import IAnnounce from "~/common/interfaces/announce";
 
 @Entity()
-export class Announcement {
+export class Announcement implements IAnnounce {
   @PrimaryGeneratedColumn()
   public id!: number;
   @Column({ type: "text", length: 200, nullable: false })

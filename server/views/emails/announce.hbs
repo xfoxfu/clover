@@ -1,0 +1,7 @@
+<p>{{#with user}}{{email}},{{/with}}</p>
+<p>Here is an announce:</p>
+{{#with announce}}
+<h1>{{title}}</h1>
+{{{content}}} {{/with}}
+<p>{{site.title}}</p>
+<p>{{announce.updatedAt}}</p>
