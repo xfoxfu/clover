@@ -40,7 +40,7 @@ export class User {
   @Column({ name: "password", type: "varchar" })
   public hashedPassword!: string;
   @Column({ name: "ss_enc", type: "varchar", length: 25 })
-  public connEnc = shadowsocksDefaultEncryption;
+  public connEnc: string;
   @Column({ name: "vmess_uid", nullable: true })
   public vmessUid: string;
   @Column({ type: "int", name: "vmess_alter_id", nullable: true })
@@ -59,95 +59,9 @@ export class User {
   private ssPassword!: string;
   @Column({ name: "ss_port", type: "int" })
   private ssPort!: number;
-  constructor(email: string) {
+
+  public constructor(email: string) {
     this.email = email;
-    if (email === config.adminEmail) {
-      this.isAdmin = true;
-    }
     this.vmessUid = uuid();
   }
-  public setPassword = async (password: string) => {
-    this.hashedPassword = await bcrypt.hash(password, passwordHashRounds);
-  };
-  public checkPassword = async (password: string) =>
-    bcrypt.compare(password, this.hashedPassword);
-  public setConnPassword = () => {
-    return (this.ssPassword = generatePassword());
-  };
-  public allocConnPort = async () => {
-    const user = await getConnection()
-      .getRepository(User)
-      .findOne({
-        order: {
-          ssPort: "DESC",
-        },
-      } as FindOneOptions<User>);
-    if (!user) {
-      // TODO: rename port_last_allocated to port_start
-      this.ssPort = shadowsocksPortStart + 1;
-    } else {
-      this.ssPort = user.ssPort + 1;
-    }
-  };
-
-  public wrap = async (generateToken = true): Promise<IUser> => ({
-    token: generateToken
-      ? await encode({
-          uid: this.id,
-        })
-      : "NOT_GENERATED",
-    id: this.id,
-    note: this.note || "",
-    email: this.email,
-    isAdmin: this.isAdmin,
-    isEmailVerified: this.isEmailVerified,
-    enabled: this.enabled,
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
-    ss: {
-      enabled: config.shadowsocks.enabled,
-      host: config.shadowsocks.host,
-      port: this.connPort,
-      encryption: this.connEnc,
-      password: this.connPassword,
-    },
-    vmess: {
-      enabled: config.vmess.enabled,
-      host: config.vmess.host,
-      port: config.vmess.port,
-      dynamicPort: config.vmess.dynamicPort,
-      network: config.vmess.network as "tcp" | "kcp" | "ws",
-      tcp: {
-        header: {
-          type: config.vmess.tcp.header.type as "http" | "none",
-        },
-      },
-      kcp: {
-        uplinkCapacity: config.vmess.kcp.uplinkCapacity,
-        downlinkCapacity: config.vmess.kcp.downlinkCapacity,
-        congestion: config.vmess.kcp.congestion,
-        header: {
-          type: config.vmess.kcp.header.type as
-            | "none"
-            | "srtp"
-            | "utp"
-            | "wechat-video",
-        },
-      },
-      webSocket: {
-        path: config.vmess.webSocket.path,
-        host: config.vmess.webSocket.host,
-        headers: config.vmess.webSocket.headers,
-      },
-      tls: {
-        status: config.vmess.tls.status as "off" | "in" | "out",
-        server: config.vmess.tls.server,
-        cert: {
-          trust: config.vmess.tls.cert.trust,
-        },
-      },
-      id: this.vmessUid,
-      aid: this.vmessAlterId,
-    },
-  });
 }

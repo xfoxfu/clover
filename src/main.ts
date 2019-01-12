@@ -2,7 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import hbs from "hbs";
 import { join } from "path";
 import { AppModule } from "~/app.module";
-import * as CONFIG from "~/common/config";
+import { ConfigService } from "~/common/config";
 import { UnauthorizedExceptionFilter } from "~/common/errors";
 import { PinoLoggerService } from "~/common/logger.service";
 
@@ -19,7 +19,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new UnauthorizedExceptionFilter());
 
-  await app.listen(CONFIG.PORT);
+  await app.listen(app.get(ConfigService).get("PORT"));
 }
 
 bootstrap();

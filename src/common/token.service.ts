@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { sign, verify } from "jsonwebtoken";
+import { ConfigService } from "~/common/config";
 import { User } from "~/entity/user";
-import { JWT_TOKEN } from "./config";
 import { InvalidTokenException } from "./errors";
 
 interface ITokenData {
@@ -10,6 +10,10 @@ interface ITokenData {
 
 @Injectable()
 export class TokenService {
+  private JWT_KEY: string;
+  public constructor(@Inject() configService: ConfigService) {
+    this.JWT_KEY = configService.get("JWT_KEY");
+  }
   /**
    * issue new token with 7d expiration
    *
@@ -17,7 +21,7 @@ export class TokenService {
    */
   public sign(user: User): string {
     const data: ITokenData = { uid: user.id };
-    return sign(data, JWT_TOKEN, {
+    return sign(data, this.JWT_KEY, {
       expiresIn: "7d",
     });
   }
@@ -29,7 +33,7 @@ export class TokenService {
    */
   public verify(token: string): number {
     try {
-      return (verify(token, JWT_TOKEN) as ITokenData).uid;
+      return (verify(token, this.JWT_KEY) as ITokenData).uid;
     } catch {
       throw new InvalidTokenException();
     }
