@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-interface Site {
+interface ISite {
   sourceCodeUrl: string;
   siteTitle: string;
   openRegister: boolean;
   adminEmail: string;
 }
 
-export default Site;
+export default ISite;

@@ -18,21 +18,38 @@ const siteBasics = {
   title: siteTitle,
 };
 const templates = {
-  announce: hbs.compile(fs.readFileSync(join(__dirname, "../views/emails/announce.hbs")).toString()),
-  resetPassword: hbs.compile(fs.readFileSync(join(__dirname, "../views/emails/reset-password.hbs")).toString()),
-  validateEmail: hbs.compile(fs.readFileSync(join(__dirname, "../views/emails/email-validate.hbs")).toString()),
+  announce: hbs.compile(
+    fs.readFileSync(join(__dirname, "../views/emails/announce.hbs")).toString()
+  ),
+  resetPassword: hbs.compile(
+    fs
+      .readFileSync(join(__dirname, "../views/emails/reset-password.hbs"))
+      .toString()
+  ),
+  validateEmail: hbs.compile(
+    fs
+      .readFileSync(join(__dirname, "../views/emails/email-validate.hbs"))
+      .toString()
+  ),
 };
-export const announce = async (ann: Announce, users: User[], alwaysSend = false) => {
+export const announce = async (
+  ann: Announce,
+  users: User[],
+  alwaysSend = false
+) => {
   const fromEmail = new helper.Email(sendgrid_config.email);
   const subject = `[${siteTitle}]${ann.title}`;
   for (const currentUser of users) {
     if (alwaysSend || (currentUser.isEmailVerified && currentUser.enabled)) {
       const toEmail = new helper.Email(currentUser.email);
-      const content = new helper.Content("text/html", templates.announce({
-        site: siteBasics,
-        announce: ann,
-        user: currentUser,
-      }));
+      const content = new helper.Content(
+        "text/html",
+        templates.announce({
+          site: siteBasics,
+          announce: ann,
+          user: currentUser,
+        })
+      );
       const mail = new helper.Mail(fromEmail, subject, toEmail, content);
       log.info("prepared email", { user: currentUser, announce: ann });
       const request = mailer.emptyRequest({
@@ -42,9 +59,17 @@ export const announce = async (ann: Announce, users: User[], alwaysSend = false)
       });
       try {
         const res = await mailer.API(request);
-        log.info("sent email", { user: currentUser, announce: ann, response: res });
+        log.info("sent email", {
+          user: currentUser,
+          announce: ann,
+          response: res,
+        });
       } catch (err) {
-        log.error("failed email", { user: currentUser, announce: ann, error: err });
+        log.error("failed email", {
+          user: currentUser,
+          announce: ann,
+          error: err,
+        });
       }
     } else {
       log.info(`ignoring email`, { user: currentUser, announce: ann });
@@ -56,11 +81,14 @@ export const resetPassword = async (user: User) => {
   const subject = `[${siteTitle}]Reset Password`;
   const toEmail = new helper.Email(user.email);
   const token = await encode({ email: user.email, uid: user.id });
-  const content = new helper.Content("text/html", templates.resetPassword({
-    site: siteBasics,
-    user,
-    link: `${siteUrl}/reset_password_email_callback?token=${token}`,
-  }));
+  const content = new helper.Content(
+    "text/html",
+    templates.resetPassword({
+      site: siteBasics,
+      user,
+      link: `${siteUrl}/reset_password_email_callback?token=${token}`,
+    })
+  );
   const mail = new helper.Mail(fromEmail, subject, toEmail, content);
   log.info("prepared email", { user });
   const request = mailer.emptyRequest({
@@ -88,11 +116,14 @@ export const validateEmail = async (user: User) => {
   const subject = `[${siteTitle}]Validate Email`;
   const toEmail = new helper.Email(user.email);
   const token = await encode({ email: user.email });
-  const content = new helper.Content("text/html", templates.resetPassword({
-    site: siteBasics,
-    user,
-    link: `${siteUrl}/validate_email_callback?token=${token}`,
-  }));
+  const content = new helper.Content(
+    "text/html",
+    templates.resetPassword({
+      site: siteBasics,
+      user,
+      link: `${siteUrl}/validate_email_callback?token=${token}`,
+    })
+  );
   const mail = new helper.Mail(fromEmail, subject, toEmail, content);
   log.info("prepared email", { user });
   const request = mailer.emptyRequest({

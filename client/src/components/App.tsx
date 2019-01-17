@@ -1,18 +1,18 @@
 // This is where you write the code,the core of the app.
-import * as React from 'react';
-import { observer, Provider } from 'mobx-react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import AppState from '../lib/state';
-import IndexPage from './IndexPage';
-import Dashboard from './Dashboard';
-import UserInfo from './UserInfo';
-import Login from './Login';
-import Announces from './Announces';
-import Menu from './Menu';
-import Admin from './Admin';
-import { Redirect } from 'react-router';
-import 'antd/dist/antd.css';
-import { Row, Col } from 'antd';
+import * as React from "react";
+import { observer, Provider } from "mobx-react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import AppState from "../lib/state";
+import IndexPage from "./IndexPage";
+import Dashboard from "./Dashboard";
+import UserInfo from "./UserInfo";
+import Login from "./Login";
+import Announces from "./Announces";
+import Menu from "./Menu";
+import Admin from "./Admin";
+import { Redirect } from "react-router";
+import "antd/dist/antd.css";
+import { Row, Col } from "antd";
 
 @observer
 class App extends React.Component<{ state: AppState }, {}> {
@@ -22,16 +22,16 @@ class App extends React.Component<{ state: AppState }, {}> {
         <Router basename={process.env.PUBLIC_URL}>
           <Row type="flex" justify="center">
             <Col xs={24} lg={18}>
-              {
-                this.props.state.user && this.props.state.user.token ?
-                  (<Switch>
-                    <Redirect from="/" to="/dashboard" />
-                  </Switch>) :
-                  (<Switch>
-                    <Route path="/" exact />
-                    <Redirect to="/" />
-                  </Switch>)
-              }
+              {this.props.state.user && this.props.state.user.token ? (
+                <Switch>
+                  <Redirect from="/" to="/dashboard" />
+                </Switch>
+              ) : (
+                <Switch>
+                  <Route path="/" exact />
+                  <Redirect to="/" />
+                </Switch>
+              )}
               <Switch>
                 <Route path="/" exact />
                 <Route component={Menu} />
@@ -55,7 +55,7 @@ class App extends React.Component<{ state: AppState }, {}> {
             </Col>
           </Row>
         </Router>
-      </Provider >
+      </Provider>
     );
   }
 }

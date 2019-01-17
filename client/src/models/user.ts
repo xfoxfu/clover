@@ -1,6 +1,6 @@
 "use strict";
 
-interface User {
+interface IUser {
   token: string;
   id: number;
   note: string;
@@ -56,4 +56,4 @@ interface User {
     aid: number;
   };
 }
-export default User;
+export default IUser;

@@ -2,8 +2,10 @@
 
 import log from "./log";
 
-const getEnv = (key: string, value: string): string => process.env[key.toUpperCase()] || value;
-const getEnvBoolean = (key: string, value = true) => getEnv(key, value ? "true" : "false").toLowerCase() === "true";
+const getEnv = (key: string, value: string): string =>
+  process.env[key.toUpperCase()] || value;
+const getEnvBoolean = (key: string, value = true) =>
+  getEnv(key, value ? "true" : "false").toLowerCase() === "true";
 
 export const sourceCodeUrl = "https://github.com/coderfox/clover";
 export const dbPath = getEnv("DB_PATH", "./clover.db");
@@ -21,9 +23,15 @@ export const siteUrl = getEnv("SITE_URL", "http://127.0.0.1:3000");
 export const adminEmail = getEnv("ADMIN_EMAIL", "user@example.com");
 export const proxyHost = getEnv("PROXY_HOST", "127.0.0.1");
 // TODO: deprecate shadowsocksDefaultEncryption, shadowsocksMuToken and shadowsocksPortStart
-export const shadowsocksDefaultEncryption = getEnv("DEFAULT_ENCRYPTION", "chacha20-ietf-poly1305");
+export const shadowsocksDefaultEncryption = getEnv(
+  "DEFAULT_ENCRYPTION",
+  "chacha20-ietf-poly1305"
+);
 export const shadowsocksPortStart = +getEnv("PORT_START", "10000");
-export const shadowsocksMuToken = getEnv("MU_TOKEN", "d6d0fbdc9483c27e6b653457879d3fbd");
+export const shadowsocksMuToken = getEnv(
+  "MU_TOKEN",
+  "d6d0fbdc9483c27e6b653457879d3fbd"
+);
 export const shadowsocks = {
   enabled: getEnvBoolean("SS_ENABLED"),
   defaultEncryption: shadowsocksDefaultEncryption,

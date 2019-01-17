@@ -53,9 +53,9 @@ export default class User {
   public hashedPassword: string;
   public setPassword = async (password: string) => {
     this.hashedPassword = await bcrypt.hash(password, passwordHashRounds);
-  }
+  };
   public checkPassword = async (password: string) =>
-    bcrypt.compare(password, this.hashedPassword)
+    bcrypt.compare(password, this.hashedPassword);
   @Column({ name: "ss_password", type: "varchar", length: 10 })
   private ssPassword: string;
   public get connPassword(): string {
@@ -63,7 +63,7 @@ export default class User {
   }
   public setConnPassword = () => {
     return (this.ssPassword = generatePassword());
-  }
+  };
   @Column({ name: "ss_port", type: "int" })
   private ssPort: number;
   public get connPort(): number {
@@ -83,7 +83,7 @@ export default class User {
     } else {
       this.ssPort = user.ssPort + 1;
     }
-  }
+  };
   @Column({ name: "ss_enc", type: "varchar", length: 25 })
   public connEnc = shadowsocksDefaultEncryption;
   @Column({ name: "vmess_uid", nullable: true })
@@ -163,5 +163,5 @@ export default class User {
       id: this.vmessUid,
       aid: this.vmessAlterId,
     },
-  })
+  });
 }

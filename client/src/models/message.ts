@@ -1,6 +1,6 @@
 "use strict";
 
-interface Message {
+interface IMessage {
   message: string;
-};
-export default Message;
+}
+export default IMessage;

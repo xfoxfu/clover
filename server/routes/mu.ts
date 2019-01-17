@@ -6,8 +6,10 @@ import { shadowsocksMuToken } from "../lib/config";
 import { connection } from "../lib/db";
 import User from "../models/user";
 
-router.get("/users", async (ctx) => {
-  if ((ctx.request.header.token || ctx.request.query.key) !== shadowsocksMuToken) {
+router.get("/users", async ctx => {
+  if (
+    (ctx.request.header.token || ctx.request.query.key) !== shadowsocksMuToken
+  ) {
     ctx.throw(401);
   } else {
     const users = await connection.getRepository(User).find();
@@ -34,14 +36,18 @@ router.get("/users", async (ctx) => {
     });
   }
 });
-router.post("/users/:id/traffic", async (ctx) => {
-  if ((ctx.request.header.token || ctx.request.query.key) !== shadowsocksMuToken) {
+router.post("/users/:id/traffic", async ctx => {
+  if (
+    (ctx.request.header.token || ctx.request.query.key) !== shadowsocksMuToken
+  ) {
     ctx.throw(401);
   } else {
-    const user = await connection.getRepository(User).findOneById(ctx.params.id);
+    const user = await connection
+      .getRepository(User)
+      .findOneById(ctx.params.id);
     if (!user) {
       ctx.throw(404);
-    } else if ((!ctx.request.body.u) && (!ctx.request.body.d)) {
+    } else if (!ctx.request.body.u && !ctx.request.body.d) {
       ctx.throw(400);
     } else {
       user.updatedAt = new Date();

@@ -9,7 +9,11 @@ import { getRepository } from "typeorm";
 import { User, Announce } from "../models";
 import { encode, decode } from "../lib/jwt";
 import { writeServerConfig } from "../lib/vmess";
-import { validateEmail, resetPassword, announce as announceMail } from "../lib/email";
+import {
+  validateEmail,
+  resetPassword,
+  announce as announceMail,
+} from "../lib/email";
 import { Context } from "koa";
 import * as MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
@@ -23,7 +27,7 @@ const raiseApiError = (code: number, message: string) => {
 
 const auth = async (ctx: Context, requireAdmin = false): Promise<User> => {
   const { email, password } = ctx.request.body;
-  if ((!email) || (!password)) {
+  if (!email || !password) {
     raiseApiError(400, "邮箱或密码未提供");
   }
   try {
@@ -31,7 +35,7 @@ const auth = async (ctx: Context, requireAdmin = false): Promise<User> => {
     if (!user) {
       return raiseApiError(404, "用户不存在");
     }
-    if (!await user.checkPassword(password)) {
+    if (!(await user.checkPassword(password))) {
       return raiseApiError(403, "密码错误");
     }
     if (requireAdmin && !user.isAdmin) {
@@ -82,7 +86,7 @@ router.use("/", async (_, next) => {
   }
 });
 
-router.post("/site_config", (ctx) => {
+router.post("/site_config", ctx => {
   const body: Interfaces.Site = {
     sourceCodeUrl: config.sourceCodeUrl,
     siteTitle: config.siteTitle,
@@ -91,20 +95,22 @@ router.post("/site_config", (ctx) => {
   };
   ctx.body = body;
 });
-router.post("/user_info", async (ctx) => {
+router.post("/user_info", async ctx => {
   const user = await auth(ctx);
   ctx.body = await user.wrap();
 });
-router.post("/user_info_token", async (ctx) => {
+router.post("/user_info_token", async ctx => {
   const user = await authToken(ctx);
   ctx.body = await user.wrap();
 });
-router.post("/announces", async (ctx) => {
-  ctx.body = await getRepository(Announce).find({ order: { updatedAt: "DESC" } });
+router.post("/announces", async ctx => {
+  ctx.body = await getRepository(Announce).find({
+    order: { updatedAt: "DESC" },
+  });
 });
-router.post("/reg", async (ctx) => {
+router.post("/reg", async ctx => {
   const { email, password, refcode } = ctx.request.body;
-  if ((!email) || (!password)) {
+  if (!email || !password) {
     raiseApiError(400, "请求格式错误");
   }
   if (!(config.openRegister || refcode)) {
@@ -137,20 +143,22 @@ router.post("/reg", async (ctx) => {
   ctx.status = 200;
   ctx.body = { message: "注册成功" };
 });
-router.post("/reset_password", async (ctx) => {
+router.post("/reset_password", async ctx => {
   const user = await auth(ctx);
   const { newPassword } = ctx.request.body;
   await user.setPassword(newPassword);
   await getRepository(User).save(user);
   ctx.body = { message: "修改成功" };
 });
-router.post("/resend_validate_email", async (ctx) => {
+router.post("/resend_validate_email", async ctx => {
   const user = await authToken(ctx);
   await validateEmail(user);
   ctx.body = { message: "邮件已发送，请到收件箱查收" };
 });
-router.post("/reset_password_email", async (ctx) => {
-  const user = await getRepository(User).findOne({ email: ctx.request.body.email });
+router.post("/reset_password_email", async ctx => {
+  const user = await getRepository(User).findOne({
+    email: ctx.request.body.email,
+  });
   if (!user) {
     return raiseApiError(404, "用户不存在");
   } else {
@@ -160,11 +168,13 @@ router.post("/reset_password_email", async (ctx) => {
     ctx.body = { message: "邮件已发送，请到收件箱查收" };
   }
 });
-router.post("/all_users", async (ctx) => {
+router.post("/all_users", async ctx => {
   await authToken(ctx, true);
-  ctx.body = await Promise.all((await getRepository(User).find()).map((consumer) => consumer.wrap(false)));
+  ctx.body = await Promise.all(
+    (await getRepository(User).find()).map(consumer => consumer.wrap(false))
+  );
 });
-router.post("/add_announce", async (ctx) => {
+router.post("/add_announce", async ctx => {
   await authToken(ctx, true);
   const { title, content } = ctx.request.body;
   if (!title) {
@@ -175,7 +185,7 @@ router.post("/add_announce", async (ctx) => {
   await announceMail(announce, await getRepository(User).find());
   ctx.body = { message: "创建成功" };
 });
-router.post("/get_refcode", async (ctx) => {
+router.post("/get_refcode", async ctx => {
   await authToken(ctx, true);
   const { email, note } = ctx.request.body;
   if (!email) {
@@ -185,9 +195,17 @@ router.post("/get_refcode", async (ctx) => {
     refcode: await encode({ email, note }),
   };
 });
-router.post("/edit_user", async (ctx) => {
+router.post("/edit_user", async ctx => {
   await authToken(ctx, true);
-  const { uid, email, note, enabled, isAdmin, isEmailVerified, regenerate } = ctx.request.body;
+  const {
+    uid,
+    email,
+    note,
+    enabled,
+    isAdmin,
+    isEmailVerified,
+    regenerate,
+  } = ctx.request.body;
   if (!uid) {
     return raiseApiError(400, "请求格式错误");
   }

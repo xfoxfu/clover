@@ -26,7 +26,14 @@ class Dashboard extends React.Component<
           >
             <Tag color="#2db7f5">待缴费 {user && user.fee_total} 元</Tag>
           </Tooltip>
-          <Tag color="#108ee9">每月 {user && user.fee_base} 元</Tag>
+          <Tag color="#108ee9">
+            每月 {user && (user.enabled ? user.fee_base : 0)} 元
+          </Tag>
+          {!(user && user.enabled) && (
+            <Tag color="#108ee9">
+              每月 {user && (user.enabled ? user.fee_base : 0)} 元
+            </Tag>
+          )}
         </p>
         <ResetPasswordDialog state={this.props.state} />
         <Button onClick={this.props.state.logout}>登出</Button>

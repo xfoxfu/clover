@@ -23,9 +23,9 @@ router.use("/", async (ctx, next) => {
     ctx.redirect("/dashboard");
   }
 });
-router.get("/", async (ctx) => {
+router.get("/", async ctx => {
   await ctx.render("admin-index", {
-    users: (await connection.getRepository(User).find()).map((value) => ({
+    users: (await connection.getRepository(User).find()).map(value => ({
       email: value.email,
       note: value.note,
     })),
@@ -33,13 +33,16 @@ router.get("/", async (ctx) => {
   });
 });
 // TODO: support announce update
-router.get("/announces", async (ctx) => {
+router.get("/announces", async ctx => {
   await ctx.render("admin-announces", {
     site,
   });
 });
-router.post("/announces", async (ctx) => {
-  const announce = new Announce(ctx.request.body.title, md.render(ctx.request.body.content));
+router.post("/announces", async ctx => {
+  const announce = new Announce(
+    ctx.request.body.title,
+    md.render(ctx.request.body.content)
+  );
   await connection.getRepository(Announce).save(announce);
   const users = await connection.getRepository(User).find();
   // TODO: use job queues
@@ -49,12 +52,12 @@ router.post("/announces", async (ctx) => {
   ctx.response.type = "text/html";
   ctx.response.body = `Succeeded.<a href="/admin">Go back</a>`;
 });
-router.get("/refcode", async (ctx) => {
+router.get("/refcode", async ctx => {
   await ctx.render("admin-refcode", {
     site,
   });
 });
-router.post("/refcode", async (ctx) => {
+router.post("/refcode", async ctx => {
   await ctx.render("admin-refcode", {
     site,
     code: await encode({

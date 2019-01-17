@@ -3,7 +3,8 @@
   "extends": [
     "tslint:recommended",
     "tslint-consistent-codestyle",
-    "tslint-eslint-rules"
+    "tslint-eslint-rules",
+    "tslint-config-prettier"
   ],
   "jsRules": {},
   "rules": {

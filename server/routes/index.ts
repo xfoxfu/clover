@@ -4,9 +4,20 @@
 import Router = require("koa-router");
 const router = new Router();
 import { Context } from "koa";
-import { sourceCodeUrl, siteTitle, adminEmail, proxyHost, openRegister, vmess, shadowsocks } from "../lib/config";
+import {
+  sourceCodeUrl,
+  siteTitle,
+  adminEmail,
+  proxyHost,
+  openRegister,
+  vmess,
+  shadowsocks,
+} from "../lib/config";
 import { connection } from "../lib/db";
-import { resetPassword as resetPasswordMail, validateEmail } from "../lib/email";
+import {
+  resetPassword as resetPasswordMail,
+  validateEmail,
+} from "../lib/email";
 import log from "../lib/log";
 import Announce from "../models/announce";
 import User from "../models/user";
@@ -14,7 +25,8 @@ import { decode } from "../lib/jwt";
 import checkAuth from "./checkAuth";
 import { getClientConfig, writeServerConfig } from "../lib/vmess";
 //  tslint:disable-next-line:no-var-requires
-const makeQrCode: (text: string) => Promise<string> = require("qrcode").toDataURL;
+const makeQrCode: (text: string) => Promise<string> = require("qrcode")
+  .toDataURL;
 
 import adminRouter from "./admin";
 import muRouter from "./mu";
@@ -34,101 +46,130 @@ const buildRenderParams = async (user?: User, cards?: any[], data?: any) => ({
     source: sourceCodeUrl,
     reg: openRegister,
   },
-  user: user ? {
-    ...user,
-    ss: {
-      ...shadowsocks,
-      port: user.connPort,
-      encryption: user.connEnc,
-      password: user.connPassword,
-      uri: new Buffer(`${
-        user.connEnc}:${
-        user.connPassword}@${
-        shadowsocks.host}:${
-        user.connPort}`).toString("base64"),
-      qrcode: await makeQrCode("ss://" + Buffer.from(`${
-        user.connEnc}:${
-        user.connPassword}@${
-        shadowsocks.host}:${
-        user.connPort}`).toString("base64")),
-    },
-    vmess: {
-      ...vmess,
-      webSocket: {
-        ...vmess.webSocket,
-        headersJson: JSON.stringify(vmess.webSocket.headers),
-      },
-      tcpHeaderJson: JSON.stringify(vmess.tcp.header),
-      remark: siteTitle,
-      id: user.vmessUid,
-      aid: user.vmessAlterId,
-      link: {
-        android: Buffer.from(JSON.stringify({
-          add: proxyHost,
-          aid: user.vmessAlterId,
-          host: `${vmess.webSocket.path};${proxyHost}`,
+  user: user
+    ? {
+        ...user,
+        ss: {
+          ...shadowsocks,
+          port: user.connPort,
+          encryption: user.connEnc,
+          password: user.connPassword,
+          uri: new Buffer(
+            `${user.connEnc}:${user.connPassword}@${shadowsocks.host}:${
+              user.connPort
+            }`
+          ).toString("base64"),
+          qrcode: await makeQrCode(
+            "ss://" +
+              Buffer.from(
+                `${user.connEnc}:${user.connPassword}@${shadowsocks.host}:${
+                  user.connPort
+                }`
+              ).toString("base64")
+          ),
+        },
+        vmess: {
+          ...vmess,
+          webSocket: {
+            ...vmess.webSocket,
+            headersJson: JSON.stringify(vmess.webSocket.headers),
+          },
+          tcpHeaderJson: JSON.stringify(vmess.tcp.header),
+          remark: siteTitle,
           id: user.vmessUid,
-          net: vmess.network,
-          port: vmess.port,
-          ps: siteTitle,
-          tls: vmess.tls.status === "off" ? "" : "tls",
-          type: vmess.network === "tcp" ?
-            vmess.tcp.header.type : (vmess.network === "kcp" ?
-              vmess.kcp.header.type : "none"),
-        })).toString("base64"),
-        win: Buffer.from(JSON.stringify({
-          add: proxyHost,
           aid: user.vmessAlterId,
-          host: `${vmess.webSocket.path};${proxyHost}`,
-          id: user.vmessUid,
-          net: vmess.network,
-          port: vmess.port,
-          ps: siteTitle,
-          tls: vmess.tls.status === "off" ? "" : "tls",
-          type: vmess.network === "tcp" ?
-            vmess.tcp.header.type : (vmess.network === "kcp" ?
-              vmess.kcp.header.type : "none"),
-        })).toString("base64"),
-        shadowrocket: `${Buffer.from(
-          `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`,
-        ).toString("base64")}?obfsParam=${
-          vmess.webSocket.host}&path=${
-          vmess.network === "ws" ? vmess.webSocket.path : vmess.tcp.header.type}&obfs=${vmess.network === "ws" ?
-            "websocket" : (vmess.network === "tcp" ?
-              vmess.tcp.header.type : "none")}&tls=${
-          vmess.tls.status === "off" ? 0 : 1}`,
-      },
-      qrcode: {
-        kitsunebi: await makeQrCode(
-          "vmess://" +
-          Buffer.from(`chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`).toString("base64") +
-          `?network=${vmess.network}` +
-          (vmess.network === "ws" ? `&wspath=${vmess.webSocket.path}` : "") +
-          `&tls=${
-          vmess.tls.status === "off" ? 0 : 1
-          }&allowInsecure=${
-          vmess.tls.cert.trust ? 0 : 1
-          }&remark=${siteTitle}`,
-        ),
-      },
-    },
-  } : undefined,
+          link: {
+            android: Buffer.from(
+              JSON.stringify({
+                add: proxyHost,
+                aid: user.vmessAlterId,
+                host: `${vmess.webSocket.path};${proxyHost}`,
+                id: user.vmessUid,
+                net: vmess.network,
+                port: vmess.port,
+                ps: siteTitle,
+                tls: vmess.tls.status === "off" ? "" : "tls",
+                type:
+                  vmess.network === "tcp"
+                    ? vmess.tcp.header.type
+                    : vmess.network === "kcp"
+                    ? vmess.kcp.header.type
+                    : "none",
+              })
+            ).toString("base64"),
+            win: Buffer.from(
+              JSON.stringify({
+                add: proxyHost,
+                aid: user.vmessAlterId,
+                host: `${vmess.webSocket.path};${proxyHost}`,
+                id: user.vmessUid,
+                net: vmess.network,
+                port: vmess.port,
+                ps: siteTitle,
+                tls: vmess.tls.status === "off" ? "" : "tls",
+                type:
+                  vmess.network === "tcp"
+                    ? vmess.tcp.header.type
+                    : vmess.network === "kcp"
+                    ? vmess.kcp.header.type
+                    : "none",
+              })
+            ).toString("base64"),
+            shadowrocket: `${Buffer.from(
+              `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${vmess.port}`
+            ).toString("base64")}?obfsParam=${vmess.webSocket.host}&path=${
+              vmess.network === "ws"
+                ? vmess.webSocket.path
+                : vmess.tcp.header.type
+            }&obfs=${
+              vmess.network === "ws"
+                ? "websocket"
+                : vmess.network === "tcp"
+                ? vmess.tcp.header.type
+                : "none"
+            }&tls=${vmess.tls.status === "off" ? 0 : 1}`,
+          },
+          qrcode: {
+            kitsunebi: await makeQrCode(
+              "vmess://" +
+                Buffer.from(
+                  `chacha20-poly1305:${user.vmessUid}@${proxyHost}:${
+                    vmess.port
+                  }`
+                ).toString("base64") +
+                `?network=${vmess.network}` +
+                (vmess.network === "ws"
+                  ? `&wspath=${vmess.webSocket.path}`
+                  : "") +
+                `&tls=${vmess.tls.status === "off" ? 0 : 1}&allowInsecure=${
+                  vmess.tls.cert.trust ? 0 : 1
+                }&remark=${siteTitle}`
+            ),
+          },
+        },
+      }
+    : undefined,
   cards,
   ...data,
 });
-const render = async (ctx: Context, template: string, cards?: any[], data?: any) => {
+const render = async (
+  ctx: Context,
+  template: string,
+  cards?: any[],
+  data?: any
+) => {
   const locals = await buildRenderParams(ctx.user, cards, data);
   log.debug(`rendering ${template}`, locals);
   await ctx.render(template, locals);
 };
 
-router.get("/", (ctx) => ctx.redirect("/app"));
-router.get("/old", async (ctx) => {
+router.get("/", ctx => ctx.redirect("/app"));
+router.get("/old", async ctx => {
   await checkAuth(ctx, true, false);
   await render(ctx, "index");
 });
-router.post("/login", async (ctx) => {
-  if ((!ctx.request.body.email) || (!ctx.request.body.password)) {
+router.post("/login", async ctx => {
+  if (!ctx.request.body.email || !ctx.request.body.password) {
     // TODO: better output
     ctx.throw(400);
   } else {
@@ -145,10 +186,12 @@ router.post("/login", async (ctx) => {
     }
   }
 });
-router.post("/reg", async (ctx) => {
-  if ((!ctx.request.body.email) ||
-    (!ctx.request.body.password) ||
-    (!ctx.request.body.password2)) {
+router.post("/reg", async ctx => {
+  if (
+    !ctx.request.body.email ||
+    !ctx.request.body.password ||
+    !ctx.request.body.password2
+  ) {
     // TODO: better output
     ctx.throw(400);
   }
@@ -178,11 +221,12 @@ router.post("/reg", async (ctx) => {
   ctx.session.uid = user.id;
   ctx.response.redirect("/dashboard");
 });
-router.get("/dashboard", async (ctx) => {
+router.get("/dashboard", async ctx => {
   await checkAuth(ctx, false);
   const cards = [];
   {
-    const announces = await connection.getRepository(Announce)
+    const announces = await connection
+      .getRepository(Announce)
       .find({ take: 2, order: { updatedAt: "DESC" } });
     for (const announce of announces) {
       cards.push({ isAnnouncement: true, ...announce });
@@ -191,26 +235,27 @@ router.get("/dashboard", async (ctx) => {
   cards.sort((a, b) => (a.updatedAt > b.createdAt ? -1 : 1));
   await render(ctx, "dashboard", cards);
 });
-router.get("/updates", async (ctx) => {
+router.get("/updates", async ctx => {
   await checkAuth(ctx, false);
-  const cards: any = await connection.getRepository(Announce)
+  const cards: any = await connection
+    .getRepository(Announce)
     .find({ take: 10, order: { updatedAt: "DESC" } });
   for (const card of cards) {
     card.isAnnouncement = true;
   }
   await render(ctx, "updates", cards);
 });
-router.get("/logout", (ctx) => {
+router.get("/logout", ctx => {
   ctx.session = null;
   ctx.response.redirect("/");
 });
-router.get("/reset_password", async (ctx) => {
+router.get("/reset_password", async ctx => {
   await checkAuth(ctx, false);
   await render(ctx, "reset-password");
 });
-router.post("/reset_password", async (ctx) => {
+router.post("/reset_password", async ctx => {
   await checkAuth(ctx, false);
-  if (!await ctx.user.checkPassword(ctx.request.body.current)) {
+  if (!(await ctx.user.checkPassword(ctx.request.body.current))) {
     // TODO: better appearance
     ctx.throw(401);
   } else {
@@ -224,8 +269,10 @@ router.post("/reset_password", async (ctx) => {
     }
   }
 });
-router.post("/reset_password_email", async (ctx) => {
-  const user = await connection.getRepository(User).findOne({ email: ctx.request.body.email });
+router.post("/reset_password_email", async ctx => {
+  const user = await connection
+    .getRepository(User)
+    .findOne({ email: ctx.request.body.email });
   if (!user) {
     ctx.throw(404);
   } else {
@@ -236,7 +283,7 @@ router.post("/reset_password_email", async (ctx) => {
     ctx.response.body = `Succeeded.<a href= "/" > Go back< /a > `;
   }
 });
-router.get("/resend_validate_email", async (ctx) => {
+router.get("/resend_validate_email", async ctx => {
   await checkAuth(ctx, false);
   await validateEmail(ctx.user);
   // TODO: better appearance
@@ -244,7 +291,7 @@ router.get("/resend_validate_email", async (ctx) => {
   ctx.response.type = "text/html";
   ctx.response.body = `Succeeded.<a href= "/" > Go back< /a > `;
 });
-router.get("/validate_email_callback", async (ctx) => {
+router.get("/validate_email_callback", async ctx => {
   if (!ctx.request.query.token) {
     ctx.throw(400);
   }
@@ -261,7 +308,9 @@ router.get("/validate_email_callback", async (ctx) => {
     ctx.throw(400);
   }
   log.debug(token.email);
-  const user = await connection.getRepository(User).findOne({ email: token.email });
+  const user = await connection
+    .getRepository(User)
+    .findOne({ email: token.email });
   if (!user) {
     ctx.throw(404);
   } else {
@@ -270,7 +319,7 @@ router.get("/validate_email_callback", async (ctx) => {
     ctx.redirect("/old");
   }
 });
-router.get("/reset_password_email_callback", async (ctx) => {
+router.get("/reset_password_email_callback", async ctx => {
   if (!ctx.request.query.token) {
     ctx.throw(400);
   }
@@ -291,10 +340,10 @@ router.get("/reset_password_email_callback", async (ctx) => {
     token: ctx.request.query.token,
   });
 });
-router.post("/reset_password_email_callback", async (ctx) => {
-  const user = await connection.getRepository(User).findOneById(
-    (await decode<any>(ctx.request.body.token)).uid,
-  );
+router.post("/reset_password_email_callback", async ctx => {
+  const user = await connection
+    .getRepository(User)
+    .findOneById((await decode<any>(ctx.request.body.token)).uid);
   if (!user) {
     ctx.throw(404);
   } else {
@@ -312,7 +361,7 @@ router.post("/reset_password_email_callback", async (ctx) => {
     ctx.response.body = `Succeeded.<a href= "/" > Go login< /a>`;
   }
 });
-router.get("/v2ray_config.json", (ctx) => {
+router.get("/v2ray_config.json", ctx => {
   ctx.set("Content-Type", "application/force-download");
   ctx.set("Content-disposition", "attachment; filename=v2ray_config.json");
   ctx.response.body = getClientConfig(ctx.query.id, +ctx.query.aid);

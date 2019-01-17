@@ -109,6 +109,7 @@
     "sw-precache-webpack-plugin": "0.9.1",
     "ts-loader": "^2.0.3",
     "tslint": "^5.5.0",
+    "tslint-config-prettier": "^1.17.0",
     "tslint-consistent-codestyle": "^1.6.0",
     "tslint-eslint-rules": "^4.1.1",
     "tslint-language-service": "^0.9.6",
