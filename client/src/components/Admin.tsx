@@ -17,6 +17,8 @@ import {
   Button,
   Modal,
   Checkbox,
+  Tooltip,
+  Tag,
 } from "antd";
 
 import IUser from "../models/user";
@@ -172,6 +174,24 @@ class Admin extends React.Component<
                       <b>{user.enabled ? "" : "账户已停用"}</b>
                     </p>
                     <p>{user.note}</p>
+                    <p>
+                      <Tooltip
+                        placement="top"
+                        title={user && `自 ${user.fee_start + 1} 月起计费`}
+                      >
+                        <Tag color="#2db7f5">
+                          待缴费 {user && user.fee_total} 元
+                        </Tag>
+                      </Tooltip>
+                      <Tag color="#108ee9">
+                        每月 {user && (user.enabled ? user.fee_base : 0)} 元
+                      </Tag>
+                      {!(user && user.enabled) && (
+                        <Tag color="#108ee9">
+                          每月 {user && (user.enabled ? user.fee_base : 0)} 元
+                        </Tag>
+                      )}
+                    </p>
                     <Button onClick={this.handleClickOpen(user)}>
                       编辑用户
                     </Button>
