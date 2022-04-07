@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.18.0"/>
+    <PackageReference Include="Grpc.Net.Client" Version="2.39.0"/>
+    <PackageReference Include="Grpc.Tools" Version="2.40.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <Protobuf Include="Protos\trojan-go.proto" GrpcServices="Client"/>
+  </ItemGroup>
+  <Target Name="DownloadContentFiles" AfterTargets="Restore">
+    <DownloadFile SourceUrl="https://raw.githubusercontent.com/p4gefau1t/trojan-go/master/api/service/api.proto" DestinationFolder="$(MSBuildProjectDirectory)/Protos/" DestinationFileName="trojan-go.proto">
+      <Output TaskParameter="DownloadedFile" ItemName="Content"/>
+    </DownloadFile>
+  </Target>
+</Project>
